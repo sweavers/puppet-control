@@ -1,0 +1,28 @@
+---
+
+classes:
+  - 'profiles::jenkins'
+
+profiles::jenkins::plugins:
+  git:
+    version: latest
+  credentials:
+    version: latest
+  git-client:
+    version: latest
+  scm-api:
+    version: latest
+  matrix-project:
+    version: latest
+  token-macro:
+    version: latest
+  ssh-credentials:
+    version: latest
+  mailer:
+    version: latest
+  scm-sync-configuration:
+    version: latest
+  subversion:
+    version: 1.54
+  mapdb-api:
+    version: latest

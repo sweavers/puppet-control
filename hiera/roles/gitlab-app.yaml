@@ -1,0 +1,6 @@
+---
+
+classes:
+  - 'profiles::gitlab'
+
+profiles::gitlab::local_login: true

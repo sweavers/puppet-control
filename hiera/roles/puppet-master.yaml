@@ -1,0 +1,6 @@
+---
+
+classes:
+  - 'profiles::puppet::master'
+
+profiles::puppet::master::deployment_key: ''

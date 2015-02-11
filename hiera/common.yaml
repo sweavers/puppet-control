@@ -1,0 +1,17 @@
+---
+
+classes:
+  - 'profiles::puppet'
+  - 'profiles::deployment'
+  - 'profiles::ntp'
+  - 'profiles::users'
+  - 'sudo'
+
+
+
+profiles::ntp::ntp_restrict_array:
+  - '127.0.1.0'
+  - '127.0.1.1'
+
+profiles::users::users_array:
+  - sysadmins

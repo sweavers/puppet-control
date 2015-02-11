@@ -1,0 +1,5 @@
+# Really not sure about the idea of having environments in hiera where they
+# exist in all regions. Needs to be reviewed... [Ben Fairless]
+---
+
+profiles::puppet::environment: development
