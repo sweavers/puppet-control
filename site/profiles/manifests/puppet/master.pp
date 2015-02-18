@@ -14,14 +14,13 @@
 #
 # Sample Usage:
 #  class { 'profiles::puppet::master':
-#    control_repo => 'git@git.lr.net:webops/puppet-control.git',
+#    control_repo => 'git@github.com:LandRegistry-Ops/puppet-control.git',
 #  }
 #
 class profiles::puppet::master (
 
-  $control_repo   = undef,
+  $control_repo   = 'https://github.com/LandRegistry-Ops/puppet-control.git',
   $hiera_path     = '/etc/puppet/hiera.yaml',
-  $r10k_key       = undef,
 
 ){
 
@@ -51,22 +50,6 @@ class profiles::puppet::master (
         'prefix'  => false
       }
     }
-  }
-
-  file { '/root/.ssh':
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0700',
-  }
-
-  file { '/root/.ssh/id_rsa':
-    ensure  => present,
-    path    => '/root/.ssh/id_rsa',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0600',
-    content => $r10k_key
   }
 
   # puppetlabs/puppetdb
@@ -102,16 +85,4 @@ class profiles::puppet::master (
     ensure => absent,
     force  => true
   }
-
-  # # puppetlabs/firewall
-  # firewall { '100 allow access for puppet agents':
-  #   port   => '8140',
-  #   proto  => tcp,
-  #   action => accept
-  # }
-  # firewall { '200 allow HTTP access for puppet db':
-  #   port   => '80',
-  #   proto  => tcp,
-  #   action => accept
-  # }
 }

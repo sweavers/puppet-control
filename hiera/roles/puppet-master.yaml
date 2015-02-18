@@ -4,3 +4,4 @@ classes:
   - 'profiles::puppet::master'
 
 profiles::puppet::master::deployment_key: ''
+profiles::puppet::master::control_repo: 'https://github.com/LandRegistry-Ops/puppet-control.git'
