@@ -36,22 +36,14 @@ class profiles::jenkins (
      owner  => 'jenkins',
      group  => 'jenkins',
      mode   => '0700'
- }
+   }
 
    file { '/var/lib/jenkins/.ssh/id_rsa':
      ensure  => 'present',
-     #source  => 'puppet:///modules/profiles/deploy_from_jenkins_rsa',
      content => $deploy_from_jenkins_rsa,
      owner   => 'jenkins',
      group   => 'jenkins',
      mode    => '0400',
      require => File['/var/lib/jenkins/.ssh']
    }
-
-  #  # puppetlabs/firewall
-  #  firewall { '100 allow http access for Jenkins':
-  #    port => '8080',
-  #    proto => tcp,
-  #    action => accept
-  #  }
 }

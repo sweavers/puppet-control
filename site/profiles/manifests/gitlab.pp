@@ -12,9 +12,7 @@
 # - puppetlabs/firewall
 #
 # Sample Usage:
-#   class { 'profiles::gitlab':
-#
-#   }
+#   class { 'profiles::gitlab': }
 #
 class profiles::gitlab (
 
@@ -33,7 +31,7 @@ class profiles::gitlab (
   class { '::gitlab' :
     puppet_manage_config   => true,
     puppet_manage_backups  => true,
-    gitlab_branch          => '7.5.1',  # Should be pulled from Hira
+    gitlab_branch          => '7.5.1',
     gitlab_download_link   => 'https://downloads-packages.s3.amazonaws.com/ubuntu-14.04/gitlab_7.5.1-omnibus.5.2.0.ci-1_amd64.deb',  # Should be pulled from Hira
     external_url           => $external_url,
     backup_keep_time       => 5184000, # In seconds, 5184000 = 60 days
@@ -66,8 +64,6 @@ class profiles::gitlab (
     ensure => present
   }
 
-
-
   mount { '/var/opt/gitlab/backups':
     ensure  => 'mounted',
     device  => $backup_location,
@@ -83,10 +79,4 @@ class profiles::gitlab (
     path   => '/etc/postfix/main.cf',
   }
 
-  # # puppetlabs/firewall
-  # firewall { '100 allow http and https access for gitlab':
-  #   port => [80, 443],
-  #   proto => tcp,
-  #   action => accept
-  # }
 }

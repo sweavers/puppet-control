@@ -1,4 +1,7 @@
-secret_repo=$1
+#!/usr/bin/env bash
+# Pulls secrets from a private repository and merges them into the Hiera tree
+
+SECRETS=$1
 
 # Check user is root
 if [ $(id -u) != 0 ]; then
@@ -14,44 +17,44 @@ fi
 
 
 # for each subdirectory of 'environments'....
-for d in /etc/puppet/environments/* ; do
+for environment in /etc/puppet/environments/* ; do
 
-  e=`basename $d`
+  e=`basename $environment`
 
-  echo "environment is $e"
+  echo "Environment is $e"
 
   #check if secrest folder exists....
-  echo "checking to see if $d/secrets  exists..."
-  if [  -d "$d/secrets" ]; then
+  echo "checking to see if $environment/secrets  exists..."
+  if [  -d "${environment}/secrets" ]; then
 
     # delete the directory if it does...
-    echo "...yup cleaning up old $d/secrets"
-    rm -rf $d/secrets
+    echo "...yup cleaning up old ${environment}/secrets"
+    rm -rf ${environment}/secrets
   fi
 
   #re-create the secrets directory
-  echo "creating new $d/secrets dir"
-  mkdir $d/secrets
+  echo "creating new ${environment}/secrets dir"
+  mkdir ${environment}/secrets
 
   #clone the secrets repo to the secrets folder
   echo "cloning the secrets repo"
-  #cd $d/secrets
-  git -C $d/secrets clone $secret_repo
+  #cd ${environment}/secrets
+  git -C ${environment}/secrets clone ${SECRETS}
 
   #check to see if branch exists in secrets for this environment
   echo "checking to see if a secrets brach exists for this environment"
-  if [ -n `git -C $d/secrets/puppet-secrets branch --list $e` ]; then
+  if [ -n `git -C ${environment}/secrets/puppet-secrets branch --list $e` ]; then
 
     #check out environment branch
     echo "checking out the secret repo branch for $e"
-    git -C $d/secrets/puppet-secrets checkout $e
+    git -C ${environment}/secrets/puppet-secrets checkout $e
 
     #move the secrets to the environment's 'hiera' folder
-    mv -f $d/secrets/puppet-secrets/* $d/hiera/
+    mv -f ${environment}/secrets/puppet-secrets/* ${environment}/hiera/
   else
    echo "no secrets brach exists for $e"
   fi
 
   #clean up
-  rm -rf $d/secrets/
+  rm -rf ${environment}/secrets/
 done
