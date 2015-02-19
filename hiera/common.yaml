@@ -14,4 +14,4 @@ profiles::ntp::ntp_restrict_array:
 profiles::users::users_array:
   - sysadmins
 
-profiles::puppet::environment: external_development
+profiles::puppet::environment: development
