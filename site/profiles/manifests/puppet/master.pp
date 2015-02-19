@@ -14,7 +14,7 @@
 #
 # Sample Usage:
 #  class { 'profiles::puppet::master':
-#    control_repo => 'git@github.com:LandRegistry-Ops/puppet-control.git',
+#    control_repo => 'https://github.com/LandRegistry-Ops/puppet-control.git',
 #  }
 #
 class profiles::puppet::master (
