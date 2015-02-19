@@ -24,7 +24,7 @@ class profiles::deployment (
 
   ){
 
-  user { "$user":
+  user { $user:
     ensure         => present,
     home           => $path,
     managehome     => true,
@@ -42,7 +42,7 @@ class profiles::deployment (
     }
   }
 
-  sudo::conf { "deployment":
+  sudo::conf { 'deployment':
     priority => 10,
     content  => "%${user} ALL=(ALL) NOPASSWD: ALL",
   }
