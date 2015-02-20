@@ -13,9 +13,7 @@ desc "Run lint tasks against module"
 PuppetLint::RakeTask.new :lint do |config|
 config.fail_on_warnings = true
 config.ignore_paths = exclude_paths
-config.disable_checks = [
-'80chars',
-]
+config.disable_checks = ['80chars']
 config.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
 end
 
@@ -30,7 +28,6 @@ task :yaml do
   d = Dir["**/*.yaml", "**/*.yml"]
   d.each do |file|
     begin
-      puts "YAML syntax - Checking #{file}"
       YAML.load_file(file)
     rescue Exception
       puts "YAML syntax - Failed to read #{file}: #{$!}".red
@@ -46,7 +43,6 @@ task :shell do
 
   d = Dir["**/*.sh"]
   d.each do |file|
-    puts "Shell syntax - Checking #{file}"
     pid, stdin, stdout, stderr = Open4.popen4("bash -n #{file}")
     ignored, status = Process::waitpid2 pid
     if status.to_i != 0 # Check if script exits with non-zero
