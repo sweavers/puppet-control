@@ -79,7 +79,7 @@ task :unit do
       return "Unit test - " + cleaned
   end
 
-  d = Dir["site/profiles/tests/**/*.pp"]
+  d = Dir["site/*/tests/**/*.pp"]
   d.each do |file|
     puts "Unit test - Running #{file}"
     pid, stdin, stdout, stderr = Open4.popen4("#{puppetcmd} #{file} >/dev/null")
