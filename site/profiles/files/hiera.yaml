@@ -1,7 +1,7 @@
 :hierarchy:
-  - secrets
-  - nodes/%{::fqdn}
-  - environments/%{environment}
+  - secrets/nodes/%{::fqdn}
+  - secrets/environments/%{environment}
+  - secrets/secrets
   - roles/%{::machine_role}
   - common
 
