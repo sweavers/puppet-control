@@ -6,4 +6,4 @@
     - 2.0.0
     - 2.1.0
 
-  script: apt-get install -y puppet; bundle exec librarian-puppet install; bundle exec rake test
+  script: sudo apt-get install -y puppet; bundle exec librarian-puppet install; bundle exec rake test
