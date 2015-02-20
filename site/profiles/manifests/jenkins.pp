@@ -24,26 +24,26 @@ class profiles::jenkins (
 
 ) {
 
-   # rtyler/jenkins
-   class { '::jenkins':
-     plugin_hash        => $plugins,
-     port               => 8080,
-     configure_firewall => false,
-   }
+  # rtyler/jenkins
+  class { '::jenkins':
+    plugin_hash        => $plugins,
+    port               => 8080,
+    configure_firewall => false,
+  }
 
-   file { '/var/lib/jenkins/.ssh':
-     ensure => directory,
-     owner  => 'jenkins',
-     group  => 'jenkins',
-     mode   => '0700'
-   }
+  file { '/var/lib/jenkins/.ssh':
+    ensure => directory,
+    owner  => 'jenkins',
+    group  => 'jenkins',
+    mode   => '0700'
+  }
 
-   file { '/var/lib/jenkins/.ssh/id_rsa':
-     ensure  => 'present',
-     content => $deploy_from_jenkins_rsa,
-     owner   => 'jenkins',
-     group   => 'jenkins',
-     mode    => '0400',
-     require => File['/var/lib/jenkins/.ssh']
-   }
+  file { '/var/lib/jenkins/.ssh/id_rsa':
+    ensure  => 'present',
+    content => $deploy_from_jenkins_rsa,
+    owner   => 'jenkins',
+    group   => 'jenkins',
+    mode    => '0400',
+    require => File['/var/lib/jenkins/.ssh']
+  }
 }
