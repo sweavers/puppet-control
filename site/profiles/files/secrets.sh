@@ -3,6 +3,7 @@
 
 SECRETS=$1
 TEMPDIR="/tmp/secrets-$(date +%s)"
+HIERA_PATH="hiera/secrets"
 OUTPUT_LABEL='deploy-secrets'
 
 # Purely cosmetic function to prettify output
@@ -30,28 +31,27 @@ function output() {
 [ -z "$SECRETS" ] && echo "ERROR - You must specify a secrets repository!" | output ERROR && exit 1
 
 # Make sure we actually have Puppet environments set up
-#[ ! -d /etc/puppet/environments ] && echo "/etc/puppet/environments does not exist!" | output ERROR && exit 1
+[ ! -d /etc/puppet/environments ] && echo "/etc/puppet/environments does not exist!" | output ERROR && exit 1
 
 echo "Deploying secrets from ${SECRETS}" | output
 git clone ${SECRETS} ${TEMPDIR} 2>&1 | output
 
-for environment in ./etc/puppet/environments/*; do
+for environment in /etc/puppet/environments/*; do
   envname=$(basename ${environment})
 
   # Clean up old secrets directory or create new one
-  if [ -d "${environment}/secrets" ]; then
-    echo "Purging secrets from ${envname}" | output
-    rm -rf ${environment}/secrets/*
+  if [ -d "${environment}/${HIERA_PATH}" ]; then
+    echo "Purging previous secrets from ${envname}" | output
+    rm -rf ${environment}/${HIERA_PATH}/*
   else
-    mkdir ${environment}/secrets
+    mkdir ${environment}/${HIERA_PATH}
   fi
 
   # Check to see if branch exists in secrets repository that matches environment
-  if [[ -n $(git -C ${TEMPDIR} branch --list ${envname}) ]]; then
-    # Check out environment branch
-    git -C ${TEMPDIR} checkout ${envname} 2>&1 >/dev/null | output
+  git -C ${TEMPDIR} checkout ${envname} >/dev/null 2>&1
+  if [[ $? == '0' ]]; then
     # Deploy new secrets
-    cp -R ${TEMPDIR}/* ${environment}/secrets/
+    cp -R ${TEMPDIR}/* ${environment}/${HIERA_PATH}
     if [ $? == '0' ]; then
       echo "New secrets deployed to ${envname}" | output
     else
@@ -60,7 +60,7 @@ for environment in ./etc/puppet/environments/*; do
       break # Skip to next environment
     fi
   else
-    echo "No secrets available for ${envname}" | output
+    echo "No secrets available for ${envname}" | output WARN
   fi
 
 done
