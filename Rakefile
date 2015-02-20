@@ -20,17 +20,17 @@ end
 # Puppet syntax task (:syntax)
 PuppetSyntax.exclude_paths = exclude_paths
 
-# YAML syntax task (:yaml)
-desc "Test YAML files can be parsed correctly"
-task :yaml do
+# Hiera syntax task (:hiera)
+desc "Test Hiera files can be parsed correctly"
+task :hiera do
   require 'yaml'
 
-  d = Dir["**/*.yaml", "**/*.yml"]
+  d = Dir["hiera/**/*.yaml", "hiera/**/*.yml"]
   d.each do |file|
     begin
       YAML.load_file(file)
     rescue Exception
-      puts "YAML syntax - Failed to read #{file}: #{$!}".red
+      puts "Hiera syntax - Failed to read #{file}: #{$!}".red
       exit 1
     end
   end
@@ -84,7 +84,7 @@ task :unit do
 end
 
 desc "Basic validation testing"
-task :validation => [:syntax, :lint, :yaml, :shell]
+task :validation => [:syntax, :lint, :hiera, :shell]
 
 desc "Full test suite - requires sudo privledges"
 task :test => [:validation, :unit]
