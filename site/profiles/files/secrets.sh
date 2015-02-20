@@ -48,9 +48,8 @@ for environment in /etc/puppet/environments/*; do
   fi
 
   # Check to see if branch exists in secrets repository that matches environment
-  if [[ -n $(git -C ${TEMPDIR} branch --list ${envname}) ]]; then
-    # Check out environment branch
-    git -C ${TEMPDIR} checkout ${envname} 2>&1 >/dev/null | output
+  git -C ${TEMPDIR} checkout ${envname} >/dev/null 2>&1
+  if [[ $? == '0' ]]; then
     # Deploy new secrets
     cp -R ${TEMPDIR}/* ${environment}/${HIERA_PATH}
     if [ $? == '0' ]; then
