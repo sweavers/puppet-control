@@ -1,14 +1,17 @@
 ---
+
   language: ruby
-  before_install: rm Gemfile.lock Puppetfile.lock || true
-  install:
-    - sudo apt-get update
-    - sudo apt-get install -y puppet
   rvm:
     - 1.9.3
     - 2.0.0
     - 2.1.0
 
-  script:
+  before_install: rm Gemfile.lock Puppetfile.lock || true
+  install:
+    - sudo apt-get update
+    - sudo apt-get install -y puppet
+    - bundle install
     - bundle exec librarian-puppet install
+
+  script:
     - bundle exec rake test
