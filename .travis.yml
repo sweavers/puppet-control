@@ -6,20 +6,23 @@
     - 2.0.0
     - 2.1.0
 
+  env:
+    - PUPPET_VERSION="3.6.2"
+    - PUPPET_VERSION="3.7.4"
+
   before_install:
+    # Clean up production lock files
+    - rm Gemfile.lock Puppetfile.lock
     # Ensure we are getting Puppet straight from source
     - wget https://apt.puppetlabs.com/puppetlabs-release-precise.deb
     - sudo dpkg -i puppetlabs-release-precise.deb
     - sudo apt-get update
   install:
-    - sudo apt-get install -y puppet facter
+    - sudo apt-get install -qy puppet=${PUPPET_VERSION} facter
     - puppet --version
     - facter --version
-    - rm Gemfile.lock Puppetfile.lock
-    - bundle install
+    - bundle install --without puppet
     - bundle exec librarian-puppet install
 
   script:
-    - puppet --version
-    - facter --version
     - bundle exec rake test
