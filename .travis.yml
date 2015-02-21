@@ -24,4 +24,5 @@
     - librarian-puppet install
 
   script:
-    - rake test
+    - #rake test
+    - rake validation
