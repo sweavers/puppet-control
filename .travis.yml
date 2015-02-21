@@ -17,8 +17,10 @@
     - wget https://apt.puppetlabs.com/puppetlabs-release-precise.deb
     - sudo dpkg -i puppetlabs-release-precise.deb
     - sudo apt-get update
+    - sudo apt-get install -qy puppet=${PUPPET_VERSION}-1puppetlabs1 facter
+    # Remove warning for template_dir deprecation
+    - sudo sed -ie '/template.*/d' /etc/puppet/puppet.conf
   install:
-    - sudo apt-get install -qy puppet=${PUPPET_VERSION} facter
     - puppet --version
     - facter --version
     - bundle install --without puppet
