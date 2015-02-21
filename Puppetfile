@@ -2,6 +2,7 @@ forge 'https://forgeapi.puppetlabs.com'
 
 # Third-party modules
 mod 'puppetlabs/puppetdb', '4.1.0'
+mod 'puppetlabs/mongodb', '0.10.0'
 mod 'rtyler/jenkins', '1.3.0'
 mod 'spuder/gitlab', '2.3.5'
 mod 'stephenrjohnson/puppet', '1.3.1'
