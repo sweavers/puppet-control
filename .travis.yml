@@ -6,12 +6,16 @@
     - 2.0.0
     - 2.1.0
 
-  before_install: rm Gemfile.lock Puppetfile.lock || true
-  install:
+  before_install:
+    # Ensure we are getting Puppet straight from source
+    - wget https://apt.puppetlabs.com/puppetlabs-release-precise.deb
+    - sudo dpkg -i puppetlabs-release-precise.deb
     - sudo apt-get update
+  install:
     - sudo apt-get install -y puppet facter
     - puppet --version
     - facter --version
+    - rm Gemfile.lock Puppetfile.lock
     - bundle install
     - bundle exec librarian-puppet install
 
