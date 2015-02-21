@@ -69,7 +69,6 @@ end
 desc "Puppet unit tests - requires sudo privledges"
 task :unit do
   require 'open4'
-  require 'puppet'
   modulepath = "./site:./modules"
   puppetcmd = "sudo puppet apply --noop --modulepath=#{modulepath}"
   failure = false
