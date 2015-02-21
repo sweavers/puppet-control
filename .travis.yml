@@ -20,7 +20,7 @@
     - puppet --version
     - facter --version
     - bundle install --without puppet
-    - librarian-puppet install --verbose
+    - librarian-puppet install
 
   script:
-    - bundle exec rake test
+    - rake test
