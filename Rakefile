@@ -70,27 +70,35 @@ desc "Puppet unit tests - requires sudo privledges"
 task :unit do
   require 'open4'
   modulepath = "./site:./modules"
-  puppetcmd = "sudo puppet apply --noop --modulepath=#{modulepath}"
+  puppetcmd = "sudo puppet apply --noop --detailed-exitcodes --modulepath=#{modulepath}"
   failure = false
+  failures = []
 
   def cleanpuppet input
-      cleaned = input.gsub(/Could .*: | on node .*|\x1b\[[0-9;]*m/,"").chomp
-      return "Unit test - " + cleaned
+    cleaned = input.to_s.gsub(/Could .*: | on node .*|\x1b\[[0-9;]*m/,"").chomp
+    return "Unit test - " + cleaned
   end
 
   d = Dir["site/*/tests/**/*.pp"]
   d.each do |file|
-    puts "Unit test - Running #{file}"
+    puts "Unit test - Running #{file} in noop mode"
     pid, stdin, stdout, stderr = Open4.popen4("#{puppetcmd} #{file} >/dev/null")
     ignored, status = Process::waitpid2 pid
     unless status.to_i == 0 # Check if test run exists with non-zero status
-      puts cleanpuppet(stderr.gets).red
+      while not stderr.eof?
+        puts cleanpuppet(stderr.gets).red
+      end
       failure = true
+      failures.push(file)
       next
     end
-    puts cleanpuppet(stderr.gets).yellow
+    while not stderr.eof?
+      puts cleanpuppet(stderr.gets).yellow
+    end
   end
   if failure == true
+    f = failures.join(", ")
+    puts "Unit test - Tests run against the following test manifests failed: #{f}".red
     exit 1
   end
 end
