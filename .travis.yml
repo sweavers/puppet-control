@@ -10,8 +10,12 @@
   install:
     - sudo apt-get update
     - sudo apt-get install -y puppet facter
+    - puppet --version
+    - facter --version
     - bundle install
     - bundle exec librarian-puppet install
 
   script:
+    - puppet --version
+    - facter --version
     - bundle exec rake test
