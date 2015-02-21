@@ -14,8 +14,9 @@
     - sudo dpkg -i puppetlabs-release-precise.deb
     - sudo apt-get update
     - sudo apt-get install -qy puppet facter
-    # Remove warning for template_dir deprecation
+    # Remove warning for template_dir deprecation and hiera configuration
     - sudo sed -ie '/template.*/d' /etc/puppet/puppet.conf
+    - sudo touch /etc/puppet/hiera.yaml
   install:
     - bundle install
     - puppet --version
