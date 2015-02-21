@@ -17,9 +17,9 @@
     # Remove warning for template_dir deprecation
     - sudo sed -ie '/template.*/d' /etc/puppet/puppet.conf
   install:
+    - bundle install
     - puppet --version
     - facter --version
-    - bundle install --without puppet
     - librarian-puppet install
 
   script:
