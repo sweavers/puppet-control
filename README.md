@@ -5,5 +5,5 @@ puppet-control
 Control repository for Land Registry's Beta project
 
 ## Requirements:
-- Ruby >= 1.8.7
+- Ruby >= 1.9.3
 - Puppet >= 3.6.0 (may work with earlier builds but not tested)
