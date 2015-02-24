@@ -43,7 +43,7 @@ class profiles::postgresql(
     manage_package_repo => true,
     version             => $version,
     datadir             => "${dbroot}/data",
-    confdir             => "${dbroot}",
+    confdir             => ${dbroot},
     require             => File[$dbroot]
   } ->
 
