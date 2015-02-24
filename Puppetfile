@@ -1,6 +1,7 @@
 forge 'https://forgeapi.puppetlabs.com'
 
 # Third-party modules
+mod 'jfryman/nginx',          '0.2.2'
 mod 'mthibaut/users',         '1.0.11'
 mod 'puppetlabs/firewall',    '1.3.0'
 mod 'puppetlabs/ntp',         '3.3.0'
