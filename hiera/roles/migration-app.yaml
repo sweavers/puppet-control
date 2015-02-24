@@ -1,0 +1,9 @@
+---
+
+# This role is to set up a stand-alone environment for the Migration process
+
+  classes:
+    - profiles::mongodb
+    - profiles::nginx
+    - profiles::postgresql
+    - profiles::rabbitmq
