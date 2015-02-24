@@ -1,13 +1,12 @@
 # Class profiles::postgresql
 #
-# This class will manage MongoDB installations
+# This class will manage PostgreSQL installations
 #
 # Parameters:
-#  ['port']     - Port which MongoDB should listen on. Defaults = 27018
-#  ['version']  - Version of MongoDB to install. Default = 2.6.7
-#  ['remote']   - Should MongoDB listen for remote connections. Defaults true
-#  ['dbroot']   - Location installation should be placed. Defaults = /mongodb
-#  ['dbpath']   - Location of database. Defaults to $dbroot/data
+#  ['port']     - Port which PostgreSQL should listen on. Defaults = 5432
+#  ['version']  - Version of PostgreSQL to install. Default = 9.3
+#  ['remote']   - Should PostgreSQL listen for remote connections. Defaults true
+#  ['dbroot']   - Location installation should be placed. Defaults = /postgres
 #
 # Requires:
 # - puppetlabs/postgresql
@@ -42,6 +41,8 @@ class profiles::postgresql(
   class { 'postgresql::globals':
     manage_package_repo => true,
     version             => $version,
+    encoding            => 'UTF8',
+    locale              => 'en_GB',
     datadir             => "${dbroot}/data",
     confdir             => $dbroot,
     require             => File[$dbroot]
