@@ -14,11 +14,14 @@
 #
 class profiles::appserver(
 
+  $supervisor_conf = undef
+
 ){
 
   class { 'supervisord':
     inet_server => true,
-    install_pip => true
+    install_pip => true,
+    conf_dir    => $supervisor_conf
   }
 
 }

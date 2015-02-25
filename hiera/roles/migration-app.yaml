@@ -9,6 +9,6 @@
     - profiles::rabbitmq
     - profiles::appserver
 
-supervisord::config_dirs:
+profiles::appserver::supervisor_conf:
   - /etc/supervisord.d/*.ini
   - /etc/supervisor.d/*.conf
