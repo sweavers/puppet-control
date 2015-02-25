@@ -41,10 +41,10 @@ class profiles::postgresql(
   class { 'postgresql::globals':
     manage_package_repo => true,
     version             => $version,
-    encoding            => 'UTF8',
-    locale              => 'en_GB',
     datadir             => "${dbroot}/data",
     confdir             => $dbroot,
+    needs_initdb        => true,
+    service_name        => 'postgresql', # confirm on ubuntu
     require             => File[$dbroot]
   } ->
 

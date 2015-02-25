@@ -6,10 +6,6 @@
 #  ['port']     - Port which MongoDB should listen on. Defaults = 27018
 #  ['version']  - Version of MongoDB to install. Default = 2.6.7
 #  ['remote']   - Should MongoDB listen for remote connections. Defaults true
-#  ['password'] - Hex encoded MD5 of $username:mongo:$password for admin user
-#  ['dbroot']   - Location installation should be placed. Defaults = /mongodb
-#  ['dbpath']   - Location of database. Defaults to $dbroot/data
-#  ['logpath']  - Location of log directory. Default = $dbroot/log
 #
 # Requires:
 # - puppetlabs/mongodb
@@ -25,9 +21,6 @@ class profiles::mongodb(
   $port     = 27018,
   $version  = '2.6.7',
   $remote   = true,
-  $password = '81cfce99f33d674bdd240d8c9d8ae44d', # 'mongodb'
-  $dbroot   = '/mongodb',
-  $dbpath   = 'data/',
 
 ){
 
@@ -43,10 +36,17 @@ class profiles::mongodb(
     $bind = concat(['127.0.0.1'],$bind_array)
   }
 
+  # Red Hat uses weird version numbers
+  if $::osfamily == 'RedHat' {
+    $ver = "${version}-1"
+  } else {
+    $ver = $version
+  }
+
   # Use 10gen repositories instead of distribution's
   class { 'mongodb::globals':
     manage_package_repo => true,
-    version             => $version
+    version             => $ver
   }->
 
   class { 'mongodb::client':
@@ -56,30 +56,12 @@ class profiles::mongodb(
   class { 'mongodb::server':
     ensure  => present,
     port    => $port,
-    bind_ip => $bind, # ? error
+    bind_ip => $bind,
     verbose => true,
     auth    => true,
-    dbpath  => "${dbroot}/${dbpath}",
     journal => true,
     rest    => false,
-    require => [Class['Mongodb::client'],File[$dbroot]]
-  }
-
-  user { 'mongodb':
-    ensure     => present,
-    comment    => 'MongoDB Database Server',
-    system     => true,
-    home       => $dbroot,
-    managehome => true,
-    shell      => '/usr/sbin/nologin',
-  }
-
-  file { $dbroot:
-    ensure  => 'directory',
-    owner   => 'mongodb',
-    group   => 'mongodb',
-    mode    => '0750',
-    require => User[mongodb]
+    require => [Class['Mongodb::client']]
   }
 
   package { ['mongodb-org-tools']:
