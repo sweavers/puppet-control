@@ -7,3 +7,4 @@
     - profiles::nginx
     - profiles::postgresql
     - profiles::rabbitmq
+    - profiles::appserver
