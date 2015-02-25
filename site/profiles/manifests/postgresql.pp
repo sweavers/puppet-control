@@ -43,7 +43,7 @@ class profiles::postgresql(
     version             => $version,
     datadir             => "${dbroot}/data",
     confdir             => $dbroot,
-    #needs_initdb        => true,
+    needs_initdb        => true,
     service_name        => 'postgresql', # confirm on ubuntu
     require             => File[$dbroot]
   } ->

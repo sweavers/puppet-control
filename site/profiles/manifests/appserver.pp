@@ -17,7 +17,8 @@ class profiles::appserver(
 ){
 
   class { 'supervisord':
-    inet_server => true
+    inet_server => true,
+    install_pip => true
   }
 
 }
