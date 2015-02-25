@@ -8,3 +8,7 @@
     - profiles::postgresql
     - profiles::rabbitmq
     - profiles::appserver
+
+supervisord::config_dirs:
+  - /etc/supervisord.d/*.ini
+  - /etc/supervisor.d/*.conf
