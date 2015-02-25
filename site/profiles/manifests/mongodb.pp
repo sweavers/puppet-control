@@ -18,7 +18,7 @@
 #
 class profiles::mongodb(
 
-  $port     = 27018,
+  $port     = 27017,
   $version  = '2.6.7',
   $remote   = true,
 
