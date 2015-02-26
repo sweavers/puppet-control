@@ -16,8 +16,6 @@ FORGE
       puppetlabs-apt (< 2.0.0, >= 1.0.0)
       puppetlabs-concat (< 2.0.0, >= 1.1.1)
       puppetlabs-stdlib (< 5.0.0, >= 4.2.0)
-    mthibaut-users (1.0.11)
-      puppetlabs-stdlib (>= 0)
     nanliu-staging (1.0.3)
     puppetlabs-apache (1.3.0)
       puppetlabs-concat (>= 1.1.1)
@@ -83,14 +81,21 @@ FORGE
       puppetlabs-stdlib (>= 3.2.0)
       puppetlabs-vcsrepo (>= 0.1.2)
 
+GIT
+  remote: https://github.com/alphagov/puppet-account.git
+  ref: master
+  sha: c0d9f26c1843c0f54d17f98611cc262f2801cece
+  specs:
+    alphagov-account (0.0.5)
+
 DEPENDENCIES
   ajcrowe-supervisord (= 0.5.2)
+  alphagov-account (>= 0)
   croddy-make (= 0.0.5)
   darin-zypprepo (= 1.0.2)
   garethr-erlang (= 0.3.0)
   gentoo-portage (= 2.2.0)
   jfryman-nginx (= 0.2.2)
-  mthibaut-users (= 1.0.11)
   nanliu-staging (= 1.0.3)
   puppetlabs-apache (= 1.3.0)
   puppetlabs-apt (= 1.7.0)

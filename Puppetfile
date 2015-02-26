@@ -2,8 +2,9 @@ forge 'https://forgeapi.puppetlabs.com'
 
 # Third-party modules
 mod 'ajcrowe/supervisord',    '0.5.2'
+mod 'alphagov/account',         :git => 'https://github.com/alphagov/puppet-account.git',
+                                :ref => 'master'
 mod 'jfryman/nginx',          '0.2.2'
-mod 'mthibaut/users',         '1.0.11'
 mod 'puppetlabs/firewall',    '1.3.0'
 mod 'puppetlabs/ntp',         '3.3.0'
 mod 'puppetlabs/mongodb',     '0.10.0'
