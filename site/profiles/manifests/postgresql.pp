@@ -80,12 +80,12 @@ class profiles::postgresql(
   }
 
   if $::osfamily == 'RedHat' {
-    file { '/usr/lib/systemd/system/postgressql.service':
+    file { '/usr/lib/systemd/system/postgresql.service':
       ensure => link,
-      target => '/usr/lib/systemd/system/postgressql-9.3.service',
+      target => '/usr/lib/systemd/system/postgresql-9.3.service',
     }
   }
-  
+
   include postgresql::client
   include postgresql::server::contrib
   include postgresql::server::postgis
