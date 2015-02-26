@@ -50,7 +50,7 @@ class profiles::postgresql(
 
   class { 'postgresql::server':
     port             => $port,
-    listen_addresses => $bind,
+    listen_addresses => $bind
   }
 
   user { 'postgres':
@@ -82,7 +82,9 @@ class profiles::postgresql(
   if $::osfamily == 'RedHat' {
     file { '/usr/lib/systemd/system/postgresql.service':
       ensure => link,
-      target => '/usr/lib/systemd/system/postgresql-9.3.service',
+      target => "/usr/lib/systemd/system/postgresql-${version}.service",
+      force  => true,
+      before => Class[Postgresql::Server]
     }
   }
 
