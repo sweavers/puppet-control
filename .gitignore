@@ -1,3 +1,5 @@
 .librarian/
 .tmp/
 modules/
+Vagrantfile
+.vagrant
