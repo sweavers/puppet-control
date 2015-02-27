@@ -2,9 +2,6 @@
 #
 # This class will manage application server installations
 #
-# Parameters:
-#  ['port']     - Port which MongoDB should listen on. Defaults = 27018
-#
 # Requires:
 # - ajcrowe/supervisord
 # - puppetlabs/stdlib
@@ -18,12 +15,43 @@ class profiles::appserver(
 
 ){
 
+  include ::stdlib
+  include ::profiles::deployment
+
   $supervisor_dir = any2array($supervisor_conf)
 
   class { 'supervisord':
     inet_server => true,
     install_pip => true,
     config_dirs => $supervisor_dir
+  }
+
+  file { '/etc/supervisord.d/':
+    ensure  => directory,
+    owner   => root,
+    group   => deployment,
+    mode    => '0775',
+    require => Class[Profiles::Deployment]
+  }
+
+  case $::osfamily{
+    'RedHat': {
+      $PKGLIST=['java-1.7.0-openjdk','ruby','scl-utils','rubygems']
+    }
+    'Debian': {$PKGLIST=['openjdk-7-jdk','ruby']
+    }
+  }
+
+  ensure_packages($PKGLIST)
+
+  package{'bundler':
+    ensure   => installed,
+    provider => gem
+  }
+
+  package{'rake':
+    ensure   => installed,
+    provider => gem
   }
 
 }
