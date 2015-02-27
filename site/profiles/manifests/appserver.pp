@@ -40,6 +40,8 @@ class profiles::appserver(
     }
     'Debian': {$PKGLIST=['openjdk-7-jdk','ruby']
     }
+    default: {$PKGLIST=[]
+    }
   }
 
   ensure_packages($PKGLIST)
