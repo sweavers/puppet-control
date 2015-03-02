@@ -1,0 +1,6 @@
+---
+
+classes:
+  - 'profiles::appserver'
+  - 'profiles::postgresql'
+  - 'profiles::rabbitmq'
