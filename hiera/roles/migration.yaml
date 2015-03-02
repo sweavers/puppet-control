@@ -2,4 +2,4 @@
 
 classes:
   - 'profiles::appserver'
-  - 'profiles::geos-addins'
+  - 'profiles::geos_addins'
