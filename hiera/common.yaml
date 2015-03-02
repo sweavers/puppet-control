@@ -6,6 +6,9 @@ classes:
   - 'profiles::ntp'
   - 'sudo'
 
+# Prevent sudo from purging unmanaged sudo configs (for vagrant)
+sudo::config_file_replace: true
+
 profiles::ntp::ntp_restrict_array:
   - '127.0.1.0'
   - '127.0.1.1'
