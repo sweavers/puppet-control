@@ -1,0 +1,16 @@
+---
+
+classes:
+  - profiles::appserver
+  - profiles::postgresql
+  - profiles::rabbitmq
+
+postgres_databases:
+  systemofrecord:
+    user: systemofrecord
+    password: md511c5a6395e27555ef43eb7b05c76d7c1
+    owner: systemofrecord
+
+postgres_users:
+  deployment:
+    password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
