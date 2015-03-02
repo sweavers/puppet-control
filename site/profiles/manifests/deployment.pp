@@ -42,10 +42,6 @@ class profiles::deployment (
     }
   }
 
-  class { 'sudo':
-    config_file_replace => false,
-  }
-
   sudo::conf { 'deployment':
     priority => 10,
     content  => "%${user} ALL=(ALL) NOPASSWD: ALL",
