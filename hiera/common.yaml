@@ -4,14 +4,23 @@ classes:
   - 'profiles::puppet'
   - 'profiles::deployment'
   - 'profiles::ntp'
-  - 'profiles::users'
   - 'sudo'
 
 profiles::ntp::ntp_restrict_array:
   - '127.0.1.0'
   - '127.0.1.1'
 
-profiles::users::users_array:
-  - sysadmins
-
 profiles::puppet::environment: development
+
+##example account declarations
+#accounts:
+#  lr-test-user:
+#    comment: lr-test-user
+#    ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDQrtZpM0DU+QlF/rY5p9zwsHbckq4DCb1CzpIk3gL4d7ljYoFnACWvQXTEFXMHMcoekyGfUqpQFPqBOzg38hjWK0ODECdG2nIwmdSCCFyEJ2kLGMWjlSM7M9Lwvvx8dkySYCMkdJ+rAQr3BXJ9kbttf2A7oYPw04IWhr+ezcq4qnZ5zydEO3XVSS5G6xSlziwjvSNo9i0O3R0sWybZSS2xeive/4tkHc6V8dPlA0670Gva1CYqoajOWjp0JE6wsf2EEgcEdDHHfTwW1U7dtc9a6BVygpGaghMgoDrP4OjAYAYtBd9dKKK2qYRXvJKxiorhj1s6Odf0IHhx9ut8qHAf
+#    groups:
+#      - lr-admin
+#  lr-test-user-2:
+#    comment: lr-test-user-2
+#    ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDFACawwPMbMoc0XiOCshIxCbYEn15SrwPxCRCfhbKM3McZ5u9Xro2b717l6tj9QALoKVqV7KddlsSWoEg3htpjuJAZrfRAvg6LawlDx6xL6jaSA6wMXROmQ8Qc+oBjfxwUwpfnB4+s4kQXQXuttou8PJbaHgxaLrFdPbWInOi2jCKb1NlwjBqa6/WVZRYfG2siO64aL2Z3hZqtEC3Be/X5Sum8ELgFh8TQsf+aLaksJTF2Wp5F/dkux5fAFKwSYMOBab3pJpemhd7EPxHBoAzUHpJxnsl9sQwxThc9T/KQR3p21bP5jemYvnW3kwiwaV5wHBR2SyWvdj1K/wjgGSId
+#    groups:
+#      - lr-admin
