@@ -88,8 +88,11 @@ class profiles::postgresql(
     }
   }
 
+  include stdlib
   include postgresql::client
   include postgresql::server::contrib
   include postgresql::server::postgis
+  create_resources('postgresql::server::db', hiera_hash('postgres_databases'))
+  create_resources('postgresql::server::role', hiera_hash('postgres_users'))
 
 }
