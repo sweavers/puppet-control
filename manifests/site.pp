@@ -13,3 +13,14 @@ File {
   owner => 'root',
   group => 'root',
 }
+
+# Explicitly set 'allow virtual packages to false' in order to surpres error
+# message on CentOS.
+if versioncmp($::puppetversion,'3.6.1') >= 0 {
+
+  $allow_virtual_packages = hiera('allow_virtual_packages',false)
+
+  Package {
+    allow_virtual => $allow_virtual_packages,
+  }
+}
