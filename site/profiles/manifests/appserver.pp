@@ -37,7 +37,11 @@ class profiles::appserver(
   #  Install required packages for Ruby and Java
   case $::osfamily{
     'RedHat': {
-      $PKGLIST=['java-1.7.0-openjdk','java-1.7.0-openjdk-devel','python','python-devel','ruby','rubygems']
+      $PKGLIST=['java-1.7.0-openjdk','java-1.7.0-openjdk-devel','python',
+                'python-devel','ruby','rubygems','autoconf','automake',
+                'binutils','bison','flex','gcc','gcc-c++','gettext','libtool',
+                'make','patch','pkgconfig','redhat-rpm-config','rpm-build',
+                'rpm-sign']
       $PYTHON='lr-python3-3.4.3-1.x86_64.rpm'
       $PKGMAN='rpm'
     }
