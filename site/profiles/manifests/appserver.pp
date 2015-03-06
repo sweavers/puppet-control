@@ -75,4 +75,9 @@ class profiles::appserver(
     provider => gem
   }
 
+  package{['virtualenv','virtualenvwrapper']:
+    ensure   => installed,
+    provider => pip
+  }
+
 }
