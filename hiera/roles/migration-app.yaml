@@ -8,6 +8,7 @@
     - profiles::postgresql
     - profiles::rabbitmq
     - profiles::appserver
+    - profiles::geos_addins
 
   # Temporary workaround due to PIP using different configuration folder to RPM
   profiles::appserver::supervisor_conf:
