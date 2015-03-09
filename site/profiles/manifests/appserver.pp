@@ -42,12 +42,14 @@ class profiles::appserver(
                 'binutils','bison','flex','gcc','gcc-c++','gettext','libtool',
                 'make','patch','pkgconfig','redhat-rpm-config','rpm-build',
                 'rpm-sign']
-      $PYTHON='lr-python3-3.4.3-1.x86_64.rpm'
+      $PYTHON='lr-python3-3.4.3-1.x86_64'
+      $PYPGK="${PYTHON}.rpm"
       $PKGMAN='rpm'
     }
     'Debian': {
       $PKGLIST=['openjdk-7-jdk','python','python-dev','ruby']
-      $PYTHON='lr-python3_3.4.3_amd64.deb'
+      $PYTHON='lr-python3_3.4.3_amd64'
+      $PYPGK="${PYTHON}.deb"
       $PKGMAN='dpkg'
     }
     default: {
@@ -58,15 +60,15 @@ class profiles::appserver(
 
   file{'LR Python package':
     ensure => 'file',
-    path   => "/tmp/${PYTHON}",
-    source => "puppet:///modules/profiles/${PYTHON}"
+    path   => "/tmp/${PYPGK}",
+    source => "puppet:///modules/profiles/${PYPGK}"
   }
 
   # Install custom Python 3.4.3 build
-  package{'LR Python 3':
+  package{ $PYTHON :
     ensure   => installed,
     provider => $PKGMAN,
-    source   => "/tmp/${PYTHON}",
+    source   => "/tmp/${PYPGK}",
     require  => File['LR Python package']
   }
 
