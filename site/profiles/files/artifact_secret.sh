@@ -111,17 +111,8 @@ for environment in ${DIR}/environments/*; do
 
 done
 
-# This is a little hacky but provides good visibilty of failures
-#if [ ! -z $SOFTFAIL ]; then
-#  echo "ERROR - Did not successfully complete deployment!" | output ERROR
-#  failures=$(printf ", %s" "${SOFTFAIL[@]}"); failures=${failures:1}
-#  echo "Failed to deploy to:${failures}" | output ERROR
-#  exit 1;
-#else
-#  # We only want to clean up if we exit cleanly, to aid debugging on fail
-#  echo "Removing temporary directory at ${TEMPDIR}" | output
-
-#rm -rf ${TEMPDIR} 2>&1 >/dev/null
+# Purge temp secrets directory
+rm -rf ${TEMPDIR} 2>&1 >/dev/null
 
 # Enssure that target artifact directory exits
 if [ ! -d ${DIR}/artifacts ] ; then
