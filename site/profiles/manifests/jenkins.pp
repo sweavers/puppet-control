@@ -46,4 +46,20 @@ class profiles::jenkins (
     mode    => '0400',
     require => File['/var/lib/jenkins/.ssh']
   }
+
+  # ensure artifact script is installed
+  file { '/usr/bin/artifact':
+    ensure => present,
+    path   => '/usr/local/bin/artifact',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    source => 'puppet:///modules/profiles/artifact.sh'
+  }
+
+  # ensure r10k is installed
+  package { 'r10k':
+    ensure   => 'installed',
+    provider => 'gem',
+  }
 }
