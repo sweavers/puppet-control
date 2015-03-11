@@ -3,10 +3,10 @@ forge 'https://forgeapi.puppetlabs.com'
 # Third-party modules
 mod 'ajcrowe/supervisord',       '0.5.2'
 mod 'alphagov/account',           :git => 'https://github.com/alphagov/puppet-account.git',
-                                  :ref => 'master'
+                                  :ref => '8bc0e9981174fd175d630dd98538334a2814065b'
 mod 'jfryman/nginx',             '0.2.2'
-mod 'openstack-infra/puppet-pip', :git => 'https://github.com/openstack-infra/puppet-pip.git',
-                                  :ref => 'master'
+mod 'openstackci/pip',            :git => 'https://github.com/openstack-infra/puppet-pip.git',
+                                  :ref => '88c1e708d421f397283fd88266147175855426dd'
 mod 'puppetlabs/firewall',       '1.3.0'
 mod 'puppetlabs/ntp',            '3.3.0'
 mod 'puppetlabs/mongodb',        '0.10.0'
