@@ -3,12 +3,13 @@
 
 GITREPO=$1
 SECRETS=$2
-DIR="/etc/artifact_r10k"
+DIR="/var/lib/jenkins/artifact_r10k"
 TIMESTAMP=$(date +%d%m%Y-%H%M)
 USAGE=`basename $0`" [GITREPO] [SECRETS_REPO]"
 TEMPDIR="/tmp/secrets-$(date +%s)"
 HIERA_PATH="hiera/secrets"
 OUTPUT_LABEL='deploy-secrets'
+R10KCONFDIR="/var/lib/jenkins/artifact_r10k"
 
 # Purely cosmetic function to prettify output
 # Set OUTPUT_LABEL to change the label
@@ -29,8 +30,8 @@ function output() {
 }
 
 # Check prerequisits
-# Check user is root
-[ $(id -u) != 0 ] && echo "ERROR - You must run this script as root!" | output ERROR && exit 1
+# Check user is root - currently disabled as script is now configured to run as un unpriv user
+#[ $(id -u) != 0 ] && echo "ERROR - You must run this script as root!" | output ERROR && exit 1
 
 # Check that a git repo has been specified
 [ -z "$GITREPO" ] && echo -e "ERROR - You must specify a source git repo! \n Usage: ${USAGE}" | output ERROR && exit 1
@@ -50,10 +51,15 @@ for command in git tar puppet r10k; do
   fi
 done
 
+# Enssure that target artifact directory exits
+if [ ! -d ${DIR}/artifacts ] ; then
+  mkdir -p ${DIR}/artifacts
+fi
+
 # Ensure that artifact_r10k configuration is in place
-rm -rf /etc/artifact_r10k.yaml
-cat > /etc/artifact_r10k.yaml <<EOF
-:cachedir: /var/cache/artifact_r10k
+rm -rf ${R10KCONFDIR}/artifact_r10k.yaml
+cat > ${R10KCONFDIR}/artifact_r10k.yaml <<EOF
+:cachedir: ${DIR}/cache
 :sources:
   control:
     basedir: ${DIR}/environments
@@ -64,14 +70,14 @@ cat > /etc/artifact_r10k.yaml <<EOF
 EOF
 
 if [[ $? == '0' ]]; then
-  echo "Created /etc/artifact_r10k.yaml" | output SUCCESS
+  echo "Created ${R10KCONFDIR}/artifact_r10k.yaml" | output SUCCESS
 else
-  echo "Error creating /etc/artifact_r10k.yaml" | output ERROR && exit 1
+  echo "Error creating ${R10KCONFDIR}/artifact_r10k.yaml" | output ERROR && exit 1
 fi
 
 # Run R10k to get puppet code from github and dependency modules from the puppet forge
 echo "Attempting to retrive puppet environment code and dependencies" | output
-r10k deploy environment -c /etc/artifact_r10k.yaml > /dev/null 2>&1
+r10k deploy environment -c ${R10KCONFDIR}/artifact_r10k.yaml > /dev/null 2>&1
 if [[ $? == '0' ]]; then
   echo "Puppet environment code and dependencies successfully retrieved" | output SUCCESS
 else
@@ -94,7 +100,9 @@ for environment in ${DIR}/environments/*; do
   fi
 
   # Check to see if branch exists in secrets repository that matches environment
-  git -c ${TEMPDIR} checkout ${envname} >/dev/null 2>&1
+  git -C ${TEMPDIR} checkout ${envname} >/dev/null 2>&1
+  #cd ${TEMPDIR}
+  #git -C checkout ${envname} >/dev/null 2>&1
   if [[ $? == '0' ]]; then
     # Deploy new secrets
     cp -R ${TEMPDIR}/* ${environment}/${HIERA_PATH}
@@ -112,12 +120,7 @@ for environment in ${DIR}/environments/*; do
 done
 
 # Purge temp secrets directory
-rm -rf ${TEMPDIR} 2>&1 >/dev/null
-
-# Enssure that target artifact directory exits
-if [ ! -d ${DIR}/artifacts ] ; then
-  mkdir -p ${DIR}/artifacts
-fi
+#rm -rf ${TEMPDIR} 2>&1 >/dev/null
 
 # Create compressed tar archive of the puppet enviroment code and dependancies
 echo "Attempting to create artifact" | output
