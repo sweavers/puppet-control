@@ -1,4 +1,4 @@
-# Class profiles::apiserver
+# Class profiles::digitalregister_app
 #
 # This class will manage api server installations
 #
@@ -6,9 +6,9 @@
 # - puppetlabs/stdlib
 #
 # Sample Usage:
-#   class { 'profiles::apiserver': }
+#   class { 'profiles::digitalregister_app': }
 #
-class profiles::apiserver{
+class profiles::digitalregister_app{
 
   include ::stdlib
   include ::profiles::deployment
