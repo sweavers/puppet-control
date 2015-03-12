@@ -2,9 +2,8 @@
 # Deploy tar ball of the /etc/puppet/environments folder (including secrets) for deployment to puppet masters
 
 DIR="/var/lib/jenkins/artifact_r10k"
-#PUPPETMASTER="puppet.lnx.lr.net"
-PUPPETMASTER="192.168.39.5 192.168.39.5"
-REMOTECI="192.168.39.5 192.168.39.5"
+PUPPETMASTER=""
+REMOTECI=""
 ARTIFACT=`ls ${DIR}/artifacts/ | sort -n | tail -1`
 
 # Purely cosmetic function to prettify output
