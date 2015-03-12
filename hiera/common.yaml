@@ -4,6 +4,7 @@ classes:
   - 'profiles::puppet'
   - 'profiles::deployment'
   - 'profiles::ntp'
+  - 'profiles::git'
   - 'sudo'
 
 # Prevent sudo from purging unmanaged sudo configs (for vagrant)
