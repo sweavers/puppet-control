@@ -11,19 +11,19 @@
 #
 class profiles::appserver(
 
-  $supervisor_conf = '/etc/supervisor.d/*.conf'
+  $supervisor_conf = ['/etc/supervisor.d/*.conf','/etc/supervisord.d/*.ini']
 
 ){
 
   include ::stdlib
   include ::profiles::deployment
 
-  $supervisor_dir = any2array($supervisor_conf)
+  $supervisor_lookup = any2array($supervisor_conf)
 
   class { 'supervisord':
     inet_server => true,
     install_pip => true,
-    config_dirs => $supervisor_dir
+    config_dirs => $supervisor_lookup
   }
 
   file { '/etc/supervisord.d/':
