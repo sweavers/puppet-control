@@ -19,7 +19,7 @@ class profiles::gitlab (
   $backup_location = undef,
   $smtp_relay      = undef,
   $local_login     = false,
-  $external_url    = 'localhost',
+  $external_url    = 'http://localhost',
   $ldap_enabled    = false,
   $ldap_host       = undef,
   $ldap_base       = undef,
