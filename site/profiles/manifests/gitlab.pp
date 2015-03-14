@@ -28,11 +28,17 @@ class profiles::gitlab (
 
 ){
 
+  $gitlab_download_link = $::operatingsystem ? {
+    CentOS     => 'https://downloads-packages.s3.amazonaws.com/centos-7.0.1406/gitlab-7.5.1_omnibus.5.2.0.ci-1.el7.x86_64.rpm',
+    Redhat     => 'https://downloads-packages.s3.amazonaws.com/centos-7.0.1406/gitlab-7.5.1_omnibus.5.2.0.ci-1.el7.x86_64.rpm',
+    Ubuntu     => 'https://downloads-packages.s3.amazonaws.com/ubuntu-14.04/gitlab_7.5.1-omnibus.5.2.0.ci-1_amd64.deb',
+  }
+
   class { '::gitlab' :
     puppet_manage_config          => true,
     puppet_manage_backups         => true,
     gitlab_branch                 => '7.5.1',
-    gitlab_download_link          => 'https://downloads-packages.s3.amazonaws.com/ubuntu-14.04/gitlab_7.5.1-omnibus.5.2.0.ci-1_amd64.deb',  # Should be pulled from Hira
+    gitlab_download_link          => $gitlab_download_link,  # Should be pulled from Hira
     external_url                  => $external_url,
     backup_keep_time              => 5184000, # In seconds, 5184000 = 60 days
     backup_path                   => '/var/opt/gitlab/backups',
@@ -56,6 +62,7 @@ class profiles::gitlab (
   #ensure that nfs package is installed
   #determin the package name based on the OS
   $nfs_package = $::operatingsystem ? {
+    CentOS     => 'nfs-utils',
     Redhat     => 'nfs-utils',
     Ubuntu     => 'nfs-common',
   }
