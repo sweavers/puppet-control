@@ -41,13 +41,13 @@ class profiles::appserver(
                 'python-devel','ruby','rubygems','autoconf','automake',
                 'binutils','bison','flex','gcc','gcc-c++','gettext','libtool',
                 'make','patch','pkgconfig','redhat-rpm-config','rpm-build',
-                'rpm-sign']
+                'rpm-sign','ruby-devel']
       $PYTHON='lr-python3-3.4.3-1.x86_64'
       $PYPGK="${PYTHON}.rpm"
       $PKGMAN='rpm'
     }
     'Debian': {
-      $PKGLIST=['openjdk-7-jdk','python','python-dev','ruby']
+      $PKGLIST=['openjdk-7-jdk','python','python-dev','ruby','ruby-dev']
       $PYTHON='lr-python3_3.4.3_amd64'
       $PYPGK="${PYTHON}.deb"
       $PKGMAN='dpkg'
