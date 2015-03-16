@@ -1,0 +1,6 @@
+---
+
+# This role is to set up a server for the elastic search service
+
+  classes:
+    - profiles::elasticsearch
