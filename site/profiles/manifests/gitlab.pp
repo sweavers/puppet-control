@@ -38,7 +38,7 @@ class profiles::gitlab (
     puppet_manage_config          => true,
     puppet_manage_backups         => true,
     gitlab_branch                 => '7.5.1',
-    gitlab_download_link          => $gitlab_download_link,  # Should be pulled from Hira
+    gitlab_download_link          => $gitlab_download_link,  # Should be pulled from Hiera
     external_url                  => $external_url,
     backup_keep_time              => 5184000, # In seconds, 5184000 = 60 days
     backup_path                   => '/var/opt/gitlab/backups',
