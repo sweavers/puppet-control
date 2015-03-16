@@ -2,8 +2,8 @@
 # Deploy tar ball of the /etc/puppet/environments folder (including secrets) for deployment to puppet masters
 
 DIR="/var/lib/jenkins/artifact_r10k"
-PUPPETMASTER=""
-REMOTECI=""
+PUPPETMASTER=${PUPPET_MASTER:-""}
+REMOTECI=${REMOTECI:-""}
 ARTIFACT=`ls ${DIR}/artifacts/ | sort -n | tail -1`
 
 # Purely cosmetic function to prettify output
