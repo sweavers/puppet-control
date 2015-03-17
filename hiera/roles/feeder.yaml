@@ -3,3 +3,14 @@
 classes:
   - 'profiles::appserver'
   - 'profiles::rabbitmq'
+  
+rabbitmq_users:
+  rabbitadmin:
+    admin: true
+    password: 'rabbitadminrabbitadmin'
+
+rabbitmq_user_permissions:
+  rabbitadmin@/:
+    configure_permission: '.*'
+    read_permission: '.*'
+    write_permission: '.*'

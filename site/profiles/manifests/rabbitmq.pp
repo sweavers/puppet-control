@@ -34,9 +34,15 @@ class profiles::rabbitmq(
   include ::erlang
 
   class { '::rabbitmq':
-    version => $ver,
-    port    => $port,
-    require => Class[erlang]
+    version           => $ver,
+    port              => $port,
+    require           => Class[erlang],
+    delete_guest_user => true
   }
+
+  include stdlib
+
+  create_resources('rabbitmq_user', hiera_hash('rabbitmq_users'))
+  create_resources('rabbitmq_user_permissions', hiera_hash('rabbitmq_user_permissions'))
 
 }
