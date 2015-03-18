@@ -14,13 +14,18 @@ class profiles::geos_addins{
   case $::osfamily{
     'RedHat': {
       $PKGLIST=['geos','geos-devel']
+      $PROVIDER= 'yum'
     }
     'Debian': {
       $PKGLIST=['libgeos-ruby1.8','libgeos-dev']
+      $PROVIDER= 'apt'
     }
     default: {
       fail("Unsupported OS type - ${::osfamily}")
     }
   }
-  ensure_packages($PKGLIST)
+  package { $PKGLIST :
+    ensure   => installed,
+    provider => $PROVIDER,
+    }
 }

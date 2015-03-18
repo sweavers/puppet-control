@@ -1,6 +1,7 @@
 ---
 
 classes:
+  - 'profiles::appserver'
   - 'profiles::rabbitmq'
 
 rabbitmq_users:
