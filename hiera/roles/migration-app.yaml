@@ -26,12 +26,12 @@
       password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
 
   rabbitmq_users:
-    rabbitadmin:
+    rabbitmqadmin:
       admin: true
-      password: 'rabbitadminrabbitadmin'
+      password: 'rabbitmqadminrabbitmqadmin'
 
   rabbitmq_user_permissions:
-    rabbitadmin@/:
+    rabbitmqadmin@/:
       configure_permission: '.*'
       read_permission: '.*'
       write_permission: '.*'
