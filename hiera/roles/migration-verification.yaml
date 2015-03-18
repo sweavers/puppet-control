@@ -6,3 +6,15 @@ classes:
   - profiles::appserver
   - profiles::postgresql
   - profiles::rabbitmq
+
+
+rabbitmq_users:
+  rabbitmqadmin:
+    admin: true
+    password: 'rabbitmqadminrabbitmqadmin'
+
+rabbitmq_user_permissions:
+  rabbitmqadmin@/:
+    configure_permission: '.*'
+    read_permission: '.*'
+    write_permission: '.*'
