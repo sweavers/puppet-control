@@ -7,8 +7,15 @@
 #
 class profiles::elasticsearch {
 
-package { 'elasticsearch' :
-  ensure => 'present',
-  status => 'enabled',
+#package { 'elasticsearch' :
+#  ensure => 'present',
+#  status => 'enabled',
+#  }
+#}
+
+  class {'::elasticsearch' :
+    manage_repo  => true,
+    repo_version => 1.4
   }
+
 }
