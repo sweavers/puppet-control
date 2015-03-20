@@ -17,6 +17,29 @@
 #     remote => ['192.168.1.2']
 #   }
 #
+# Hiera Lookups:
+#
+# postgres_databases:
+#   systemofrecord:
+#    user: systemofrecord
+#    password: md511c5a6395e27555ef43eb7b05c76d7c1
+#    owner: systemofrecord
+
+# postgres_users:
+#   deployment:
+#     password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
+#
+##
+# pg_hba_rule:
+#   test:
+#     description: test
+#     type: host
+#     database: all
+#     user: all
+#     address: 0.0.0.0/0
+#     auth_method: md5
+#
+
 class profiles::postgresql(
 
   $port     = 5432,
@@ -42,15 +65,17 @@ class profiles::postgresql(
     manage_package_repo => true,
     version             => $version,
     datadir             => "${dbroot}/data",
-    confdir             => $dbroot,
+    confdir             => "${dbroot}/data",
     needs_initdb        => true,
     service_name        => 'postgresql', # confirm on ubuntu
     require             => File[$dbroot]
   } ->
 
   class { 'postgresql::server':
-    port             => $port,
-    listen_addresses => $bind
+    port                    => $port,
+    listen_addresses        => $bind,
+    # The following needs to be replaced with propper hba managment
+    ip_mask_allow_all_users => '0.0.0.0/0',
   }
 
   user { 'postgres':
@@ -96,5 +121,7 @@ class profiles::postgresql(
   include postgresql::lib::devel
   create_resources('postgresql::server::db', hiera_hash('postgres_databases'))
   create_resources('postgresql::server::role', hiera_hash('postgres_users'))
+  #Will allow hba rules to be set for specific users/dbs via hiera
+  #create_resources('postgresql::server::pg_hba_rule', hiera_hash('pg_hba_rule'))
 
 }
