@@ -57,6 +57,26 @@ class profiles::jenkins (
     source => 'puppet:///modules/profiles/artifact.sh'
   }
 
+  # ensure artifact script is installed
+  file { '/usr/bin/deploy':
+    ensure => present,
+    path   => '/usr/local/bin/deploy',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    source => 'puppet:///modules/profiles/deploy.sh'
+  }
+
+  # ensure app-deploy script is installed
+  file { '/usr/bin/app-deploy':
+    ensure => present,
+    path   => '/usr/local/bin/app-deploy',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    source => 'puppet:///modules/profiles/app-deploy.sh'
+  }
+
   # ensure r10k is installed
   package { 'r10k':
     ensure   => 'installed',
