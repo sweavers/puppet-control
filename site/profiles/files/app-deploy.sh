@@ -60,19 +60,19 @@ fi
 echo "Attempting to deploy code artifact on ${TARGETSERVER}" | output
 # Stop monit service
 ssh deployment@${TARGETSERVER} "sudo monit stop all" > /dev/null 2>&1
-[[ $? != '0' ]] && echo "Error stopping monit service on ${TARGETSERVER}" | output ERROR && exit 1
+[[ $? != '0' ]] && echo "Error stopping monit service on ${TARGETSERVER}" | output ERROR #&& exit 1
 
 # Ensure 'prev-ver' directory exists and is purged on TARGETSERVER
 ssh deployment@${TARGETSERVER} "if [ ! -d /opt/deployment/prev-ver ] ; then sudo mkdir -p /opt/deployment/prev-ver ; else sudo rm -rf /opt/deployment/prev-ver/* ; fi" #> /dev/null 2>&1
 [[ $? != '0' ]] && echo "Error creating or purging 'prev-ver' directory on ${TARGETSERVER}" | output ERROR && exit 1
 
 # Ensure TARGETDIR directory exists on TARGETSERVER
-ssh deployment@${TARGETSERVER} "if [ ! -d ${TARGETDIR} ] ; then sudo mkdir -p ${TARGETDIR} ; else exit 0 ; fi" #> /dev/null 2>&1
+ssh deployment@${TARGETSERVER} "if [ ! -d ${TARGETDIR} ] ; then sudo mkdir -p ${TARGETDIR} ; else exit 0 ; fi" > /dev/null 2>&1
 [[ $? != '0' ]] && echo "Error creating or creating ${TARGETDIR} on ${TARGETSERVER}" | output ERROR && exit 1
 
-# Move existing code to 'prev-ver' folder
+# Move any existing code to 'prev-ver' folder
 ssh deployment@${TARGETSERVER} "sudo mv ${TARGETDIR}/* /opt/deployment/prev-ver/" > /dev/null 2>&1
-[[ $? != '0' ]] && echo "Error moving existing code to 'pre-ver' ${TARGETSERVER}" | output ERROR && exit 1
+[[ $? != '0' ]] && echo "Error moving existing code to 'pre-ver' ${TARGETSERVER}" | output ERROR #&& exit 1
 
 # Untar artifact from /tmp to TARGETDIR
 ssh deployment@${TARGETSERVER} "sudo tar -C ${TARGETDIR} -xzf /tmp/${APPNAME}.tgz" > /dev/null 2>&1
@@ -83,8 +83,8 @@ else
 fi
 
 # Re-start monitd service
-ssh deployment@${TARGETSERVER} "sudo monit start all" > /dev/null 2>&1
-[[ $? != '0' ]] && echo "Error re-starting monitd service on ${TARGETSERVER}" | output ERROR && exit 1
+ssh deployment@${TARGETSERVER} "sudo systemctl start monit && sudo monit start all" > /dev/null 2>&1
+[[ $? != '0' ]] && echo "Error re-starting monitd service on ${TARGETSERVER}" | output ERROR #&& exit 1
 
 # Clean up
 ssh deployment@${TARGETSERVER} "sudo rm -rf /tmp/${APPNAME}.tgz/" > /dev/null 2>&1
