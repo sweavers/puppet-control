@@ -3,11 +3,7 @@
 # Sample Usage:
 #   class { 'profiles::logbrokerextranet': }
 #
-class profiles::redis {
+class profiles::logredis {
 
-include ::redis
-
-package { 'redis' :
-  ensure  => installed,
-  }
+  class { 'redis': }
 }

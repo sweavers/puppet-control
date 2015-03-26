@@ -7,8 +7,8 @@ mod 'alphagov/account',             :git => 'https://github.com/alphagov/puppet-
 mod 'elasticsearch/elasticsearch', '0.9.2'
 mod 'elasticsearch/logstash',      '0.5.1'
 mod 'evenup/kibana',               '2.0.1'
+mod 'evenup/redis',                '1.3.1'
 mod 'jfryman/nginx',               '0.2.2'
-mod 'maestrodev/wget',             '1.5.7'
 mod 'openstackci/pip',              :git => 'https://github.com/openstack-infra/puppet-pip.git',
                                     :ref => '88c1e708d421f397283fd88266147175855426dd'
 mod 'puppetlabs/firewall',         '1.3.0'
@@ -21,7 +21,6 @@ mod 'rtyler/jenkins',              '1.3.0'
 mod 'saz/sudo',                    '3.0.9'
 mod 'spuder/gitlab',               '2.3.5'
 mod 'stephenrjohnson/puppet',      '1.3.1'
-mod 'thomasvandoren/redis',        '0.10.0'
 mod 'zack/r10k',                   '2.6.2'
 
 # Dependency modules
