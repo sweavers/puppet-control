@@ -1,0 +1,9 @@
+---
+
+# This role is to set up a server for the log respository
+
+  classes:
+    - profiles::redis
+    - profiles::elkelasticsearch
+    - profiles::elklogstash
+    - profiles::elkkibana
