@@ -83,13 +83,16 @@ else
 fi
 
 # Re-start monitd service
+echo "Attempting to restart monit service" | output
 ssh deployment@${TARGETSERVER} "sudo systemctl start monit && sudo monit start all" > /dev/null 2>&1
 [[ $? != '0' ]] && echo "Error re-starting monitd service on ${TARGETSERVER}" | output ERROR #&& exit 1
 
 # Clean up
+echo "Cleaning up" | output
 ssh deployment@${TARGETSERVER} "sudo rm -rf /tmp/${APPNAME}.tgz/" > /dev/null 2>&1
 [[ $? != '0' ]] && echo "Error cleaning up /tmp/${APPNAME}.tgz on ${TARGETSERVER}" | output WARN
 rm ${APPNAME}.tgz
 [[ $? != '0' ]] && echo "Error cleaning up /tmp/${APPNAME}.tgz on local machine" | output WARN
 rm -rf ${LOCALDIR}${APPNAME}
 [[ $? != '0' ]] && echo "Error cleaning up ${LOCALDIR}${APPNAME} on local machine" | output WARN
+exit 0
