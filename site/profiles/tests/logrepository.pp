@@ -1,2 +1,1 @@
-include profiles::logredis
-include profiles::elklogstash
+include profiles::logrepository
