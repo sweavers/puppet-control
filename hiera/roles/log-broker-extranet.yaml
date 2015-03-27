@@ -3,5 +3,4 @@
 # This role is to set up a server for the logbrokerextranet
 
   classes:
-    - profiles::logredis
-    - profiles::elklogstash
+    - profiles::logbrokerextranet
