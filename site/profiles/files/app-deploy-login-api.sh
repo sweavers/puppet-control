@@ -4,6 +4,7 @@
 GITREPO=${GITREPO:-""}
 APPNAME=`echo $GITREPO | cut -d "/" -f2 | cut -d "." -f1`
 TARGETSERVER=${TARGETSERVER:-""}
+BRANCH=${BRANCH:-""}
 LOCALDIR="/tmp/"
 TARGETDIR="/opt/deployment/${APPNAME}"
 
@@ -31,7 +32,7 @@ done
 
 # Clone GITREPO to LOCALDIR
 echo "Attempting to clone ${GITREPO}" | output
-git clone ${GITREPO} ${LOCALDIR}${APPNAME} > /dev/null 2>&1
+git clone -b ${BRANCH} ${GITREPO} ${LOCALDIR}${APPNAME} --single-branch > /dev/null 2>&1
 if [[ $? == '0' ]]; then
   echo "Successfully cloned ${GITREPO}" | output SUCCESS
 else
