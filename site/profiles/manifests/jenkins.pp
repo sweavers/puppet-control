@@ -77,6 +77,26 @@ class profiles::jenkins (
     source => 'puppet:///modules/profiles/app-deploy.sh'
   }
 
+  # ensure app-deploy script is installed
+  file { '/usr/bin/app-deploy-api':
+    ensure => present,
+    path   => '/usr/local/bin/app-deploy-api',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    source => 'puppet:///modules/profiles/app-deploy-api.sh'
+  }
+
+  # ensure app-deploy script is installed
+  file { '/usr/bin/app-deploy-login-api':
+    ensure => present,
+    path   => '/usr/local/bin/app-deploy-login-api',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    source => 'puppet:///modules/profiles/app-deploy-login-api.sh'
+  }
+
   # ensure r10k is installed
   package { 'r10k':
     ensure   => 'installed',
