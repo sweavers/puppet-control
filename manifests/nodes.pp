@@ -6,6 +6,23 @@ if empty($machine_role) {
 # Default nodes
 node default {
 
+  if $virtual == 'xenu' {
+
+    user {
+        'webapp':
+            ensure  => present,
+            home    => '/home/webapp',
+            shell   => '/bin/bash',
+            uid     => '1003',
+            gid     => '1003';
+    }
+      # enter puppet code
+  }
+
+  else {
+    # enter puppet code
+  
+
   # Create 'lr-admin' group on all hosts
   group { 'lr-admin' :
     ensure => present,
@@ -20,4 +37,6 @@ node default {
 
   # Create accounts from Hiera data
   create_resources( 'account', hiera_hash('accounts', {require => Group['lr-admin']}) )
+}
+
 }
