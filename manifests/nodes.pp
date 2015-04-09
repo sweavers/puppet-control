@@ -16,6 +16,15 @@ node default {
             uid     => '1003',
             gid     => '1003';
     }
+
+    file {
+        '/etc/sudoers.d/webapp':
+            ensure  => file,
+            source  => 'puppet:///modules/webapp',
+            owner   => 'root',
+            group   => 'root',
+            mode    => '0644';
+    }
       # enter puppet code
   }
 
