@@ -19,8 +19,6 @@ class profiles::appserver(
   include ::profiles::deployment
 
   $supervisor_lookup = any2array($supervisor_conf)
-  $ruby_dependencies = hiera('common_gems')
-  $python_dependencies = hiera('common_pip_packages')
 
   class { 'supervisord':
     inet_server => true,
@@ -74,12 +72,12 @@ class profiles::appserver(
     require  => File['LR Python package']
   }
 
-  package{$ruby_dependencies:
+  package{['bundler','rake']:
     ensure   => installed,
     provider => gem
   }
 
-  package{'$python_dependencies':
+  package{['virtualenv','virtualenvwrapper']:
     ensure   => installed,
     provider => pip
   }
