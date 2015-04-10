@@ -17,7 +17,68 @@ profiles::ntp::ntp_restrict_array:
 
 profiles::puppet::environment: development
 
+common_pip_packages:
+  - 'setuptools'
+  - 'pg8000'
+  - 'Werkzeug'
+  - 'Jinja2'
+  - 'MarkupSafe'
+  - 'itsdangerous'
+  - 'Flask'
+  - 'virtualenvwrapper'
+  - 'virtualenv'
 
+feeder_pip_packages:
+  - 'amqp'
+  - 'anyjson'
+  - 'billiard'
+  - 'celery'
+  - 'chardet'
+  - 'elasticsearch'
+  - 'jsonschema'
+  - 'kombu'
+  - 'mock'
+  - 'pytz'
+  - 'simplejson'
+  - 'stopit'
+  - 'urllib3'
+
+register_pip_packages:
+  - 'Flask-Login'
+  - 'Flask-WTF'
+  - 'gunicorn'
+  - 'gunicorn-service'
+  - 'python-dateutil'
+  - 'requests'
+  - 'six'
+  - 'WTForms'
+
+login_pip_packages:
+  - 'Flask-SQLAlchemy'
+  - 'gunicorn'
+  - 'gunicorn-service'
+  - 'SQLAlchemy'
+
+common_gems:
+  - 'activesupport'
+  - 'bigdecimal'
+  - 'bundler'
+  - 'i18n'
+  - 'io-console'
+  - 'json'
+  - 'kgio'
+  - 'mini_portile'
+  - 'minitest'
+  - 'psych'
+  - 'rack'
+  - 'rack-test'
+  - 'raindrops'
+  - 'rdoc'
+  - 'rgen'
+  - 'thread_safe'
+  - 'tzinfo'
+  - 'unicorn'
+  - 'unicorn-rails'
 
 ##example account declarations
 #accounts:
