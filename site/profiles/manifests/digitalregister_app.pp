@@ -14,6 +14,8 @@ class profiles::digitalregister_app{
   include ::profiles::deployment
   include ::profiles::nginx
 
+  $register_dependencies = hiera('register_pip_packages')
+
   #  Install required packages for Ruby and Java
   case $::osfamily{
     'RedHat': {
@@ -54,16 +56,16 @@ class profiles::digitalregister_app{
     require => Package[$PYTHON]
   }
 
-  package{'gunicorn' :
+  package{'register_dependencies' :
     ensure   => installed,
     provider => pip3,
     require  => File['/usr/bin/pip3']
   }
 
-  package{'flask' :
+  /*package{'flask' :
     ensure   => installed,
     provider => pip3,
     require  => File['/usr/bin/pip3']
-  }
+  }*/
 
 }
