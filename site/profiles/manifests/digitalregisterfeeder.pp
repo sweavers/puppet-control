@@ -9,7 +9,7 @@ class profiles::digitalregisterfeeder {
 
   include ::stdlib
   include ::profiles::rabbitmq
-
+  $feeder_dependecies = hiera_array('feeder_pip_packages')
   #  Install required packages for Ruby and Java
   case $::osfamily{
     'RedHat': {
@@ -56,7 +56,7 @@ class profiles::digitalregisterfeeder {
     require => Package[$PYTHON]
 }
 
-  package{ 'celery' :
+  package{ '$feeder_pip_packages' :
     ensure   => installed,
     provider => pip3,
     require  => File['/usr/bin/pip3']
