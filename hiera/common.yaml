@@ -12,6 +12,9 @@ classes:
 # Prevent sudo from purging unmanaged sudo configs (for vagrant)
 sudo::purge: false
 sudo::config_file_replace: false
+sudo::configs:
+    'webapp':
+        'source'  : 'puppet:///modules/profiles/webapp'
 
 
 profiles::ntp::ntp_restrict_array:
