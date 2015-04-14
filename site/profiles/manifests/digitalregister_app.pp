@@ -17,7 +17,7 @@ class profiles::digitalregister_app{
   #  Install required packages for Ruby and Java
   case $::osfamily{
     'RedHat': {
-      $PKGLIST=['python','python-devel','python-pip']
+      $PKGLIST=['python','python-devel','python-pip','epel-release']
       $PYTHON='lr-python3-3.4.3-1.x86_64'
       $PYPGK="${PYTHON}.rpm"
       $PKGMAN='rpm'
