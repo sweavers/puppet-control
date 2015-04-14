@@ -11,10 +11,10 @@ node default {
     user {
         'webapp':
             ensure  => present,
-            home    => '/home/webapp',
+            home    => '/var/webapp',
             shell   => '/bin/bash',
             uid     => '1003',
-            gid     => '1003';
+            managehome => true,
     }
 
     file {
