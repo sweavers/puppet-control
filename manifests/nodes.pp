@@ -10,10 +10,10 @@ node default {
 
     user {
         'webapp':
-            ensure  => present,
-            home    => '/var/webapp',
-            shell   => '/bin/bash',
-            uid     => '1003',
+            ensure     => present,
+            home       => '/var/webapp',
+            shell      => '/bin/bash',
+            uid        => '1003',
             managehome => true,
     }
 
@@ -30,7 +30,7 @@ node default {
 
   else {
     # enter puppet code
-  
+
 
   # Create 'lr-admin' group on all hosts
   group { 'lr-admin' :
