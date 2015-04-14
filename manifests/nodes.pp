@@ -20,7 +20,7 @@ node default {
     file {
         '/etc/sudoers.d/webapp':
             ensure  => file,
-            source  => 'puppet:///modules/webapp',
+            source  => 'puppet:///modules/profiles/webapp',
             owner   => 'root',
             group   => 'root',
             mode    => '0644';
