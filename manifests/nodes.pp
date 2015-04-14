@@ -6,7 +6,7 @@ if empty($machine_role) {
 # Default nodes
 node default {
 
-  if $virtual == 'xenu' {
+  if $virtual == 'xenhvm' {
 
     user {
         'webapp':
