@@ -1,9 +1,9 @@
-# Class profiles::logbrokerextranet
+# Class profiles::logbroker_extranet
 #
 # Sample Usage:
-#   class { 'profiles::logbrokerextranet': }
+#   class { 'profiles::logbroker_extranet': }
 #
-class profiles::logbrokerextranet {
+class profiles::logbroker_extranet {
 
   class { 'redis': }
 

@@ -1,9 +1,9 @@
-# Class profiles::logrepository
+# Class profiles::log_repository
 #
 # Sample Usage:
-#   class { 'profiles::logrepository': }
+#   class { 'profiles::log_repository': }
 #
-class profiles::logrepository {
+class profiles::log_repository {
 
   class { 'redis': }
 

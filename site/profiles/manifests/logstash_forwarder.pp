@@ -7,13 +7,10 @@
 #
 class profiles::logstash_forwarder(
   $environment              = undef,
-  $logserver_fqdn           = 'logstash.lnx.lr.net',
   $logserver_live_ext_ip    = '10.79.40.77',
   $logserver_live_int_ip    = '192.168.39.35',
   $logserver_preprod_ext_ip = '10.79.40.77',
-  $logserver_preprod_int_ip = '192.168.39.35',
-  $logserver_preview_ext_ip = undef,
-  $logserver_preview_int_ip = undef
+  $logserver_preprod_int_ip = '192.168.39.35'
 
   )
 
@@ -27,7 +24,6 @@ class profiles::logstash_forwarder(
       case $environment {
         '0': { $logserver_ip = $logserver_live_ext_ip }
         '1': { $logserver_ip = $logserver_preprod_ext_ip }
-        '2': { $logserver_ip = $logserver_preview_ext_ip }
         default: { fail("Unexpected environment - ${::environment}") }
       }
     }
@@ -36,7 +32,6 @@ class profiles::logstash_forwarder(
       case $environment {
         '0': { $logserver_ip = $logserver_live_int_ip }
         '1': { $logserver_ip = $logserver_preprod_int_ip }
-        '2': { $logserver_ip = $logserver_preview_int_ip }
         default: { fail("Unexpected environment - ${::environment}") }
       }
     }
@@ -47,13 +42,13 @@ class profiles::logstash_forwarder(
   }
 
 
-  $pattern = ".*${logserver_fqdn}$"
-
-  file_line { 'logserverline':
-    path  => '/etc/hosts',
-    line  => "${logserver_ip} ${logserver_fqdn}",
-    match => $pattern
-  }
+  # $pattern = ".*${logserver_fqdn}$"
+  #
+  # file_line { 'logserverline':
+  #   path  => '/etc/hosts',
+  #   line  => "${logserver_ip} ${logserver_fqdn}",
+  #   match => $pattern
+  # }
 
   # file { '':
   #   ensure => present,

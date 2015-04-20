@@ -17,6 +17,12 @@ profiles::ntp::ntp_restrict_array:
 
 profiles::puppet::environment: development
 
+profiles::logbroker_extranet::ip_address:
+  - '10.79.40.64'
+
+profiles::log_repository::ip_address:
+  - '192.168.39.34'  
+
 
 
 ##example account declarations
