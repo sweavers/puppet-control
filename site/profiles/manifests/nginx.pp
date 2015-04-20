@@ -24,7 +24,7 @@ class profiles::nginx (
   	  www_root     => '/var/jail',
   	  proxy_set_header => [
   	    'X-Real-IP        $remote_addr',
-  	    'X-Forwarded-For  $proxy_add_x_forwarded_for',
+  	    'X-Forwarded-For  $proxy_add_x_forwarded_for',  # This directive addresses session stealing US100
   	  ],
 
 
