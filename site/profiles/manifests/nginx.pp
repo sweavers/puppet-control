@@ -15,24 +15,48 @@ class profiles::nginx (
 
   include ::nginx
 
-  if $hostname == 'digital-register-frontend-\d\d' {
+  if $virtual == 'xenhvm' {
 
-  	nginx::resource::vhost { 'digital.integration.beta.landregistryconcept.co.uk' :
+  	case $::hostname {
+  		'digital-register-frontend-01': {
 
-  	  listen_port  => 80,
-  	  proxy        => 'http://127.0.0.1:8000',
-  	  www_root     => '/var/jail',
-  	  proxy_set_header => [
-  	    'X-Real-IP        $remote_addr',
-  	    'X-Forwarded-For  $proxy_add_x_forwarded_for',  # This directive addresses session stealing US100
-  	  ],
+  			nginx::resource::vhost { 'digital.integration.beta.landregistryconcept.co.uk':
+              
+              listen_port     => 80,
+              proxy           => 'http://127.0.0.1:8000',
+              www_root        => '/var/jail',
+              proxy_set_header=> [
+              'X-Real-IP        $remote_addr',
+              'X-Forwarded-For  $proxy_add_x_forwarded_for', # This directive is to address US100 "session stealing"
+              'Host             $http_host',
+              ],
 
+  		    }
 
-  	}
-  else {
-  		# enter puppet code
+  	
+        }
+        'digital-register-frontend-02': {
+
+        	nginx::resource::vhost { 'digital.preview.beta.landregistryconcept.co.uk':
+             
+              listen_port      => 80,
+              proxy            => 'http://127.0.0.1:8000',
+              www_root         => '/var/jail',
+              proxy_set_header => [
+              'X-Real-IP         $remote_addr',
+              'X-Forwarded-For   $proxy_add_x_forwarded_for',
+              'Host              $http_host',
+              ]
+
+            }
+
+        }
   	}
   }
+  else {
+  		# enter puppet code
+  }
+  
 
 }
 
