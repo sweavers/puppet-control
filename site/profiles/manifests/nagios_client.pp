@@ -14,7 +14,7 @@
 # Hiera:
 # <EXAMPLE OF ANY REQUIRED HIERA STRUCTURE>
 #
-class profiles::nagios_server (
+class profiles::nagios_client (
 
   $nagios_server = '172.16.42.69'
 
