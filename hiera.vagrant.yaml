@@ -1,0 +1,10 @@
+---
+:backends:
+  - yaml
+
+:yaml:
+  :datadir: /vagrant/hiera
+:hierarchy:
+  - vagrant_%{::vagrant}
+  - roles/%{::machine_role}
+  - common
