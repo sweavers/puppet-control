@@ -48,4 +48,25 @@ class profiles::nagios_server (
       ensure  =>'running',
       require => Package['nagios']
     }
+
+    # Auto populate nagios configuration from puppetdb
+    Nagios_command <<||>> {
+      require => Package['nagios'],
+      notify  => Service['nagios']
+    }
+
+    Nagios_host <<||>> {
+      require => Package['nagios'],
+      notify  => Service['nagios']
+    }
+    
+    Nagios_hostgroup <<||>> {
+      require => Package['nagios'],
+      notify  => Service['nagios']
+    }
+
+    Nagios_service <<||>> {
+      require => Package['nagios'],
+      notify  => Service['nagios']
+    }
 }
