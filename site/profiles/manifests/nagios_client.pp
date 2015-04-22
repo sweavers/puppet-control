@@ -54,4 +54,14 @@ class profiles::nagios_client (
       notification_interval => '30',
       notification_period   => '24x7'
     }
+
+    # Export nagios service configuration
+    @@nagios_service { 'SSH' :
+      ensure                => present,
+      use                   => 'generic-service',
+      host_name             => 'client',
+      service_description   => 'SSH',
+      check_command         => 'check_ssh',
+      notifications_enabled => '0'
+    }
 }

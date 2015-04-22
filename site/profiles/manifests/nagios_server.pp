@@ -50,11 +50,6 @@ class profiles::nagios_server (
     }
 
     # Auto populate nagios configuration from puppetdb
-    Nagios_command <<||>> {
-      require => Package['nagios'],
-      notify  => Service['nagios']
-    }
-
     Nagios_host <<||>> {
       target  => '/etc/nagios/conf.d/nagios_host.cfg',
       require => Package['nagios'],
@@ -62,12 +57,21 @@ class profiles::nagios_server (
     }
 
     Nagios_hostgroup <<||>> {
+      target  => '/etc/nagios/conf.d/host_group.cfg',
       require => Package['nagios'],
       notify  => Service['nagios']
     }
 
     Nagios_service <<||>> {
+      target  => '/etc/nagios/conf.d/service.cfg',
       require => Package['nagios'],
       notify  => Service['nagios']
     }
+
+    Nagios_command <<||>> {
+      target  => '/etc/nagios/conf.d/command.cfg',
+      require => Package['nagios'],
+      notify  => Service['nagios']
+    }
+
 }
