@@ -33,7 +33,6 @@ class profiles::nagios_client (
       match   => '^allowed_hosts.*$',
       require => Package['nrpe'],
       notify  => Service['nrpe']
-
     }
 
     # Ensure nrpe is runnning
@@ -43,13 +42,16 @@ class profiles::nagios_client (
     }
 
     # Export nagios host configuration
-    @@nagios_host {"${::hostname}.${::network}":
-      ensure     => present,
-      address    => $::ipaddress,
-      group      => nagios,
-      hostgroups => "${::kernel}, ${::network}, ${::virtual}",
-      mode       => '0644',
-      owner      => root,
-      use        => 'generic-server',
+    @@nagios_host { $::hostname :
+      ensure                => present,
+      alias                 => $::hostname,
+      address               => $::ipaddress,
+      mode                  => '0644',
+      owner                 => root,
+      use                   => 'linux-server',
+      max_check_attempts    => '5',
+      check_period          => '24x7',
+      notification_interval => '30',
+      notification_period   => '24x7'
     }
 }
