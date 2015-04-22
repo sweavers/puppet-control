@@ -56,10 +56,11 @@ class profiles::nagios_server (
     }
 
     Nagios_host <<||>> {
+      target  => '/etc/nagios/conf.d/',
       require => Package['nagios'],
       notify  => Service['nagios']
     }
-    
+
     Nagios_hostgroup <<||>> {
       require => Package['nagios'],
       notify  => Service['nagios']
