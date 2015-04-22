@@ -28,6 +28,7 @@ class profiles::nagios_client (
 
     # Set ip address of nagios server
     file_line { '/etc/nagios/nrpe.cfg':
+      path    => '/etc/nagios/nrpe.cfg',
       line    => "allowed_hosts=127.0.0.1 ${nagios_server}",
       match   => '^allowed_hosts.*$',
       require => Package['nrpe'],
