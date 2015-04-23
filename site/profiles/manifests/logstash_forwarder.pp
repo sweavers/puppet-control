@@ -57,7 +57,7 @@ class profiles::logstash_forwarder(
   }
 
   file { 'logstash_forwarder_cert':
-    ensure  => 'file',  
+    ensure  => 'file',
     name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
     owner   => 'root',
     group   => 'root',
