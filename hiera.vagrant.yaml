@@ -3,8 +3,9 @@
   - yaml
 
 :yaml:
-  :datadir: /vagrant/hiera
+  :datadir: /vagrant/hiera/roles
 :hierarchy:
+  - vagrant
   - vagrant_%{::vagrant}
   - roles/%{::machine_role}
   - common
