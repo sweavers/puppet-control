@@ -44,11 +44,7 @@ node default {
       # enter puppet code
   }
 
-  elsif $virtual == 'virtualbox' {
-      
-      
-
-  } else {
+  else {
     # enter puppet code
 
 
