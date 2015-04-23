@@ -65,7 +65,7 @@ class profiles::logstash_forwarder(
     content => $logserver_cert
   }
 
-  class { 'logstashforwarder': }
+  class { 'logstashforwarder':
     servers => [ $logserver_ip ],
     ssl_ca  => $logserver_cert,
     require => File[logstash_forwarder_cert]
