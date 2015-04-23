@@ -1,0 +1,7 @@
+---
+
+# This role is to set up an app server for the Digital Register service
+
+  classes:
+    - profiles::vagrant
+
