@@ -6,64 +6,68 @@
 #   class { 'profiles::logstash_forwarder': }
 #
 class profiles::logstash_forwarder(
-  $environment              = undef,
-  $logserver_live_ext_ip    = '10.79.40.77',
-  $logserver_live_int_ip    = '192.168.39.35',
-  $logserver_preprod_ext_ip = '10.79.40.77',
-  $logserver_preprod_int_ip = '192.168.39.35'
-
+  $environment = undef
   )
 
   {
 
+  include profiles::logbroker_extranet
+  include profiles::log_repository
+
   $ip_first_octet = split( $::ipaddress, '[.]' )
-  $environment    = regsubst($::hostname, '^.*-(\d)\d\.*$', '\1')
 
-  case $ip_first_octet[0]{
-    10: {
-      case $environment {
-        '0': { $logserver_ip = $logserver_live_ext_ip }
-        '1': { $logserver_ip = $logserver_preprod_ext_ip }
-        default: { fail("Unexpected environment - ${::environment}") }
+  case regsubst($::hostname, '^.*-(\d)\d\.*$', '\1'){
+    0: {
+      case $ip_first_octet[0]{
+        10: {
+          $logserver_ip   = $profiles::logbroker_extranet::prod_ip_address
+          $logserver_cert = $profiles::logbroker_extranet::prod_logstash_forwarder_cert
+        }
+
+        192: {
+          $logserver_ip   = $profiles::log_repository::prod_ip_address
+          $logserver_cert = $profiles::log_repository::prod_logstash_forwarder_cert
+        }
+
+        default: {
+          fail("Unexpected network - ${::ipaddress}")
+        }
       }
     }
+    1: {
+      case $ip_first_octet[0]{
+        10: {
+          $logserver_ip   = $profiles::logbroker_extranet::preprod_ip_address
+          $logserver_cert = $profiles::logbroker_extranet::preprod_logstash_forwarder_cert
+        }
 
-    192: {
-      case $environment {
-        '0': { $logserver_ip = $logserver_live_int_ip }
-        '1': { $logserver_ip = $logserver_preprod_int_ip }
-        default: { fail("Unexpected environment - ${::environment}") }
+        192: {
+          $logserver_ip   = $profiles::log_repository::preprod_ip_address
+          $logserver_cert = $profiles::log_repository::preprod_logstash_forwarder_cert
+        }
+
+        default: {
+          fail("Unexpected network - ${::ipaddress}")
+        }
       }
     }
-
     default: {
-      fail("Unexpected network - ${::ipaddress}")
+      fail("Unexpected environment value derived from hostname - ${::hostname}")
     }
   }
 
+  file { 'logstash_forwarder_cert':
+    name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0664',
+    content => $logserver_cert
+  }
 
-  # $pattern = ".*${logserver_fqdn}$"
-  #
-  # file_line { 'logserverline':
-  #   path  => '/etc/hosts',
-  #   line  => "${logserver_ip} ${logserver_fqdn}",
-  #   match => $pattern
-  # }
-
-  # file { '':
-  #   ensure => present,
-  #   path   => '/etc/pki/tls/openssl.cnf',
-  #   source => '',
-  #   owner  => '',
-  #   group  => '',
-  #   mode   => '0111'
-  #
-  # }
-
-  #  class { 'logstashforwarder': }
-  #    servers  => [ 'logstash.lnx.lr.net' ],
-  #    ssl_key  => 'puppet:///path/to/your/ssl.key',
-  #    ssl_ca   => 'puppet:///path/to/your/ssl.ca',
-  #    ssl_cert => 'puppet:///path/to/your/ssl.cert'
-
+  class { 'logstashforwarder': }
+    servers => [ $logserver_ip ],
+    ssl_ca  => $logserver_cert,
+    require => File[logstash_forwarder_cert]
+  }
 }
