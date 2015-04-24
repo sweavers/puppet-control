@@ -3,11 +3,7 @@
 # Sample Usage:
 #   class { 'profiles::log_repository': }
 #
-class profiles::log_repository(
-  $environment = undef
-  )
-
-  {
+class profiles::log_repository{
 
   case regsubst($::hostname, '^.*-(\d)\d\.*$', '\1'){
     0: { $environment = 'prod' }
