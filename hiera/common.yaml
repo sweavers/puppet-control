@@ -20,8 +20,6 @@ profiles::ntp::ntp_restrict_array:
 
 profiles::puppet::environment: development
 
-
-
 ##example account declarations
 #accounts:
 #  lr-test-user:
