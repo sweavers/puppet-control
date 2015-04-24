@@ -16,6 +16,7 @@
 #
 class profiles::gitlab (
 
+  $enable_backup   = false,
   $backup_location = undef,
   $smtp_relay      = undef,
   $local_login     = false,
@@ -71,13 +72,15 @@ class profiles::gitlab (
     ensure => present
   }
 
-  mount { '/var/opt/gitlab/backups':
-    ensure  => 'mounted',
-    device  => $backup_location,
-    fstype  => 'nfs',
-    options => 'defaults',
-    atboot  => true,
-    require => Package [ $nfs_package ]
+  if $enable_backup == true {
+      mount { '/var/opt/gitlab/backups':
+        ensure  => 'mounted',
+        device  => $backup_location,
+        fstype  => 'nfs',
+        options => 'defaults',
+        atboot  => true,
+        require => Package [ $nfs_package ]
+    }
   }
 
   file_line { 'internal smtp relay config':
@@ -85,5 +88,4 @@ class profiles::gitlab (
     line   => "relayhost = ${smtp_relay}",
     path   => '/etc/postfix/main.cf',
   }
-
 }
