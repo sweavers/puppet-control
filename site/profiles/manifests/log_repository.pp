@@ -3,15 +3,11 @@
 # Sample Usage:
 #   class { 'profiles::log_repository': }
 #
-class profiles::log_repository(
-  $environment = undef
-  )
-
-  {
+class profiles::log_repository{
 
   case regsubst($::hostname, '^.*-(\d)\d\.*$', '\1'){
-    0: { $environment = 'prod' }
-    1: { $environment = 'preprod' }
+    0: { $serverenv = 'prod' }
+    1: { $serverenv = 'preprod' }
     default: {
       fail("Unexpected environment value derived from hostname - ${::hostname}")
     }
@@ -20,7 +16,7 @@ class profiles::log_repository(
   class { 'redis': }
 
   class { 'elasticsearch':
-    config => { 'cluster.name' => $environment }
+    config => { 'cluster.name' => $serverenv }
   }
 
   class { 'logstash':

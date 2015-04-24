@@ -1,3 +1,5 @@
+forge 'https://forgeapi.puppetlabs.com'
+
 # Third-party modules
 mod 'ajcrowe/supervisord',             '0.5.2'
 mod 'alphagov/account',                 :git => 'https://github.com/alphagov/puppet-account.git',
