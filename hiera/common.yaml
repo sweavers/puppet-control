@@ -27,9 +27,6 @@ profiles::puppet::environment: development
 #   - 'X-Forwarded-For  $proxy_add_x_forwarded_for'
 #   - 'Host             $http_host'
 
-
-
-
 ##example account declarations
 #accounts:
 #  lr-test-user:
