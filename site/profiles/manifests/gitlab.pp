@@ -37,7 +37,7 @@ class profiles::gitlab (
 
   class { '::gitlab' :
     puppet_manage_config          => true,
-    puppet_manage_backups         => true,
+    puppet_manage_backups         => $enable_backup,
     gitlab_branch                 => '7.5.1',
     gitlab_download_link          => $gitlab_download_link,  # Should be pulled from Hiera
     external_url                  => $external_url,
