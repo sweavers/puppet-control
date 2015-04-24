@@ -8,22 +8,7 @@ node default {
 
   if $virtual == 'xenhvm' {
 
-    case $hostname {
-        'digital-register-frontend-01': {
-            nginx::resource::vhost{ 'digital.integration.beta.landregistryconcept.co.uk':
-              proxy  => 'http://127.0.0.1:8000',
-            }
-        }
-        'digital-register-frontend-02':  {
-            nginx::resource::vhost{ 'digital.preview.beta.landregistryconcept.co.uk':
-              proxy  => 'http://127.0.0.1:8000',
-            }
-        }
-        default: {
-
-        }
-    }
-
+    
     user {
         'webapp':
             ensure     => present,
