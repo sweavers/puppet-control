@@ -1,5 +1,3 @@
-forge 'https://forgeapi.puppetlabs.com'
-
 # Third-party modules
 mod 'ajcrowe/supervisord',             '0.5.2'
 mod 'alphagov/account',                 :git => 'https://github.com/alphagov/puppet-account.git',
@@ -7,7 +5,12 @@ mod 'alphagov/account',                 :git => 'https://github.com/alphagov/pup
 mod 'elastic/puppet-logstashforwarder', :git => 'https://github.com/elastic/puppet-logstashforwarder.git',
                                         :ref => 'e07043db7c377da88d1d93b3ae967bf4b7f8dc32'
 mod 'elasticsearch/elasticsearch',     '0.9.2'
+mod 'elasticsearch/logstash',          '0.5.1'
+mod 'evenup/kibana',                   '2.0.1'
+mod 'evenup/redis',                    '1.3.1'
+mod 'ispavailability/file_concat',     '0.2.1'
 mod 'jfryman/nginx',                   '0.2.2'
+mod 'maestrodev/wget',                 '1.5.7'
 mod 'openstackci/pip',                  :git => 'https://github.com/openstack-infra/puppet-pip.git',
                                         :ref => '88c1e708d421f397283fd88266147175855426dd'
 mod 'puppetlabs/firewall',             '1.3.0'
