@@ -117,7 +117,13 @@ class profiles::postgresql(
   include stdlib
   include postgresql::client
   include postgresql::server::contrib
-  include postgresql::server::postgis
+  #include postgresql::server::postgis
+
+
+  package{ 'postgis2_93' :
+    ensure   => installed,
+  }
+
   include postgresql::lib::devel
   create_resources('postgresql::server::db', hiera_hash('postgres_databases'))
   create_resources('postgresql::server::role', hiera_hash('postgres_users'))
