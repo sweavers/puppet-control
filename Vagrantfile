@@ -11,11 +11,11 @@ Vagrant.configure(2) do |config|
   end
   
   config.vm.box = "landregistry/centos"
+  config.vm.box_version = "0.1.0"
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
     puppet.manifest_file = "site.pp"
     puppet.hiera_config_path = "hiera.vagrant.yaml"
-    puppet.working_directory = "/tmp/vagrant-puppet"
     puppet.options = '--environment=development'
     puppet.module_path = ["site", "modules"]
     puppet.facter = {
