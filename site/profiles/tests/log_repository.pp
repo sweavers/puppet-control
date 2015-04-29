@@ -1,1 +1,1 @@
-include profiles::logrepository
+include profiles::log_repository
