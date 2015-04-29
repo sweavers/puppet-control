@@ -5,11 +5,7 @@
 # Sample Usage:
 #   class { 'profiles::log_forwarder': }
 #
-class profiles::log_forwarder(
-  $environment = undef,
-#  $logserver_ip = undef,
-#  $logserver_cert = undef
-) {
+class profiles::log_forwarder{
 
   $ip_first_octet = split( $::ipaddress, '[.]' )
 
