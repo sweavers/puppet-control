@@ -23,9 +23,9 @@ class profiles::rabbitmq(
 ){
 
   # Load SELinuux policy for RabbitMQ
-  selinux::module { 'rabbit-se':
+  selinux::module { 'rabbit':
     ensure => 'present',
-    source => 'puppet:///modules/profiles/rabbit.te',
+    source => 'puppet:///modules/profiles/rabbit.te'
   }
 
   # Red Hat uses weird version numbers
