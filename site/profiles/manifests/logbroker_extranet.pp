@@ -50,7 +50,7 @@ class profiles::logbroker_extranet {
   }
 
   logstash::configfile { 'input_lumberjack':
-    content => hiera( 'logbroker_extranet_logstash_forwarder_cconfig' ),
+    content => hiera( 'logbroker_extranet_logstash_config' ),
     order   => 10
   }
 }
