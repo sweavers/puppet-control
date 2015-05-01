@@ -12,6 +12,7 @@ mod 'evenup/kibana',                          '2.0.1'
 mod 'evenup/redis',                           '1.3.1'
 mod 'ispavailability/file_concat',            '0.2.1'
 mod 'jfryman/nginx',                          '0.2.2'
+mod 'jfryman/selinux'                         '0.2.3'
 mod 'maestrodev/wget',                        '1.5.7'
 mod 'openstackci/pip',                        :git => 'https://github.com/openstack-infra/puppet-pip.git',
                                               :ref => '88c1e708d421f397283fd88266147175855426dd'
