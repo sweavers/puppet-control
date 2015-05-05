@@ -1,7 +1,5 @@
 # Global defaults for all nodes
 
-import 'nodes/*.pp'
-
 # Include classes specified in Hiera
 hiera_include('classes')
 
