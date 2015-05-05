@@ -1,12 +1,13 @@
+---
+:backends:
+  - yaml
+:yaml:
+  :datadir: /etc/puppet/environments/%{environment}/hiera
 :hierarchy:
   - secrets/nodes/%{::fqdn}
   - secrets/environments/%{environment}
   - secrets/secrets
+  - "hosts/%{::clientcert}"
   - roles/%{::machine_role}
   - common
 
-:backends:
-  - yaml
-
-:yaml:
-  :datadir: /etc/puppet/environments/%{environment}/hiera
