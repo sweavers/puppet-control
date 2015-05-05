@@ -1,0 +1,6 @@
+---
+# Integration: digital-register-frontend 
+classes:
+  - profiles::digitalregister_app
+
+
