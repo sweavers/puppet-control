@@ -1,6 +1,11 @@
 ---
 # Integration: digital-register-frontend 
-classes:
-  - profiles::digitalregister_app
 
-
+nginx::ssl: true
+nginx::ssl_protocols: TLSv1 SSLv3
+nginx::ssl_ciphers: 'RC4:HIGH:!aNULL:MD5:@STRENGTH'
+nginx::ssl_cache: 'shared:WEB:10m'
+nginx::ssl_cert: 'digital.integration.beta.landregistryconcept.co.uk.crt'
+nginx::ssl_key: 'digital.integration.beta.landregistryconcept.co.uk.key'
+nginx::listen_port: 443
+nginx::proxy: 'http://127.0.0.1:8000'
