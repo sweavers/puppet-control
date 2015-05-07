@@ -59,9 +59,12 @@ fi
 
 # SSH to TARGETSERVER,
 echo "Attempting to deploy code artifact on ${TARGETSERVER}" | output
-# Stop monit service
-ssh deployment@${TARGETSERVER} "sudo monit stop all" > /dev/null 2>&1
+# Stop monit service (and wait 40 seconds for api app to shut down
+ssh deployment@${TARGETSERVER} "sudo monit stop all && sleep 40" > /dev/null 2>&1
 [[ $? != '0' ]] && echo "Error stopping monit service on ${TARGETSERVER}" | output ERROR #&& exit 1
+
+
+
 
 # Ensure 'prev-ver' directory exists and is purged on TARGETSERVER
 ssh deployment@${TARGETSERVER} "if [ ! -d /opt/deployment/prev-ver ] ; then sudo mkdir -p /opt/deployment/prev-ver ; else sudo rm -rf /opt/deployment/prev-ver/* ; fi" #> /dev/null 2>&1

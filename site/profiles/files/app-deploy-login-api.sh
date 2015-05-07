@@ -59,8 +59,8 @@ fi
 
 # SSH to TARGETSERVER,
 echo "Attempting to deploy code artifact on ${TARGETSERVER}" | output
-# Stop monit service
-ssh deployment@${TARGETSERVER} "sudo monit stop all" > /dev/null 2>&1
+# Stop log-in service
+ssh deployment@${TARGETSERVER} "sudo systemctl stop login-api" > /dev/null 2>&1
 [[ $? != '0' ]] && echo "Error stopping monit service on ${TARGETSERVER}" | output ERROR #&& exit 1
 
 # Ensure 'prev-ver' directory exists and is purged on TARGETSERVER
@@ -84,8 +84,8 @@ else
 fi
 
 # Re-start monitd service
-echo "Attempting to restart monit service" | output
-ssh deployment@${TARGETSERVER} "sudo systemctl start monit && sudo monit start all" > /dev/null 2>&1
+echo "Attempting to restart login-api service" | output
+ssh deployment@${TARGETSERVER} "sudo systemctl start login-api" > /dev/null 2>&1
 [[ $? != '0' ]] && echo "Error re-starting monitd service on ${TARGETSERVER}" | output ERROR #&& exit 1
 
 # Clean up

@@ -8,16 +8,15 @@
 # Sample Usage:
 #   class { 'profiles::digitalregister_app': }
 #
-class profiles::digitalregister_app{
+class profiles::vagrant{
 
   include ::stdlib
-  include ::profiles::deployment
   include ::profiles::nginx
 
   #  Install required packages for Ruby and Java
   case $::osfamily{
     'RedHat': {
-      $PKGLIST=['python','python-devel','python-pip','epel-release']
+      $PKGLIST=['python','python-devel','epel-release']
       $PYTHON='lr-python3-3.4.3-1.x86_64'
       $PYPGK="${PYTHON}.rpm"
       $PKGMAN='rpm'
@@ -33,6 +32,13 @@ class profiles::digitalregister_app{
     }
   }
   ensure_packages($PKGLIST)
+
+  package {
+      'python-pip':
+          ensure      => installed,
+          provider    => yum,
+          require     => Package[$PKGLIST];
+  }
 
   file{'LR Python package':
     ensure => 'file',

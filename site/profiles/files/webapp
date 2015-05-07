@@ -1,0 +1,7 @@
+
+
+# Enable webapp to manage services
+
+webapp  ALL=(ALL)       NOPASSWD:/sbin/service
+
+
