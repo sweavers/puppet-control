@@ -67,6 +67,8 @@ class profiles::log_forwarder{
 
   logstashforwarder::file { 'stdlogs':
     paths  => [ '/var/log/messages','/var/log/secure' ],
-    fields => { 'type' => 'syslog' },
+    fields => {
+      'type' => 'syslog'
+    }
   }
 }
