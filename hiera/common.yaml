@@ -6,6 +6,7 @@ classes:
   - 'profiles::ntp'
   - 'profiles::git'
   - 'profiles::disable_firewall'
+  - 'selinux'
   - 'sudo'
 
 
@@ -13,6 +14,8 @@ classes:
 sudo::purge: false
 sudo::config_file_replace: false
 
+# Set SELinux to enforcing
+selinux::mode: enforcing
 
 profiles::ntp::ntp_restrict_array:
   - '127.0.1.0'
@@ -22,7 +25,7 @@ profiles::puppet::environment: development
 
 # nginx::config::www_root: '/var/jail'
 # nginx::config::listen_port: '80'
-# nginx::config::proxy_set_header: 
+# nginx::config::proxy_set_header:
 #   - 'X-Real-IP        $remote_addr'
 #   - 'X-Forwarded-For  $proxy_add_x_forwarded_for'
 #   - 'Host             $http_host'
