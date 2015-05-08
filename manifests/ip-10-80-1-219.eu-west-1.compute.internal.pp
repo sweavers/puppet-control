@@ -25,7 +25,6 @@ node 'ip-10-80-1-219.eu-west-1.compute.internal' {
     ssl_cert         =>  $ssl_cert,
     ssl_key          =>  $ssl_key,
     proxy_set_header =>  $proxy_set_header,
-    rewrite_to_https =>  { 'rewrite' 
-                     => '^ https://$server_name$request_uri? permanent' },
+    rewrite_to_https =>  { 'rewrite' => '^ https://$server_name$request_uri? permanent' },
   }
 }
