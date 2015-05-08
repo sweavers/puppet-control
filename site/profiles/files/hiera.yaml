@@ -7,7 +7,7 @@
   - secrets/nodes/%{::fqdn}
   - secrets/environments/%{environment}
   - secrets/secrets
-  - "hosts/%{::clientcert}"
+  - "hosts/%{::fqdn}"
   - roles/%{::machine_role}
   - common
 
