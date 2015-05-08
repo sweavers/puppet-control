@@ -1,10 +1,21 @@
 ---
-# Integration: digital-register-frontend 
+# Integration: digital-register-frontend
 
-nginx::ssl: true
-nginx::ssl_protocols: TLSv1 SSLv3
-nginx::ssl_ciphers: 'RC4:HIGH:!aNULL:MD5:@STRENGTH'
-nginx::ssl_cache: 'shared:WEB:10m'
-nginx::ssl_cert: '/etc/nginx/digital.integration.beta.landregistryconcept.co.uk.crt'
-nginx::ssl_key: '/etc/nginx/digital.integration.beta.landregistryconcept.co.uk.key'
-nginx::proxy: 'http://127.0.0.1:8000'
+classes:
+    - profiles::digitalregister_app
+
+nginx::nginx_vhosts:
+  'digital.integration.beta.landregistryconcept.co.uk':
+    ssl: true
+    ssl_protocols: TLSv1 SSLv3
+    ssl_ciphers: 'RC4:HIGH:!aNULL:MD5:@STRENGTH'
+    ssl_cache: 'shared:WEB:10m'
+    ssl_cert: '/etc/nginx/digital.integration.beta.landregistryconcept.co.uk.crt'
+    ssl_key: '/etc/nginx/digital.integration.beta.landregistryconcept.co.uk.key'
+    rewrite_to_https: true
+    proxy: 'http://127.0.0.1:8000'
+    proxy_set_header:
+      - 'Host $host'
+      - 'X-Forward-For $proxy_add_x_forwarded_for'
+      - 'X-Real_IP $remote_addr'
+      - 'Client_IP $remote_addr'
