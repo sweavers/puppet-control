@@ -2,7 +2,7 @@ node 'ip-10-80-1-219.eu-west-1.compute.internal' {
 
 	include '::profiles::nginx'
 
-	$ssl             =  hiera('nginx::ssl')
+	  $ssl             =  hiera('nginx::ssl')
     $ssl_protocols   =  hiera('nginx::ssl_protocols')
     $ssl_ciphers     =  hiera('nginx::ssl_ciphers')
     $ssl_cache       =  hiera('nginx::ssl_cache')
