@@ -2,3 +2,5 @@
 .tmp/
 Vagrantfile
 .vagrant
+modules/*
+!modules/.PLACEHOLDER
