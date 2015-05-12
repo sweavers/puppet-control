@@ -66,4 +66,13 @@ class profiles::digitalregister_app{
     require  => File['/usr/bin/pip3']
   }
 
+  nginx::resource::vhost { 'api_proxy':
+    server_name    => [ $::hostname ],
+    listen_port    => 80,
+    #proxy_set_header => ['X-Forward-For $proxy_add_x_forwrded_for',
+      #'Host $http_host'],
+    proxy_redirect => 'off',
+    proxy          => 'http://127.0.0.1:8000',
+
+  }
 }
