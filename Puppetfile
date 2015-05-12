@@ -4,10 +4,9 @@ forge 'https://forgeapi.puppetlabs.com'
 mod 'ajcrowe/supervisord',             '0.5.2'
 mod 'alphagov/account',                 :git => 'https://github.com/alphagov/puppet-account.git',
                                         :ref => '8bc0e9981174fd175d630dd98538334a2814065b'
-mod 'elastic/puppet-logstashforwarder', :git => 'https://github.com/elastic/puppet-logstashforwarder.git',
-                                        :ref => 'e07043db7c377da88d1d93b3ae967bf4b7f8dc32'
 mod 'elasticsearch/elasticsearch',     '0.9.2'
 mod 'elasticsearch/logstash',          '0.5.1'
+mod 'elasticsearch/logstashforwarder', '0.1.1'
 mod 'evenup/kibana',                   '2.0.1'
 mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
