@@ -1,4 +1,4 @@
-forge 'https://forgeapi.puppetlabs.com'
+forge 'https://forge.puppetlabs.com'
 
 # Third-party modules
 mod 'ajcrowe/supervisord',             '0.5.2'

@@ -10,6 +10,9 @@ Vagrant.configure(2) do |config|
     puts "You may have to run `librarian-puppet` on your host machine if you have not already"
   end
   
+  config.librarian_puppet.puppetfile_dir = "."
+  config.librarian_puppet.placeholder_filename = ".PLACEHOLDER"  
+ 
   config.vm.box = "landregistry/centos"
   config.vm.box_version = "0.1.0"
   config.vm.provision :puppet do |puppet|
