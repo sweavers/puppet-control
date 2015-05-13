@@ -5,7 +5,7 @@
   classes:
     - profiles::vagrant
 
-  nginx::resource::vhost:
+  nginx::nginx_vhosts:
     'landregistry.local':
       www_root: '/usr/share/nginx/html'
       index_files: ['index.html','index.htm']
