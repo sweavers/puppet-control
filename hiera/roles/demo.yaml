@@ -1,0 +1,11 @@
+---
+
+  classes:
+    - profiles::nginx
+    - profiles::postgresql
+    - profiles::rabbitmq
+
+  rabbitmq_users:
+    rabbitmqadmin:
+      admin: true
+      password: 'secretpassword'
