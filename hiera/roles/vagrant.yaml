@@ -5,3 +5,19 @@
   classes:
     - profiles::vagrant
 
+  nginx::nginx_vhosts:
+    'landregistry.local':
+      www_root: '/usr/share/nginx/html'
+      index_files: ['index.html','index.htm']
+
+
+  env_vars:
+    - 'WORKON_HOME=/home/vagrant/land-registry-python-venvs'
+    - 'bash_profile=/home/vagrant/.bash_profile'
+
+  ssh_config:
+    - 'Host github.com'
+    - 'StrictHostKeyChecking no'
+
+  phantomjs_resources: 'puppet:///modules/profiles/phantomjs.sh'
+

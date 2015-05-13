@@ -23,13 +23,6 @@ profiles::ntp::ntp_restrict_array:
 
 profiles::puppet::environment: development
 
-# nginx::config::www_root: '/var/jail'
-# nginx::config::listen_port: '80'
-# nginx::config::proxy_set_header:
-#   - 'X-Real-IP        $remote_addr'
-#   - 'X-Forwarded-For  $proxy_add_x_forwarded_for'
-#   - 'Host             $http_host'
-
 ##example account declarations
 #accounts:
 #  lr-test-user:
@@ -60,6 +53,3 @@ logbroker_extranet_logstash_config: |
       codec => json
     }
   }
-
-
-
