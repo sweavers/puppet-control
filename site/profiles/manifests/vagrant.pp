@@ -68,26 +68,27 @@ class profiles::vagrant{
   }
 
   file{'/usr/bin/pip3' :
-    ensure  => link,
-    target  => '/usr/local/bin/pip3',
-    require => Package[$PYTHON]
+    ensure => link,
+    target => '/usr/local/bin/pip3',
   }
 
 
   file{'/etc/profile.d/env_vars' :
     ensure  => file,
     content => $env_vars,
-  }
-
-  file{'/tmp/phantomjs.sh' :
-    source  => $phantomjs_resources,
-    ensure  => present,
   } ~>
 
+  file{'/tmp/phantomjs.sh' :
+    ensure => present,
+    source => $phantomjs_resources,
+
+  }
+
   exec{'phantomjs' :
-    command => "bash phantomjs.sh",
-    cwd     => "/tmp",
+    command => 'bash phantomjs.sh',
+    cwd     => '/tmp',
     timeout => 0,
+    require => File['/tmp/phantomjs.sh'],
   }
 
   package{'foreman' :
@@ -109,8 +110,8 @@ class profiles::vagrant{
 
   file{'/var/log/applications' :
     ensure => directory,
-    owner  => "vagrant",
-    group  => "vagrant",
+    owner  => 'vagrant',
+    group  => 'vagrant',
   }
 
   file{'/home/vagrant/.ssh/config' :
@@ -119,8 +120,8 @@ class profiles::vagrant{
   }
 
   file{'/home/vagrant/.bash_profile' :
-    ensure  => file,
-    source  => 'puppet:///modules/profiles/.bash_profile',
+    ensure => file,
+    source => 'puppet:///modules/profiles/.bash_profile',
   }
 
 }
