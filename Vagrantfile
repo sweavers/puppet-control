@@ -9,6 +9,9 @@ Vagrant.configure(2) do |config|
     puts "You can install it with `vagrant plugin install vagrant-librarian-puppet`"
     puts "You may have to run `librarian-puppet` on your host machine if you have not already"
   end
+
+  config.librarian_puppet.puppetfile_dir = "."
+  config.librarian_puppet.placeholder_filename = ".PLACEHOLDER"
   
   config.vm.box = "landregistry/centos"
   config.vm.box_version = "0.1.0"
@@ -33,10 +36,10 @@ Vagrant.configure(2) do |config|
   end
 
 
-  config.vm.define "charges" do |charges|
-    charges.vm.host_name = "charges"
-    charges.vm.provision "shell", inline: "yum install postgresql-server -y"
-    charges.vm.provider :virtualbox do |v|
+  config.vm.define "register" do |register|
+    register.vm.host_name = "register"
+    register.vm.provision "shell", inline: "yum install postgresql-server -y"
+    register.vm.provider :virtualbox do |v|
       v.customize ['modifyvm', :id, '--memory', '2048']
     end
   end
