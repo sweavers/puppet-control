@@ -13,7 +13,12 @@ class profiles::nginx (
 
 ) {
 
+  # Load SELinuux policy for NginX
+  selinux::module { 'nginx':
+    ensure => 'present',
+    source => 'puppet:///modules/profiles/nginx.te'
+  }
+
   include ::nginx
 
 }
-

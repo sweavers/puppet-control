@@ -6,6 +6,7 @@ classes:
   - 'profiles::ntp'
   - 'profiles::git'
   - 'profiles::disable_firewall'
+  - 'selinux'
   - 'sudo'
 
 
@@ -13,13 +14,14 @@ classes:
 sudo::purge: false
 sudo::config_file_replace: false
 
+# Set SELinux to enforcing
+selinux::mode: enforcing
 
 profiles::ntp::ntp_restrict_array:
   - '127.0.1.0'
   - '127.0.1.1'
 
 profiles::puppet::environment: development
-
 
 ##example account declarations
 #accounts:
@@ -33,3 +35,21 @@ profiles::puppet::environment: development
 #    ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDFACawwPMbMoc0XiOCshIxCbYEn15SrwPxCRCfhbKM3McZ5u9Xro2b717l6tj9QALoKVqV7KddlsSWoEg3htpjuJAZrfRAvg6LawlDx6xL6jaSA6wMXROmQ8Qc+oBjfxwUwpfnB4+s4kQXQXuttou8PJbaHgxaLrFdPbWInOi2jCKb1NlwjBqa6/WVZRYfG2siO64aL2Z3hZqtEC3Be/X5Sum8ELgFh8TQsf+aLaksJTF2Wp5F/dkux5fAFKwSYMOBab3pJpemhd7EPxHBoAzUHpJxnsl9sQwxThc9T/KQR3p21bP5jemYvnW3kwiwaV5wHBR2SyWvdj1K/wjgGSId
 #    groups:
 #      - lr-admin
+
+logbroker_extranet_logstash_config: |
+  input {
+    lumberjack {
+      port => 5000
+      type => "logs"
+      ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
+      ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
+    }
+  }
+  output {
+    redis {
+      host => "localhost"
+      data_type => "list"
+      key => "logstash"
+      codec => json
+    }
+  }
