@@ -15,3 +15,7 @@
       user: tester
       owner: tester
       password: md5b84f21541ef11f3e5d07840ed6f98cd9
+
+  postgres_users:
+    deployment:
+      password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
