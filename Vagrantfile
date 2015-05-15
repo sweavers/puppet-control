@@ -41,7 +41,6 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "register" do |register|
     register.vm.host_name = "register"
-    register.vm.provision "shell", inline: "yum install postgresql-server -y"
     register.vm.network "forwarded_port", guest: 80, host: 80
     register.vm.provider :virtualbox do |v|
       v.customize ['modifyvm', :id, '--memory', '2048']
