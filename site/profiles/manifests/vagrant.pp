@@ -12,6 +12,7 @@ class profiles::vagrant{
 
   include ::stdlib
   include ::profiles::nginx
+  include ::profiles::postgresql
 
   Exec {
     path      =>  ['/bin/', '/usr/bin'],
