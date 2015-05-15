@@ -21,3 +21,12 @@
 
   phantomjs_resources: 'puppet:///modules/profiles/phantomjs.sh'
 
+  postgres_databases:
+    ['user_data','register_data']:
+      user: 'register'
+      password: 'register'
+    
+
+  postgres_users:
+    'register_admin':
+      superuser: true
