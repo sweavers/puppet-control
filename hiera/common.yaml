@@ -40,23 +40,7 @@ profiles::puppet::environment: development
 #    groups:
 #      - lr-admin
 
-logbroker_extranet_logstash_config: |
-  input {
-    lumberjack {
-      port => 5000
-      type => "logs"
-      ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
-      ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
-    }
-  }
-  output {
-    redis {
-      host => "localhost"
-      data_type => "list"
-      key => "logstash"
-      codec => json
-    }
-  }
+
 
 
 
