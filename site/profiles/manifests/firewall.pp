@@ -15,49 +15,54 @@
 #
 class profiles::firewall (
 
-  $firewall_state = 'off'
+  $firewall_state    = 'off',
+  $ssh_allowed_range = '0.0.0.0/1'
 
   ){
 
-  case $firewall_state {
-    'on':{
-      # Remove firewalld package and purge its config files
-      package { 'firewalld':
-        ensure => 'purged'
-      }
+    case $firewall_state {
+      'on':{
+        # Disable and remove firewalld
+        service { 'firewalld':
+          ensure => stopped,
+          enable => false,
+        }
+        package { 'firewalld':
+          ensure => purged
+        }
 
-      # Puppetlabs/firewall
-      # ensure furewall is installed and runing
-      include ::firewall
+        # Install and enable IP tables
+        package { 'iptables-services' :
+          ensure => installed
+        }
+        service { 'iptables':
+          ensure  => running,
+          enable  => true,
+          require => Package ['iptables-services']
+        }
 
-      # Remove firewall rules not managed by puppet
-      resources { 'firewall' :
-        purge   => true,
-      }
-
-      # Ensure default pre firewall rules are applied (e.g. ssh)
-      class { 'profiles::default_fw::pre' :
-        require => Class['firewall']
-      }
-
-      # Ensure default post firewall rules are applied (e.g. drop all)
-      class { 'profiles::default_fw::post' :
-        require => Class['profiles::default_fw::pre']
-      }
+        # Configure iptables rules from template
+        file { '/etc/sysconfig/iptables':
+          content => template('profiles/iptables.conf.erb'),
+          owner   => root,
+          group   => root,
+          mode    => '0600',
+          notify  => Service['iptables']
+        }
     }
 
-    default :{
-      # Ensure that firewalld service is not running
-      service { 'firewalld':
-        ensure => stopped,
-        enable => false,
-      }
+      default :{
+        # Ensure that firewalld service is not running
+        service { 'firewalld':
+          ensure => stopped,
+          enable => false,
+        }
 
-      # Ensure that iptables is not running
-      service { 'iptables':
-        ensure => stopped,
-        enable => false,
+        # Ensure that iptables is not running
+        service { 'iptables':
+          ensure => stopped,
+          enable => false,
+        }
       }
     }
   }
-}
