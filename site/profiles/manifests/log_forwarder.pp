@@ -10,12 +10,7 @@ class profiles::log_forwarder{
   $ip_first_octet = split( $::ipaddress, '[.]' )
 
   case $ip_first_octet[0]{
-    10:      {
-      if $::hostname =~ /^l.*/ {
-        $servertype = 'repository'
-      } else {
-        $servertype = 'broker' }
-    }
+    10:      { $servertype = 'broker' }
     192:     { $servertype = 'repository' }
     default: { fail("Unexpected network - ${::ipaddress}") }
   }
@@ -47,6 +42,7 @@ class profiles::log_forwarder{
 
   logstashforwarder::file { 'stdlogs':
     paths  => [ '/var/log/messages','/var/log/secure' ],
-    fields => { 'type' => 'syslog' },
+    fields => {
+                'type' => 'syslog' }
   }
 }
