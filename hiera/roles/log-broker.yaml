@@ -3,4 +3,4 @@
 # This role is to set up a server for the log_broker
 
   classes:
-    - profiles::logbroker
+    - profiles::log_broker
