@@ -20,6 +20,10 @@
       user: systemofrecord
       password: md511c5a6395e27555ef43eb7b05c76d7c1
       owner: systemofrecord
+    verification:
+      user: verification
+      password: md5b7f047367594464238adef718640417b
+      owner: verification
 
   postgres_users:
     deployment:
