@@ -1,22 +1,29 @@
 # Class profiles::firewall
-# This class will configures and manages IP tables.
+# This class will configures and manages IP tables if firewall state is 'on'.
 #
 # Parameters: #Paramiters accepted by the class
-# - none
+# - [firewall_state] - Sets the firewall on or off
+# - [ssh_allowed_range] - Source address range for allowed ssh connections
+# - [services] - A hash containing the details of allowed services
 #
 # Requires: #Modules required by the class
-# - puppetlabs/firewall
+# - N/A
 #
 # Sample Usage:
 # class { 'profiles::firewall': }
 #
 # Hiera:
-# - none NB look ups are required my_fw classes
+#   profiles::firewall::firewall_state: 'on'
+#   profiles::firewall::ssh_allowed_range: '0.0.0.0/0'
+#   profiles::firewall::service:
+#     HTTP: 80
+#
 #
 class profiles::firewall (
 
   $firewall_state    = 'off',
-  $ssh_allowed_range = '0.0.0.0/1'
+  $ssh_allowed_range = '0.0.0.0/0',
+  $services          = {}
 
   ){
 

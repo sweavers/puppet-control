@@ -38,8 +38,16 @@
 #
 
 # SERVICE chain rules
--A SERVICE -i eth0 -p tcp -m tcp --dport 22 -m comment --comment "Pass management SSH to SSH chain" -j SSH
--A SERVICE -i eth1 -p tcp -m tcp --dport 80 -m comment --comment "Allow data HTTP on 80" -j ACCEPT
+-A SERVICE -p tcp -m tcp --dport 22 -m comment --comment "Pass management SSH to SSH chain" -j SSH
+<% puts services.inspect -%>
+<% if !services.empty? -%>
+<% services.each_pair do |key, val| -%>
+-A SERVICE -p tcp -m tcp --dport <%= val %> -m comment --comment "Allow data <%= key %> on <%= val %>" -j ACCEPT
+<% end -%>
+<% end -%>
+
+#-A SERVICE -p tcp -m tcp --dport 80 -m comment --comment "Allow data HTTP on 80" -j ACCEPT
+
 #
 # In the SERVICE chain we accept connections to services we have opened up to
 # the network. We are passing management LAN connections to SSH on 22 to the
