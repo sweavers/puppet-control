@@ -4,7 +4,7 @@
 GITREPO=$1
 SECRETS=$2
 DIR="/var/lib/jenkins/artifact_r10k"
-TIMESTAMP=$(date +%d%m%Y-%H%M)
+TIMESTAMP=$(date +%Y%m%d-%H%M)
 USAGE=`basename $0`" [GITREPO] [SECRETS_REPO]"
 TEMPDIR="/tmp/secrets-$(date +%s)"
 HIERA_PATH="hiera/secrets"

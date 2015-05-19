@@ -1,0 +1,53 @@
+
+module rabbit 1.0;
+
+require {
+	type amavisd_send_port_t;
+	type pki_tks_port_t;
+	type unreserved_port_t;
+	type zabbix_port_t;
+	type trisoap_port_t;
+	type amavisd_recv_port_t;
+	type ricci_port_t;
+	type zabbix_agent_port_t;
+	type spamd_port_t;
+	type pki_kra_port_t;
+	type amanda_port_t;
+	type kubernetes_port_t;
+	type postfix_policyd_port_t;
+	type pki_ra_port_t;
+	type pgpkeyserver_port_t;
+	type rabbitmq_t;
+	type http_cache_port_t;
+	type pki_ocsp_port_t;
+	type pop_port_t;
+	type memcache_port_t;
+	class tcp_socket name_bind;
+}
+
+#============= rabbitmq_t ==============
+allow rabbitmq_t amanda_port_t:tcp_socket name_bind;
+allow rabbitmq_t amavisd_recv_port_t:tcp_socket name_bind;
+allow rabbitmq_t amavisd_send_port_t:tcp_socket name_bind;
+allow rabbitmq_t http_cache_port_t:tcp_socket name_bind;
+allow rabbitmq_t kubernetes_port_t:tcp_socket name_bind;
+allow rabbitmq_t memcache_port_t:tcp_socket name_bind;
+allow rabbitmq_t pgpkeyserver_port_t:tcp_socket name_bind;
+allow rabbitmq_t pki_kra_port_t:tcp_socket name_bind;
+allow rabbitmq_t pki_ocsp_port_t:tcp_socket name_bind;
+allow rabbitmq_t pki_ra_port_t:tcp_socket name_bind;
+allow rabbitmq_t pki_tks_port_t:tcp_socket name_bind;
+
+#!!!! This avc can be allowed using the boolean 'nis_enabled'
+allow rabbitmq_t pop_port_t:tcp_socket name_bind;
+allow rabbitmq_t postfix_policyd_port_t:tcp_socket name_bind;
+allow rabbitmq_t ricci_port_t:tcp_socket name_bind;
+
+#!!!! This avc can be allowed using the boolean 'nis_enabled'
+allow rabbitmq_t spamd_port_t:tcp_socket name_bind;
+allow rabbitmq_t trisoap_port_t:tcp_socket name_bind;
+
+#!!!! This avc can be allowed using the boolean 'nis_enabled'
+allow rabbitmq_t unreserved_port_t:tcp_socket name_bind;
+allow rabbitmq_t zabbix_agent_port_t:tcp_socket name_bind;
+allow rabbitmq_t zabbix_port_t:tcp_socket name_bind;

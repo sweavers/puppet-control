@@ -1,4 +1,4 @@
-# Class profiles::log_forwarder
+# Class profiles::log_forwarderuto-merging hiera/common.yaml
 #
 # Will install logstash forwarder on a node.
 #
@@ -43,6 +43,7 @@ class profiles::log_forwarder{
   logstashforwarder::file { 'stdlogs':
     paths  => [ '/var/log/messages','/var/log/secure' ],
     fields => {
-                'type' => 'syslog' }
+      'type' => 'syslog'
+    }
   }
 }

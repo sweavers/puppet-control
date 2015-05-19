@@ -41,24 +41,24 @@ for PUPPET in ${PUPPETMASTER} ; do
   
   # SSH to puppet master, stop puppetmaster service, purge existing environments,
   # uncompress artifact and restart puppetmaster service 
-  ssh deployment@${PUPPET} "sudo service apache2 stop" > /dev/null 2>&1
-  [[ $? != '0' ]] && echo "Error stopping apache2  service on ${PUPPET}" | output ERROR && exit 1   
-  ssh deployment@${PUPPET} "sudo rm -rf /etc/puppet/environments" > /dev/null 2>&1
+  ssh deployment@${PUPPET} "sudo service puppetmaster stop" > /dev/null 2>&1
+  [[ $? != '0' ]] && echo "Error stopping puppetmaster service on ${PUPPET}" | output ERROR && exit 1   
+  ssh deployment@${PUPPET} "sudo rm -rf /etc/puppet/environments" #> /dev/null 2>&1
   [[ $? != '0' ]] && echo "Error purging existing environments on  ${PUPPET}" | output ERROR && exit 1
   ssh deployment@${PUPPET} "sudo tar -C /etc/puppet/ -xzf /tmp/${ARTIFACT}" > /dev/null 2>&1 
   [[ $? != '0' ]] && echo "Error extracting artifact on  ${PUPPET}" | output ERROR && exit 1
-  ssh deployment@${PUPPET} "sudo service apache2 start" > /dev/null 2>&1
+  ssh deployment@${PUPPET} "sudo service puppetmaster start" > /dev/null 2>&1
   if [[ $? == '0' ]]; then
     echo "Puppet environment code and dependencies successfully deployed" | output SUCCESS
   else
-    echo "Error restarting apache2 service on ${PUPPET}" | output ERROR && exit 1
+    echo "Error restarting puppetmaster service on ${PUPPET}" | output ERROR && exit 1
   fi
 done
 
 # Copy artifact to remote ci server
 for CI in ${REMOTECI} ; do
   echo "Attempting to copy ${ARTIFACT} to ${CI}" | output
-  scp ${DIR}/artifacts/${ARTIFACT} deployment@${CI}:/tmp/ > /dev/null 2>&1
+  scp ${DIR}/artifacts/${ARTIFACT} deployment@${CI}:${DIR}/artifacts/ > /dev/null 2>&1
   if [[ $? == '0' ]]; then
     echo "${ARTIFACT}" successfully copied to ${CI} | output SUCCESS
   else
