@@ -15,7 +15,7 @@
 # Hiera:
 #   profiles::firewall::firewall_state: 'on'
 #   profiles::firewall::ssh_allowed_range: '0.0.0.0/0'
-#   profiles::firewall::service:
+#   profiles::firewall::services:
 #     HTTP: 80
 #
 #
