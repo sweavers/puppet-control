@@ -22,7 +22,7 @@
       owner: systemofrecord
     verification:
       user: verification
-      password: md5b7f047367594464238adef718640417b
+      password: md51f9f5bb065dcc48f72ec3e7c4de17e33
       owner: verification
 
   postgres_users:
