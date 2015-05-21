@@ -11,6 +11,7 @@ class profiles::log_repository{
   case regsubst($hostnumber, '^(\d)\d$', '\1'){
     0:       { $serverenv = prod }
     1:       { $serverenv = preprod }
+    9:       { $serverenv = test }
     default: { fail("Unexpected environment value derived from hostname - ${::hostname}") }
   }
 
@@ -26,15 +27,6 @@ class profiles::log_repository{
     group   => 'root',
     mode    => '0664',
     content => $logserver_key
-  }
-
-  file { 'logstash_forwarder_cert':
-    ensure  => 'file',
-    name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0664',
-    content => $logserver_cert
   }
 
   class { 'profiles::elasticsearch':
