@@ -14,7 +14,7 @@ class profiles::log_broker {
   $logserver_cert = hiera("log_broker_${serverenv}_logstash_forwarder_cert")
   $logserver_key  = hiera("log_broker_${serverenv}_logstash_forwarder_key")
 
-  file { 'logstash_forwarder_key':
+  file { 'logstash_broker_key':
     ensure  => 'file',
     name    => '/etc/pki/tls/private/logstash-forwarder.key',
     owner   => 'root',
@@ -23,7 +23,7 @@ class profiles::log_broker {
     content => $logserver_key
   }
 
-  file { 'logstash_forwarder_cert':
+  file { 'logstash_broker_cert':
     ensure  => 'file',
     name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
     owner   => 'root',
@@ -31,6 +31,23 @@ class profiles::log_broker {
     mode    => '0664',
     content => $logserver_cert
   }
+
+sysctl { 'vm.overcommit_memory':
+  value  => '1',
+  notify => Service['redis']
+}
+
+exec { 'disable_transparent_hugepage_enabled':
+  command => '/bin/echo never > /sys/kernel/mm/transparent_hugepage/enabled',
+  unless  => '/bin/grep -c "\[never\]" /sys/kernel/mm/transparent_hugepage/enabled 2>/dev/null',
+  notify  => Service['redis']
+}
+
+exec { 'set_somaxconn_for_redis':
+  command => '/bin/echo 511 > /proc/sys/net/core/somaxconn',
+  unless  => '/bin/grep -c "511" /proc/sys/net/core/somaxconn 2>/dev/null',
+  notify  => Service['redis']
+}
 
   class { 'redis':
     listen => '0.0.0.0'
