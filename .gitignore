@@ -6,3 +6,4 @@ modules/*
 !modules/.PLACEHOLDER
 
 hiera/vagrant.yaml
+Puppetfile.lock
