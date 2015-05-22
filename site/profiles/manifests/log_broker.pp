@@ -57,7 +57,7 @@ exec { 'set_somaxconn_for_redis':
     java_install => true,
     package_url  => 'https://download.elasticsearch.org/logstash/logstash/packages/centos/logstash-1.4.1-1_bd507eb.noarch.rpm',
     require      => [ Class[ 'redis' ],
-                      File[ 'logstash_forwarder_key','logstash_forwarder_cert' ] ]
+                      File[ 'logstash_broker_key','logstash_broker_cert' ] ]
   }
 
   logstash::configfile { 'log_broker_config':
