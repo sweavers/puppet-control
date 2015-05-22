@@ -26,17 +26,18 @@ class profiles::log_forwarder{
     }
   }
 
-
   $logserver_ip   = hiera("log_${servertype}_${serverenv}_ip_address")
   $logserver_cert = hiera("log_${servertype}_${serverenv}_logstash_forwarder_cert")
 
-  file { 'logstash_forwarder_cert':
-    ensure  => 'file',
-    name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0664',
-    content => $logserver_cert
+  if ! defined(File['logstash_forwarder_cert']) {
+    file { 'logstash_forwarder_cert':
+      ensure  => 'file',
+      name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0664',
+      content => $logserver_cert
+    }
   }
 
   class { 'logstashforwarder':

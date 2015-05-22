@@ -29,6 +29,15 @@ class profiles::log_repository{
     content => $logserver_key
   }
 
+  file { 'logstash_forwarder_cert':
+    ensure  => 'file',
+    name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0664',
+    content => $logserver_cert
+  }
+
   class { 'profiles::elasticsearch':
     clustername => $serverenv,
     nodenumber  => $hostnumber
