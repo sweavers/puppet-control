@@ -10,12 +10,13 @@ class profiles::elasticsearch(
   $nodenumber  = '00'
 ){
 
-  class {'::elasticsearch' :
+  class { '::elasticsearch':
     manage_repo  => true,
     repo_version => 1.4,
     java_install => true,
     config       => {
-      'cluster.name' => $clustername
+      'cluster.name'                         => $clustername,
+      'discovery.zen.ping.multicast.enabled' => false
       }
   }
 

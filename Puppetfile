@@ -25,6 +25,7 @@ mod 'rtyler/jenkins',                  '1.3.0'
 mod 'saz/sudo',                        '3.0.9'
 mod 'spuder/gitlab',                   '2.3.5'
 mod 'stephenrjohnson/puppet',          '1.3.1'
+mod 'thias/sysctl',                    '1.0.2'
 mod 'zack/r10k',                       '2.6.2'
 
 # Dependency modules
