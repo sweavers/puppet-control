@@ -11,6 +11,7 @@ class profiles::log_repository{
   case regsubst($hostnumber, '^(\d)\d$', '\1'){
     0:       { $serverenv = prod }
     1:       { $serverenv = preprod }
+    9:       { $serverenv = test }
     default: { fail("Unexpected environment value derived from hostname - ${::hostname}") }
   }
 

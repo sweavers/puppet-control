@@ -9,28 +9,35 @@ class profiles::log_forwarder{
 
   $ip_first_octet = split( $::ipaddress, '[.]' )
 
-  case $ip_first_octet[0]{
-    10:      { $servertype = 'broker' }
-    192:     { $servertype = 'repository' }
-    default: { fail("Unexpected network - ${::ipaddress}") }
-  }
-
   case regsubst($::hostname, '^.*-(\d)\d\.*$', '\1'){
     0:       { $serverenv = prod }
     1:       { $serverenv = preprod }
+    9:       { $serverenv = test }
     default: { fail("Unexpected environment value derived from hostname - ${::hostname}") }
+  }
+
+  if $serverenv == 'test' {
+    $servertype = 'repository'
+  } else {
+    case $ip_first_octet[0]{
+      10:      { $servertype = 'broker' }
+      192:     { $servertype = 'repository' }
+      default: { fail("Unexpected network - ${::ipaddress}") }
+    }
   }
 
   $logserver_ip   = hiera("log_${servertype}_${serverenv}_ip_address")
   $logserver_cert = hiera("log_${servertype}_${serverenv}_logstash_forwarder_cert")
 
-  file { 'logstash_forwarder_cert':
-    ensure  => 'file',
-    name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0664',
-    content => $logserver_cert
+  if ! defined(File['logstash_forwarder_cert']) {
+    file { 'logstash_forwarder_cert':
+      ensure  => 'file',
+      name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0664',
+      content => $logserver_cert
+    }
   }
 
   class { 'logstashforwarder':
