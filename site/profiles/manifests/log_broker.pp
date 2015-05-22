@@ -15,7 +15,7 @@ class profiles::log_broker {
   $logserver_cert = hiera("log_broker_${serverenv}_logstash_forwarder_cert")
   $logserver_key  = hiera("log_broker_${serverenv}_logstash_forwarder_key")
 
-  file { 'logstash_broker_key':
+  file { 'logstash_forwarder_key':
     ensure  => 'file',
     name    => '/etc/pki/tls/private/logstash-forwarder.key',
     owner   => 'root',
@@ -24,7 +24,7 @@ class profiles::log_broker {
     content => $logserver_key
   }
 
-  file { 'logstash_broker_cert':
+  file { 'logstash_forwarder_cert':
     ensure  => 'file',
     name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
     owner   => 'root',
@@ -58,7 +58,7 @@ exec { 'set_somaxconn_for_redis':
     java_install => true,
     package_url  => 'https://download.elasticsearch.org/logstash/logstash/packages/centos/logstash-1.4.1-1_bd507eb.noarch.rpm',
     require      => [ Class[ 'redis' ],
-                      File[ 'logstash_broker_key','logstash_broker_cert' ] ]
+                      File[ 'logstash_forwarder_key','logstash_forwarder_cert' ] ]
   }
 
   logstash::configfile { 'log_broker_config':
