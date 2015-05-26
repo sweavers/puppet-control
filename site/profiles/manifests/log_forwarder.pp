@@ -17,7 +17,12 @@ class profiles::log_forwarder{
   }
 
   if $serverenv == 'test' {
-    $servertype = 'repository'
+    $test_zone = split( $::domain, '[.]' )
+    case $test_zone[0]{
+      zone1:      { $servertype = 'repository' }
+      zone2:      { $servertype = 'broker' }
+      default: { fail("No Valid Zone Available - ${::domain}") }
+    }
   } else {
     case $ip_first_octet[0]{
       10:      { $servertype = 'broker' }

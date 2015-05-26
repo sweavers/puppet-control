@@ -5,5 +5,8 @@ Vagrantfile
 modules/*
 !modules/.PLACEHOLDER
 
+hiera/vagrant-repository.yaml
+hiera/vagrant-broker.yaml
 hiera/vagrant.yaml
+
 Puppetfile.lock
