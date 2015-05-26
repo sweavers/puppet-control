@@ -1,1 +1,1 @@
-include profiles::log_broker
+include ::profiles::log_broker
