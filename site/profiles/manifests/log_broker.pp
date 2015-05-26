@@ -33,6 +33,23 @@ class profiles::log_broker {
     content => $logserver_cert
   }
 
+sysctl { 'vm.overcommit_memory':
+  value  => '1',
+  notify => Service['redis']
+}
+
+exec { 'disable_transparent_hugepage_enabled':
+  command => '/bin/echo never > /sys/kernel/mm/transparent_hugepage/enabled',
+  unless  => '/bin/grep -c "\[never\]" /sys/kernel/mm/transparent_hugepage/enabled 2>/dev/null',
+  notify  => Service['redis']
+}
+
+exec { 'set_somaxconn_for_redis':
+  command => '/bin/echo 511 > /proc/sys/net/core/somaxconn',
+  unless  => '/bin/grep -c "511" /proc/sys/net/core/somaxconn 2>/dev/null',
+  notify  => Service['redis']
+}
+
   class { 'redis':
     listen => '0.0.0.0'
   }
