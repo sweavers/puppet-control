@@ -1,7 +1,8 @@
 # Set role based on hostname
-if empty($machine_role) {
-  $machine_role = regsubst($::hostname, '^(.*)-\d+$', '\1')
-}
+#if empty($machine_role) {
+#  $machine_role = regsubst($::hostname, '^(.*)-\d+$', '\1')
+#}
+notify{"Machine Role: ${machine_role}": loglevel => alert,}
 
 # Default nodes
 node default {

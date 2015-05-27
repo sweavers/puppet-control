@@ -5,11 +5,11 @@
 #
 class profiles::log_broker {
 
-  case regsubst($::hostname, '^.*-(\d)\d\.*$', '\1'){
-    0:       { $serverenv = prod }
-    1:       { $serverenv = preprod }
-    9:       { $serverenv = test }
-    default: { fail("Unexpected environment value derived from hostname - ${::hostname}") }
+  case $machine_level{
+    production:     { $serverenv = prod }
+    pre-production: { $serverenv = preprod }
+    test:           { $serverenv = test }
+    default: { fail("Unexpected environment value derived from hostname - ${puppet_environment}") }
   }
 
   $logserver_cert = hiera("log_broker_${serverenv}_logstash_forwarder_cert")
