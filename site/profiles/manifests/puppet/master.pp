@@ -1,6 +1,6 @@
 # Class: profiles::puppet::master
 #
-# This class installs and configures a Puppet Master
+# This class installs and configures a Puppet Master on Nginx / Unicorn
 #
 # Parameters:
 #  ['control_repo'] - URI of control repository
@@ -23,46 +23,13 @@ class profiles::puppet::master (
 
   ){
 
+    # Install nginx
     include ::nginx
 
     # Install puppet-server package
     package { 'puppet-server' :
       ensure  => installed
     }
-
-    # file_line { 'Add alt dns names' :
-    #   path  => '/etc/puppet/puppet.conf',
-    #   line  => "dns_alt_names = puppet, ${::fqdn}",
-    #   after => 'ssldir = $vardir/ssl'
-    # }
-
-    # #Generate puppet cert
-    # # Clean existing certs
-    # $crt_clean_cmd  = "puppet cert clean ${::fqdn}"
-    # # Gen the cert
-    # $crt_gen_cmd   = "puppet certificate --ca-location=local --dns_alt_names= puppet, ${::fqdn} generate ${::fqdn}"
-    # # Sign the cert
-    # $crt_sign_cmd  = "puppet cert sign --allow-dns-alt-names ${::fqdn}"
-    # # find is required to move the cert into the certs directory which is
-    # # where it needs to be for puppetdb to find it
-    # $cert_find_cmd = "puppet certificate --ca-location=local find ${::fqdn}"
-
-    # # Execute the commands
-    # exec { 'Create certs if not present':
-    #   command   => "${crt_clean_cmd} ; ${crt_gen_cmd} && ${crt_sign_cmd} && ${cert_find_cmd}",
-    #   unless    => "/bin/ls /var/lib/puppet/ssl/certs/${::fqdn}.pem",
-    #   path      => '/usr/bin:/usr/local/bin',
-    #   logoutput => on_failure,
-    #   require   => Package ['puppet-server']
-    # }
-
-    # # Add environment path to puppet.conf
-    # file_line { 'Add environmentpath':
-    #   path    => '/etc/puppet/puppet.conf',
-    #   line    => 'environmentpath = /etc/puppet/environments',
-    #   after   => "dns_alt_names = puppet, ${::fqdn}",
-    #   require => File_line ['Add alt dns names']
-    # }
 
     # Configure puppet
     file { '/etc/puppet/puppet.conf':
@@ -72,10 +39,7 @@ class profiles::puppet::master (
       mode    => '0644'
     }
 
-    # package { 'puppetdb-terminus':
-    #   ensure => installed
-    # }
-
+    # Ensure permissions are set correctly on puppet/environments dir
     file { '/etc/puppet/environments' :
       ensure  => directory,
       owner   => puppet,
@@ -131,28 +95,7 @@ class profiles::puppet::master (
       notify  => Service['nginx']
     }
 
-    # Configure Nginx
-    # nginx::resource::upstream { 'puppetmaster_unicorn':
-    #   members => ['unix:/var/run/puppet/puppetmaster_unicorn.sock fail_timeout=0'],
-    # }
-    #
-    # nginx::resource::vhost { 'puppetmaster_proxy':
-    #   server_name         => [ $::fqdn ],
-    #   listen_port         => 8140,
-    #   ssl                 => true,
-    #   ssl_session_timeout => '5m',
-    #   ssl_cert            => "/var/lib/puppet/ssl/certs/${::fqdn}.pem",
-    #   ssl_key             => "/var/lib/puppet/ssl/private_keys/${::fqdn}.pem",
-    #   ssl_ciphers         => 'SSLv2:-LOW:-EXPORT:RC4+RSA',
-    #   proxy_set_header    => ['Host $http_host','X-Real-IP $remote_addr','X-Forwarded-For $proxy_add_x_forwarded_for', 'X-Client-Verify $ssl_client_verify', 'X-Client-DN $ssl_client_s_dn', 'X-SSL-Issuer $ssl_client_i_dn',  ],
-    #   proxy_redirect      => 'off',
-    #   proxy               => 'http://puppetmaster_unicorn',
-    #   vhost_cfg_append    => {
-    #     'ssl_verify_client'      => 'optional',
-    #     'ssl_client_certificate' => '/var/lib/puppet/ssl/ca/ca_crt.pem'
-    #   }
-    # }
-
+    # Configure systemd to start puppet unicorn service
     file { '/etc/systemd/system/puppetmaster-unicorn.service' :
       ensure  => present,
       owner   => 'root',
@@ -162,11 +105,13 @@ class profiles::puppet::master (
       require => Package ['unicorn']
     }
 
+    # Reload systemd to pick up config change
     exec {'systemctl daemon-reload' :
       command     => '/usr/bin/systemctl daemon-reload',
       refreshonly => true
     }
 
+    # Start puppet master service
     service { 'puppetmaster-unicorn' :
       ensure  => running,
       require => File ['/etc/systemd/system/puppetmaster-unicorn.service']
@@ -202,6 +147,7 @@ class profiles::puppet::master (
       puppetdb_port   => 8081
     }
 
+    # Ensure puppetdb user is in the puppet group to allow access to certs
     user { 'puppetdb' :
       groups => puppet
     }
@@ -216,6 +162,7 @@ class profiles::puppet::master (
       source => 'puppet:///modules/profiles/hiera.yaml'
     }
 
+    # Ensure secrets script is installed on the master
     file { '/usr/local/bin/secrets':
       ensure => present,
       path   => '/usr/local/bin/secrets',
