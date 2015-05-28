@@ -1,0 +1,41 @@
+[main]
+  logdir=/var/log/puppet
+  vardir=/var/lib/puppet
+  ssldir=/var/lib/puppet/ssl
+  rundir=/var/run/puppet
+  factpath=$vardir/lib/facter
+  environmentpath = $confdir/environments
+
+[master]
+  # These are needed when the puppetmaster is run by passenger
+  # and can safely be removed if webrick is used.
+  #ssl_client_header = SSL_CLIENT_S_DN
+  #ssl_client_verify_header = SSL_CLIENT_VERIFY
+  ssl_client_header = HTTP_X_CLIENT_DN
+  ssl_client_verify_header = HTTP_X_CLIENT_VERIFY
+  #reports = store,puppetdb
+  hiera_config = /etc/puppet/hiera.yaml
+  digest_algorithm = md5
+  pluginsync = true
+  parser = current
+  dns_alt_names = puppet, <%= @fqdn %>
+  autosign = true
+  certname = <%= @fqdn %>
+  #storeconfigs = true
+  #storeconfigs_backend = puppetdb
+
+
+[agent]
+  environment = production
+  report = true
+  digest_algorithm = md5
+  ordering = title-hash
+  configtimeout = 2m
+  listen = false
+  use_srv_records = false
+  reportserver = $server
+  runinterval = 1800
+  splay = true
+  pluginsync = true
+  server = puppet
+  masterport = 8140
