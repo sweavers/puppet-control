@@ -17,7 +17,7 @@
 #    control_repo => 'https://github.com/LandRegistry-Ops/puppet-control.git',
 #  }
 #
-class profiles::puppet::master (
+class profiles::puppet::old_master (
 
   $control_repo   = 'https://github.com/LandRegistry-Ops/puppet-control.git',
   $hiera_path     = '/etc/puppet/hiera.yaml',
