@@ -5,7 +5,8 @@ classes:
   - 'profiles::deployment'
   - 'profiles::ntp'
   - 'profiles::git'
-  - 'profiles::disable_firewall'
+  - 'profiles::log_forwarder'
+  #- 'profiles::disable_firewall'
   - 'selinux'
   - 'sudo'
 

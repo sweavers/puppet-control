@@ -1,4 +1,4 @@
-# Class profiles::log_forwarder
+# Class profiles::log_forwarderuto-merging hiera/common.yaml
 #
 # Will install logstash forwarder on a node.
 #
@@ -10,52 +10,39 @@ class profiles::log_forwarder{
   $ip_first_octet = split( $::ipaddress, '[.]' )
 
   case regsubst($::hostname, '^.*-(\d)\d\.*$', '\1'){
-    0: {
-      case $ip_first_octet[0]{
-        10: {
-          $logserver_ip   = hiera('logbroker_extranet_prod_ip_address')
-          $logserver_cert = hiera('logbroker_extranet_prod_logstash_forwarder_cert')
-        }
+    0:       { $serverenv = prod }
+    1:       { $serverenv = preprod }
+    9:       { $serverenv = test }
+    default: { fail("Unexpected environment value derived from hostname - ${::hostname}") }
+  }
 
-        192: {
-          $logserver_ip   = hiera('log_repository_prod_ip_address')
-          $logserver_cert = hiera('log_repository_prod_logstash_forwarder_cert')
-        }
-
-        default: {
-          fail("Unexpected network - ${::ipaddress}")
-        }
-      }
+  if $serverenv == 'test' {
+    $test_zone = split( $::domain, '[.]' )
+    case $test_zone[0]{
+      zone1:      { $servertype = 'repository' }
+      zone2:      { $servertype = 'broker' }
+      default: { fail("No Valid Zone Available - ${::domain}") }
     }
-    1: {
-      case $ip_first_octet[0]{
-        10: {
-          $logserver_ip   = hiera('logbroker_extranet_preprod_ip_address')
-          $logserver_cert = hiera('logbroker_extranet_preprod_logstash_forwarder_cert')
-        }
-
-        192: {
-          $logserver_ip   = hiera('log_repository_preprod_ip_address')
-          $logserver_cert = hiera('log_repository_preprod_logstash_forwarder_cert')
-        }
-
-        default: {
-          fail("Unexpected network - ${::ipaddress}")
-        }
-      }
-    }
-    default: {
-      fail("Unexpected environment value derived from hostname - ${::hostname}")
+  } else {
+    case $ip_first_octet[0]{
+      10:      { $servertype = 'broker' }
+      192:     { $servertype = 'repository' }
+      default: { fail("Unexpected network - ${::ipaddress}") }
     }
   }
 
-  file { 'logstash_forwarder_cert':
-    ensure  => 'file',
-    name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0664',
-    content => $logserver_cert
+  $logserver_ip   = hiera("log_${servertype}_${serverenv}_ip_address")
+  $logserver_cert = hiera("log_${servertype}_${serverenv}_logstash_forwarder_cert")
+
+  if ! defined(File['logstash_forwarder_cert']) {
+    file { 'logstash_forwarder_cert':
+      ensure  => 'file',
+      name    => '/etc/pki/tls/certs/logstash-forwarder.crt',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0664',
+      content => $logserver_cert
+    }
   }
 
   class { 'logstashforwarder':
