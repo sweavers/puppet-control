@@ -3,5 +3,7 @@
 classes:
   - 'profiles::puppet::master'
 
+# Puppet master profile managees itself
+profiles::puppet::do_not_manage: true
 profiles::puppet::master::deployment_key: ''
 profiles::puppet::master::control_repo: 'https://github.com/LandRegistry-Ops/puppet-control.git'

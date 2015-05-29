@@ -26,7 +26,7 @@
 
 
 [agent]
-  environment = production
+  environment = <%= @environment %>
   report = true
   digest_algorithm = md5
   ordering = title-hash
@@ -37,5 +37,5 @@
   runinterval = 1800
   splay = true
   pluginsync = true
-  server = puppet
+  server = <%= @fqdn %>
   masterport = 8140

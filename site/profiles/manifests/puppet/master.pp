@@ -1,6 +1,7 @@
 # Class: profiles::puppet::master
 #
 # This class installs and configures a Puppet Master on Nginx / Unicorn
+# Also configures agent on for self management
 #
 # Parameters:
 #  ['control_repo'] - URI of control repository
@@ -20,6 +21,10 @@ class profiles::puppet::master (
 
   $control_repo = 'https://github.com/LandRegistry-Ops/puppet-control.git',
   $hiera_path   = '/etc/puppet/hiera.yaml',
+  $environment = 'production',
+  $arguments   = '--no-daemonize --onetime --logdest syslog > /dev/null 2>&1',
+  $run_hours   = '08-16',
+  $run_days    = '1-5'
 
   ){
 
@@ -181,5 +186,20 @@ class profiles::puppet::master (
     file { '/etc/puppet/modules':
       ensure => absent,
       force  => true
+    }
+
+    # Load SELinuux policy for NginX
+    selinux::module { 'puppetmaster':
+      ensure => 'present',
+      source => 'puppet:///modules/profiles/puppetmaster.te'
+    }
+
+    # Configure puppet agent runs
+    cron { 'puppet-agent':
+      command => "/usr/bin/puppet agent ${arguments}",
+      user    => root,
+      minute  => [0,30],
+      hour    => $run_hours,
+      weekday => $run_days,
     }
 }

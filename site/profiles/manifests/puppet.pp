@@ -13,14 +13,22 @@
 #
 class profiles::puppet(
 
-  $master_fqdn = 'puppet',
-  $environment = 'production'
+  $master_fqdn   = 'puppet',
+  $environment   = 'production',
+  $do_not_manage = false
 
 ){
 
-  class { 'profiles::puppet::agent':
-    master_fqdn => $master_fqdn,
-    environment => $environment
+  case $do_not_manage{
+    default: {
+      class { 'profiles::puppet::agent':
+        master_fqdn => $master_fqdn,
+        environment => $environment
+      }
+    }
+    true: {
+      # Do not manage agent with puppet module
+      # Reqired for puppet masters
+    }
   }
-
 }
