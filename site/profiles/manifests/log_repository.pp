@@ -45,7 +45,7 @@ class profiles::log_repository(
   class { 'nginx': }
 
   nginx::resource::vhost { 'kibana_proxy':
-    server_name    => [ '192.168.39.35' ],
+    server_name    => [ $::hostname ],
     listen_port    => 80,
     proxy_redirect => 'off',
     proxy          => 'http://127.0.0.1:5601'

@@ -7,8 +7,10 @@
 #
 class profiles::git {
 
-# Install custom git build
-  package{ 'git' :
-    ensure   => installed,
+  # Install custom git build
+  if ! defined(Package['git']) {
+    package{ 'git' :
+      ensure   => installed,
+    }
   }
 }

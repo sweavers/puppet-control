@@ -1,0 +1,17 @@
+[Unit]
+Description=Puppet Master Unicorn Server
+[Service]
+User=puppet
+Type=forking
+WorkingDirectory=/etc/puppet
+SyslogIdentifier=puppetmaster-unicorn
+PIDFile=/var/run/puppet/puppetmaster_unicorn.pid
+MemoryAccounting=true
+MemoryLimit=512M
+Restart=on-failure
+RestartSec=10s
+ExecStart=/usr/local/bin/unicorn -D -c /etc/puppet/unicorn.conf
+ExecReload=/bin/kill -s USR2 $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+[Install]
+WantedBy=multi-user.target
