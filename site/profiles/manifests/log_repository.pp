@@ -3,13 +3,15 @@
 # Sample Usage:
 #   class { 'profiles::log_repository': }
 #
-class profiles::log_repository{
+class profiles::log_repository(
+  $hostnumber     = 1,
+){
 
-  case $machine_level{
+  case $::machine_level{
     production:     { $serverenv = prod }
     pre-production: { $serverenv = preprod }
-    test:           { $serverenv = test }
-    default: { fail("Unexpected environment value derived from hostname - ${puppet_environment}") }
+    development:    { $serverenv = test }
+    default: { fail("Unexpected environment value derived from hostname - ${::machine_level}") }
   }
 
   $logserver_cert = hiera("log_repository_${serverenv}_logstash_forwarder_cert")

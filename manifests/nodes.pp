@@ -2,7 +2,9 @@
 #if empty($machine_role) {
 #  $machine_role = regsubst($::hostname, '^(.*)-\d+$', '\1')
 #}
-notify{"Machine Role: ${machine_role}": loglevel => alert,}
+notify{"Machine Role: ${::machine_role}": loglevel => alert,}
+notify{"Machine Zone: ${::machine_location}": loglevel => alert,}
+notify{"Machine level: ${::machine_level}": loglevel => alert,}
 
 # Default nodes
 node default {

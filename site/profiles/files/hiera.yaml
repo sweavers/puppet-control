@@ -5,9 +5,9 @@
   :datadir: /etc/puppet/environments/%{environment}/hiera
 :hierarchy:
   - secrets/nodes/%{::fqdn}
-  - secrets/environments/%{environment}
+  - secrets/level/%{::machine_level}
   - secrets/secrets
+  - level/%{::machine_level}
   - "hosts/%{::fqdn}"
   - roles/%{::machine_role}
   - common
-

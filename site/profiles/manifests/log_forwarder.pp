@@ -7,19 +7,17 @@
 #
 class profiles::log_forwarder{
 
-  case $machine_level{
+  case $::machine_level{
     production:     { $serverenv = prod }
     pre-production: { $serverenv = preprod }
-    test:           { $serverenv = test }
-    default: { fail("Unexpected environment value derived from hostname - ${machine_level}") }
+    development:    { $serverenv = test }
+    default: { fail("Unexpected environment value derived from hostname - ${::machine_level}") }
   }
 
-  notify{"Current Zone: ${machine_location}": loglevel => alert,}
-
-  case $machine_location{
+  case $::machine_location{
     zone1:      { $servertype = 'repository' }
     zone2:      { $servertype = 'broker' }
-    default: { fail("No Valid Zone Available - ${machine_location}") }
+    default: { fail("No Valid Zone Available - ${::machine_location}") }
   }
 
   $logserver_ip   = hiera("log_${servertype}_${serverenv}_ip_address")
