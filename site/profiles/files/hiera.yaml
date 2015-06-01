@@ -7,7 +7,7 @@
   - secrets/nodes/%{::fqdn}
   - secrets/level/%{::machine_level}
   - secrets/secrets
-  - level/%{::machine_level}
+  - machine_region/%{::machine_region}
   - "hosts/%{::fqdn}"
   - roles/%{::machine_role}
   - common
