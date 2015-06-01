@@ -7,28 +7,17 @@
 #
 class profiles::log_forwarder{
 
-  $ip_first_octet = split( $::ipaddress, '[.]' )
-
-  case regsubst($::hostname, '^.*-(\d)\d\.*$', '\1'){
-    0:       { $serverenv = prod }
-    1:       { $serverenv = preprod }
-    9:       { $serverenv = test }
-    default: { fail("Unexpected environment value derived from hostname - ${::hostname}") }
+  case $::machine_region{
+    production:     { $serverenv = prod }
+    pre-production: { $serverenv = preprod }
+    development:    { $serverenv = test }
+    default: { fail("Unexpected environment value derived from hostname - ${::machine_region}") }
   }
 
-  if $serverenv == 'test' {
-    $test_zone = split( $::domain, '[.]' )
-    case $test_zone[0]{
-      zone1:      { $servertype = 'repository' }
-      zone2:      { $servertype = 'broker' }
-      default: { fail("No Valid Zone Available - ${::domain}") }
-    }
-  } else {
-    case $ip_first_octet[0]{
-      10:      { $servertype = 'broker' }
-      192:     { $servertype = 'repository' }
-      default: { fail("Unexpected network - ${::ipaddress}") }
-    }
+  case $::network_location{
+    zone1:      { $servertype = 'repository' }
+    zone2:      { $servertype = 'broker' }
+    default: { fail("No Valid Zone Available - ${::network_location}") }
   }
 
   $logserver_ip   = hiera("log_${servertype}_${serverenv}_ip_address")

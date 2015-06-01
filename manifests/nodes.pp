@@ -1,14 +1,17 @@
 # Set role based on hostname
-if empty($machine_role) {
-  $machine_role = regsubst($::hostname, '^(.*)-\d+$', '\1')
-}
+#if empty($machine_role) {
+#  $machine_role = regsubst($::hostname, '^(.*)-\d+$', '\1')
+#}
+notify{"Machine Role: ${::role}": loglevel => alert,}
+notify{"Machine Zone: ${::network_location}": loglevel => alert,}
+notify{"Machine level: ${::machine_region}": loglevel => alert,}
 
 # Default nodes
 node default {
 
   if $virtual == 'xenhvm' {
 
-    
+
     user {
         'webapp':
             ensure     => present,

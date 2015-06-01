@@ -3,16 +3,15 @@
 # Sample Usage:
 #   class { 'profiles::log_repository': }
 #
-class profiles::log_repository{
+class profiles::log_repository(
+  $hostnumber     = 1,
+){
 
-  $hostnumber = regsubst($::hostname, '^.*-(\d\d)\.*$', '\1')
-
-
-  case regsubst($hostnumber, '^(\d)\d$', '\1'){
-    0:       { $serverenv = prod }
-    1:       { $serverenv = preprod }
-    9:       { $serverenv = test }
-    default: { fail("Unexpected environment value derived from hostname - ${::hostname}") }
+  case $::machine_region{
+    production:     { $serverenv = prod }
+    pre-production: { $serverenv = preprod }
+    development:    { $serverenv = test }
+    default: { fail("Unexpected environment value derived from hostname - ${::machine_region}") }
   }
 
   $logserver_cert = hiera("log_repository_${serverenv}_logstash_forwarder_cert")
