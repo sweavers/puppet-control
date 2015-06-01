@@ -7,17 +7,17 @@
 #
 class profiles::log_forwarder{
 
-  case $::machine_level{
+  case $::machine_region{
     production:     { $serverenv = prod }
     pre-production: { $serverenv = preprod }
     development:    { $serverenv = test }
-    default: { fail("Unexpected environment value derived from hostname - ${::machine_level}") }
+    default: { fail("Unexpected environment value derived from hostname - ${::machine_region}") }
   }
 
-  case $::machine_location{
+  case $::network_location{
     zone1:      { $servertype = 'repository' }
     zone2:      { $servertype = 'broker' }
-    default: { fail("No Valid Zone Available - ${::machine_location}") }
+    default: { fail("No Valid Zone Available - ${::network_location}") }
   }
 
   $logserver_ip   = hiera("log_${servertype}_${serverenv}_ip_address")

@@ -9,5 +9,5 @@
   - secrets/secrets
   - machine_region/%{::machine_region}
   - "hosts/%{::fqdn}"
-  - roles/%{::machine_role}
+  - roles/%{::role}
   - common
