@@ -7,21 +7,14 @@
 #
 class profiles::log_forwarder{
 
-  case $::machine_region{
-    production:     { $serverenv = prod }
-    pre-production: { $serverenv = preprod }
-    development:    { $serverenv = test }
-    default: { fail("Unexpected environment value derived from hostname - ${::machine_region}") }
-  }
-
   case $::network_location{
     zone1:      { $servertype = 'repository' }
     zone2:      { $servertype = 'broker' }
     default: { fail("No Valid Zone Available - ${::network_location}") }
   }
 
-  $logserver_ip   = hiera("log_${servertype}_${serverenv}_ip_address")
-  $logserver_cert = hiera("log_${servertype}_${serverenv}_logstash_forwarder_cert")
+  $logserver_ip   = hiera("log_${servertype}_ip_address")
+  $logserver_cert = hiera("log_${servertype}_logstash_forwarder_cert")
 
   if ! defined(File['logstash_forwarder_cert']) {
     file { 'logstash_forwarder_cert':

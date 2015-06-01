@@ -5,15 +5,8 @@
 #
 class profiles::log_broker {
 
-  case $::machine_region{
-    production:     { $serverenv = prod }
-    pre-production: { $serverenv = preprod }
-    development:    { $serverenv = test }
-    default: { fail("Unexpected environment value derived from hostname - ${::machine_region}") }
-  }
-
-  $logserver_cert = hiera("log_broker_${serverenv}_logstash_forwarder_cert")
-  $logserver_key  = hiera("log_broker_${serverenv}_logstash_forwarder_key")
+  $logserver_cert = hiera("log_broker_logstash_forwarder_cert")
+  $logserver_key  = hiera("log_broker_logstash_forwarder_key")
 
   file { 'logstash_forwarder_key':
     ensure  => 'file',
