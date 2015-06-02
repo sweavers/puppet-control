@@ -31,7 +31,7 @@ class profiles::log_repository(
   }
 
   class { 'profiles::elasticsearch':
-    clustername => $machine_region,
+    clustername => $::machine_region,
     nodenumber  => $hostnumber
   }
 
