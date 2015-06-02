@@ -6,10 +6,9 @@ classes:
   - 'profiles::ntp'
   - 'profiles::git'
   - 'profiles::log_forwarder'
-  #- 'profiles::disable_firewall'
+  - 'profiles::firewall'
   - 'selinux'
   - 'sudo'
-
 
 # Prevent sudo from purging unmanaged sudo configs (for vagrant)
 sudo::purge: false
@@ -22,7 +21,7 @@ profiles::ntp::ntp_restrict_array:
   - '127.0.1.0'
   - '127.0.1.1'
 
-profiles::puppet::environment: development
+profiles::puppet::environment: local
 
 ##example account declarations
 #accounts:

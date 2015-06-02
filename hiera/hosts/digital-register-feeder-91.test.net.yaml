@@ -1,0 +1,6 @@
+---
+
+profiles::firewall::services:
+  AMQP:
+    port: 5267
+    range: 192.16.42.0/24
