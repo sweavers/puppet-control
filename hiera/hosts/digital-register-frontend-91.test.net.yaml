@@ -1,5 +1,6 @@
 ---
 
+profiles::firewall::firewall_state: 'on'
 profiles::firewall::services:
   ElasticSearch:
     port: 9200

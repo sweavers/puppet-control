@@ -1,7 +1,5 @@
 ---
 
-profiles::firewall::firewall_state: 'on'
-
 log_repository_ip_address: 192.16.42.49
 
 log_repository_logstash_forwarder_key: |
