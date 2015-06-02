@@ -24,18 +24,13 @@ profiles::ntp::ntp_restrict_array:
 
 profiles::puppet::environment: development
 
-##example account declarations
-#accounts:
-#  lr-test-user:
-#    comment: lr-test-user
-#    ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDQrtZpM0DU+QlF/rY5p9zwsHbckq4DCb1CzpIk3gL4d7ljYoFnACWvQXTEFXMHMcoekyGfUqpQFPqBOzg38hjWK0ODECdG2nIwmdSCCFyEJ2kLGMWjlSM7M9Lwvvx8dkySYCMkdJ+rAQr3BXJ9kbttf2A7oYPw04IWhr+ezcq4qnZ5zydEO3XVSS5G6xSlziwjvSNo9i0O3R0sWybZSS2xeive/4tkHc6V8dPlA0670Gva1CYqoajOWjp0JE6wsf2EEgcEdDHHfTwW1U7dtc9a6BVygpGaghMgoDrP4OjAYAYtBd9dKKK2qYRXvJKxiorhj1s6Odf0IHhx9ut8qHAf
-#    groups:
-#      - lr-admin
-#  lr-test-user-2:
-#    comment: lr-test-user-2
-#    ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDFACawwPMbMoc0XiOCshIxCbYEn15SrwPxCRCfhbKM3McZ5u9Xro2b717l6tj9QALoKVqV7KddlsSWoEg3htpjuJAZrfRAvg6LawlDx6xL6jaSA6wMXROmQ8Qc+oBjfxwUwpfnB4+s4kQXQXuttou8PJbaHgxaLrFdPbWInOi2jCKb1NlwjBqa6/WVZRYfG2siO64aL2Z3hZqtEC3Be/X5Sum8ELgFh8TQsf+aLaksJTF2Wp5F/dkux5fAFKwSYMOBab3pJpemhd7EPxHBoAzUHpJxnsl9sQwxThc9T/KQR3p21bP5jemYvnW3kwiwaV5wHBR2SyWvdj1K/wjgGSId
-#    groups:
-#      - lr-admin
+#Add test user NB must be removed (in hiera)for all internal and AWS deployments
+accounts:
+ lr-test-user:
+   comment: lr-test-user
+   ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQC2JcuGfXBiaUKCRf9qJ/SSswEy+V7TW0BiN7sfKqycWoWIas7tMKCHdsJSayXO12rz1fP59vCyThUayAdwLrzzVQjGxsN43eS80aGeo83GoxcqGVjNQcNK6NKT5EzbpdxN1FEtSFEVGnpJznpbSetKtwCUuMARVTJ1xtZUZNgWzRkgBRTcaaq6SxulJ42BB3fxReOCswDnTHnHUjk+xigH+QyZgI9Vmp8/k9i6dtV8VTBs32dPaB5SzuP+ljjoW06+UND0MRxl9UeW82UGMLKMXRhL5gBLyDhP+/9lIIeqc9f6p7JU8bJz3pwFVNKxCKW9LjKUAxAUEboiryKx7GYv
+   groups:
+     - lr-admin
 
 logbroker_extranet_logstash_config: |
   input {

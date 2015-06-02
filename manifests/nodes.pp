@@ -50,6 +50,12 @@ node default {
 
   # Create accounts from Hiera data
   create_resources( 'account', hiera_hash('accounts', {require => Group['lr-admin']}) )
-}
 
+  # Disable root login with password
+  user { root :
+    ensure   => present,
+    password => '!'
+  }
+
+}
 }
