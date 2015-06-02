@@ -7,17 +7,10 @@ class profiles::log_repository(
   $hostnumber     = 1,
 ){
 
-  case $::machine_region{
-    production:     { $serverenv = prod }
-    pre-production: { $serverenv = preprod }
-    development:    { $serverenv = test }
-    default: { fail("Unexpected environment value derived from hostname - ${::machine_region}") }
-  }
-
-  $logserver_cert = hiera("log_repository_${serverenv}_logstash_forwarder_cert")
-  $logserver_key  = hiera("log_repository_${serverenv}_logstash_forwarder_key")
-  $logserver_ip = hiera("log_repository_${serverenv}_ip_address")
-  $log_repository_logstash_config = hiera("log_repository_${serverenv}_logstash_config")
+  $logserver_cert = hiera('log_repository_logstash_forwarder_cert')
+  $logserver_key  = hiera('log_repository_logstash_forwarder_key')
+  $logserver_ip = hiera('log_repository_ip_address')
+  $log_repository_logstash_config = hiera('log_repository_logstash_config')
 
   file { 'logstash_forwarder_key':
     ensure  => 'file',
@@ -38,7 +31,7 @@ class profiles::log_repository(
   }
 
   class { 'profiles::elasticsearch':
-    clustername => $serverenv,
+    clustername => $::machine_region,
     nodenumber  => $hostnumber
   }
 
