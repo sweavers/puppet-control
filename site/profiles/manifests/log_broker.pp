@@ -5,8 +5,8 @@
 #
 class profiles::log_broker {
 
-  $logserver_cert = hiera("log_broker_logstash_forwarder_cert")
-  $logserver_key  = hiera("log_broker_logstash_forwarder_key")
+  $logserver_cert = hiera('log_broker_logstash_forwarder_cert')
+  $logserver_key  = hiera('log_broker_logstash_forwarder_key')
 
   file { 'logstash_forwarder_key':
     ensure  => 'file',

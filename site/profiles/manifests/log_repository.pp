@@ -7,10 +7,10 @@ class profiles::log_repository(
   $hostnumber     = 1,
 ){
 
-  $logserver_cert = hiera("log_repository_logstash_forwarder_cert")
-  $logserver_key  = hiera("log_repository_logstash_forwarder_key")
-  $logserver_ip = hiera("log_repository_ip_address")
-  $log_repository_logstash_config = hiera("log_repository_logstash_config")
+  $logserver_cert = hiera('log_repository_logstash_forwarder_cert')
+  $logserver_key  = hiera('log_repository_logstash_forwarder_key')
+  $logserver_ip = hiera('log_repository_ip_address')
+  $log_repository_logstash_config = hiera('log_repository_logstash_config')
 
   file { 'logstash_forwarder_key':
     ensure  => 'file',
@@ -31,7 +31,7 @@ class profiles::log_repository(
   }
 
   class { 'profiles::elasticsearch':
-    clustername => $serverenv,
+    clustername => $machine_region,
     nodenumber  => $hostnumber
   }
 
