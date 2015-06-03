@@ -72,7 +72,7 @@ log_repository_logstash_config: |
   }
   output {
     elasticsearch { host => localhost
-                    cluster => test }
+                    cluster => development }
   }
 
 log_broker_ip_address: 192.16.42.48
