@@ -8,6 +8,6 @@
   - secrets/machine_region/%{::machine_region}
   - secrets/secrets
   - machine_region/%{::machine_region}
-  - "hosts/%{::fqdn}"
+  - hosts/%{::fqdn}
   - roles/%{::role}
   - common
