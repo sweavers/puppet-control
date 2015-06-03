@@ -6,10 +6,9 @@ classes:
   - 'profiles::ntp'
   - 'profiles::git'
   - 'profiles::log_forwarder'
-  #- 'profiles::disable_firewall'
+  - 'profiles::firewall'
   - 'selinux'
   - 'sudo'
-
 
 # Prevent sudo from purging unmanaged sudo configs (for vagrant)
 sudo::purge: false

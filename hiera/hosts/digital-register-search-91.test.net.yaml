@@ -1,0 +1,7 @@
+---
+
+profiles::firewall::firewall_state: 'on'
+profiles::firewall::services:
+  ElasticSearch:
+    port: 9200
+    range: 192.16.42.0/24
