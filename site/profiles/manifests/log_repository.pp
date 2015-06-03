@@ -6,7 +6,7 @@
 class profiles::log_repository(
   $hostnumber     = 1,
   $auth_basic     = 'Restricted',
-  $auth_password     = 'password',
+  $auth_password     = 'TOtM2LbCXW4XI',
 
 ){
 
@@ -45,21 +45,39 @@ class profiles::log_repository(
     source => 'puppet:///modules/profiles/log_repo.te'
   }
 
+  $key = '/etc/nginx/ssl/kibana.key'
+  $csr = '/etc/nginx/ssl/kibana.csr'
+  $crt = '/etc/nginx/ssl/kibana.pem'
+
+  file {"/etc/nginx/ssl/":
+    ensure => "directory",
+  }
+
+  exec { 'create key':
+    command => "openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj '/C=UK/ST=Denial/L=Plymouth/O=Dis/CN=$::hostname' -keyout $key  -out $crt",
+    creates => $key,
+    require => File['/etc/nginx/ssl/'],
+  }
+
   # Set auth_basic to Off to disable.
   nginx::resource::vhost { 'kibana_proxy':
-    server_name    => [ $::hostname ],
-    listen_port    => 80,
-    auth_basic     => $auth_basic,
+    server_name          => [ $::hostname ],
+    listen_port          => 443,
+    auth_basic           => $auth_basic,
     auth_basic_user_file => '/etc/nginx/conf.d/kibana.htpasswd',
-    proxy_redirect => 'off',
-    proxy          => 'http://127.0.0.1:5601'
+    proxy_redirect       => 'off',
+    proxy                => 'http://127.0.0.1:5601',
+    ssl                  => true,
+    ssl_cert             => $crt,
+    ssl_key              => $key,
+    require              => Exec['create key'],
   }
 
   file { '/etc/nginx/conf.d/kibana.htpasswd':
   ensure => present,
   }->
-  htpasswd { 'dan':
-    cryptpasswd => '{PLAIN}password',  # encrypted password
+  htpasswd { 'kibana':
+    cryptpasswd => $auth_password,  # encrypted password
     target      => '/etc/nginx/conf.d/kibana.htpasswd',
   }
 
