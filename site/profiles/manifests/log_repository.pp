@@ -51,12 +51,12 @@ class profiles::log_repository(
     $key = '/etc/nginx/ssl/kibana.key'
     $crt = '/etc/nginx/ssl/kibana.pem'
 
-    file {"/etc/nginx/ssl/":
-      ensure => "directory",
+    file {'/etc/nginx/ssl/':
+      ensure => 'directory',
     }
 
     exec { 'create key':
-      command => "openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj '/C=UK/ST=Denial/L=Plymouth/O=Dis/CN=$::hostname' -keyout $key  -out $crt",
+      command => "openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj '/C=UK/ST=Denial/L=Plymouth/O=Dis/CN=${::hostname}' -keyout ${key}  -out ${crt}",
       creates => $key,
       require => File['/etc/nginx/ssl/'],
     }
@@ -84,10 +84,10 @@ class profiles::log_repository(
 
   } else {
     nginx::resource::vhost { 'kibana_proxy':
-      server_name          => [ $::hostname ],
-      listen_port          => 80,
-      proxy_redirect       => 'off',
-      proxy                => 'http://127.0.0.1:5601',
+      server_name    => [ $::hostname ],
+      listen_port    => 80,
+      proxy_redirect => 'off',
+      proxy          => 'http://127.0.0.1:5601',
     }
   }
 
