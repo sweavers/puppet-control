@@ -27,6 +27,7 @@ mod 'spuder/gitlab',                   '2.3.5'
 mod 'stephenrjohnson/puppet',          '1.3.1'
 mod 'thias/sysctl',                    '1.0.2'
 mod 'zack/r10k',                       '2.6.2'
+mod 'leinaddm/htpasswd',               '0.0.3'
 
 # Dependency modules
 mod 'croddy/make',                     '0.0.5'

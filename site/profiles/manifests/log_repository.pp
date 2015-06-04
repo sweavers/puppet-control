@@ -5,6 +5,9 @@
 #
 class profiles::log_repository(
   $hostnumber     = 1,
+  $secure     = false,
+  $auth_password     = 'TOtM2LbCXW4XI',
+
 ){
 
   $logserver_cert = hiera('log_repository_logstash_forwarder_cert')
@@ -36,13 +39,56 @@ class profiles::log_repository(
     nodenumber  => $hostnumber
   }
 
-  class { 'nginx': }
+  include profiles::nginx
 
-  nginx::resource::vhost { 'kibana_proxy':
-    server_name    => [ $::hostname ],
-    listen_port    => 80,
-    proxy_redirect => 'off',
-    proxy          => 'http://127.0.0.1:5601'
+  selinux::module { 'log_repo':
+    ensure => 'present',
+    source => 'puppet:///modules/profiles/log_repo.te'
+  }
+
+  if ($secure == true) {
+
+    $key = '/etc/nginx/ssl/kibana.key'
+    $crt = '/etc/nginx/ssl/kibana.pem'
+
+    file {'/etc/nginx/ssl/':
+      ensure => 'directory',
+    }
+
+    exec { 'create key':
+      command => "openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj '/C=UK/ST=Denial/L=Plymouth/O=Dis/CN=${::hostname}' -keyout ${key}  -out ${crt}",
+      creates => $key,
+      require => File['/etc/nginx/ssl/'],
+    }
+
+    nginx::resource::vhost { 'kibana_proxy':
+      server_name          => [ $::hostname ],
+      listen_port          => 443,
+      auth_basic           => 'Restricted',
+      auth_basic_user_file => '/etc/nginx/conf.d/kibana.htpasswd',
+      proxy_redirect       => 'off',
+      proxy                => 'http://127.0.0.1:5601',
+      ssl                  => true,
+      ssl_cert             => $crt,
+      ssl_key              => $key,
+      require              => Exec['create key'],
+    }
+
+    file { '/etc/nginx/conf.d/kibana.htpasswd':
+    ensure => present,
+    }->
+    htpasswd { 'kibana':
+      cryptpasswd => $auth_password,  # encrypted password
+      target      => '/etc/nginx/conf.d/kibana.htpasswd',
+    }
+
+  } else {
+    nginx::resource::vhost { 'kibana_proxy':
+      server_name    => [ $::hostname ],
+      listen_port    => 80,
+      proxy_redirect => 'off',
+      proxy          => 'http://127.0.0.1:5601',
+    }
   }
 
   class { 'logstash':
