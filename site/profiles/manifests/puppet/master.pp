@@ -21,7 +21,7 @@ class profiles::puppet::master (
 
   $control_repo = 'https://github.com/LandRegistry-Ops/puppet-control.git',
   $hiera_path   = '/etc/puppet/hiera.yaml',
-  $environment = 'production',
+  $environment = hiera('$::profiles::puppet::environment', 'production'),
   $arguments   = '--no-daemonize --onetime --logdest syslog > /dev/null 2>&1',
   $run_hours   = '08-16',
   $run_days    = '1-5'
@@ -29,7 +29,7 @@ class profiles::puppet::master (
   ){
 
     # Install nginx
-    include ::nginx
+    include ::profiles::nginx
 
     # Install puppet-server package
     package { 'puppet-server' :
