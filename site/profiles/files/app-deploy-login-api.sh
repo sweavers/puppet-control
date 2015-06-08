@@ -34,6 +34,11 @@ done
 echo "Attempting to clone ${GITREPO}" | output
 git clone -b ${BRANCH} ${GITREPO} ${LOCALDIR}${APPNAME} --single-branch > /dev/null 2>&1
 if [[ $? == '0' ]]; then
+  if [[ "${TAG}" != "" ]]; then
+    cd ${LOCALDIR}${APPNAME}
+    git checkout ${TAG}
+    cd -
+  fi
   echo "Successfully cloned ${GITREPO}" | output SUCCESS
 else
   echo "Error creating cloning ${GITREPO}" | output ERROR && exit 1
