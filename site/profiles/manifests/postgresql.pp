@@ -114,6 +114,9 @@ class profiles::postgresql(
       force  => true,
       before => Class[Postgresql::Server]
     }
+    package { 'epel-release' :
+      ensure => installed
+    }
   }
 
 
@@ -123,7 +126,8 @@ class profiles::postgresql(
   #include postgresql::server::postgis
 
   package{ 'postgis2_93' :
-    ensure => installed,
+    ensure  => installed,
+    require => Package['epel-release']
   }
 
   include postgresql::lib::devel
