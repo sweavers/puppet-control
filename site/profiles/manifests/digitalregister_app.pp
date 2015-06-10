@@ -15,43 +15,36 @@ class profiles::digitalregister_app{
   include ::profiles::nginx
 
   #  Install required packages for Ruby and Java
-  case $::osfamily{
-    'RedHat': {
-      $PKGLIST=['python','python-devel','python-pip','epel-release']
-      $PYTHON='lr-python3-3.4.3-1.x86_64'
-      $PYPGK="${PYTHON}.rpm"
-      $PKGMAN='rpm'
-    }
-    'Debian': {
-      $PKGLIST=['python','python-dev','python-pip']
-      $PYTHON='lr-python3_3.4.3_amd64'
-      $PYPGK="${PYTHON}.deb"
-      $PKGMAN='dpkg'
-    }
-    default: {
-      fail("Unsupported OS type - ${::osfamily}")
-    }
+
+  $PKGLIST=['python','python-devel','python-pip']
+
+  package { 'epel-release' :
+    ensure => installed
   }
-  ensure_packages($PKGLIST)
+
+  package{ $PKGLIST :
+    ensure  => installed,
+    require => Package[epel-release]
+  }
 
   file{'LR Python package':
     ensure => 'file',
-    path   => "/tmp/${PYPGK}",
-    source => "puppet:///modules/profiles/${PYPGK}"
+    path   => '/tmp/lr-python3-3.4.3-1.x86_64.rpm',
+    source => 'puppet:///modules/profiles/lr-python3-3.4.3-1.x86_64.rpm'
   }
 
   # Install custom Python 3.4.3 build
-  package{ $PYTHON :
+  package{ 'lr-python3-3.4.3-1.x86_64.rpm' :
     ensure   => installed,
-    provider => $PKGMAN,
-    source   => "/tmp/${PYPGK}",
+    provider => rpm,
+    source   => '/tmp/lr-python3-3.4.3-1.x86_64.rpm',
     require  => File['LR Python package']
   }
 
   file{'/usr/bin/pip3' :
     ensure  => link,
     target  => '/usr/local/bin/pip3',
-    require => Package[$PYTHON]
+    require => Package['lr-python3-3.4.3-1.x86_64.rpm']
   }
 
   package{'gunicorn' :
