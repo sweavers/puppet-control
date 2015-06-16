@@ -32,7 +32,7 @@ done
 
 # Clone GITREPO to LOCALDIR
 echo "Attempting to clone ${GITREPO}" | output
-git clone -b ${BRANCH} ${GITREPO} ${LOCALDIR}${APPNAME} --single-branch > /dev/null 2>&1
+git clone -b --recurse-submodules ${BRANCH} ${GITREPO} ${LOCALDIR}${APPNAME} --single-branch > /dev/null 2>&1
 if [[ $? == '0' ]]; then
   if [[ "${TAG}" != "" ]]; then
     cd ${LOCALDIR}${APPNAME}
