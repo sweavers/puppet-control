@@ -8,11 +8,21 @@
 # Sample Usage:
 #   class { 'profiles::digitalregister_app': }
 #
-class profiles::digitalregister_app{
+class profiles::digitalregister_app(
+
+  $application = undef,
+  $bind        = '5000',
+  $source      = 'undef',
+  $vars        = {},
+  $wsgi_entry  = undef,
+  $manage      = true,
+
+  ){
 
   include ::stdlib
   include ::profiles::deployment
   include ::profiles::nginx
+  include ::wsgi
 
   #  Install required packages for Ruby and Java
 
@@ -27,45 +37,43 @@ class profiles::digitalregister_app{
     require => Package[epel-release]
   }
 
-  file{'LR Python package':
-    ensure => 'file',
-    path   => '/tmp/lr-python3-3.4.3-1.x86_64.rpm',
-    source => 'puppet:///modules/profiles/lr-python3-3.4.3-1.x86_64.rpm'
+  # Dirty hack to address hard coded logging location in manage.py
+  file { '/var/log/applications/' :
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755'
   }
 
-  # Install custom Python 3.4.3 build
-  package{ 'lr-python3-3.4.3-1.x86_64.rpm' :
-    ensure   => installed,
-    provider => rpm,
-    source   => '/tmp/lr-python3-3.4.3-1.x86_64.rpm',
-    require  => File['LR Python package']
+  # Dirty hack required to complie pip dependacies for frontend (should be
+  # removed ASAP)
+  package { 'gcc-c++' :
+    ensure => present
   }
 
-  file{'/usr/bin/pip3' :
-    ensure  => link,
-    target  => '/usr/local/bin/pip3',
-    require => Package['lr-python3-3.4.3-1.x86_64.rpm']
+  # Load SELinuux policy for Nginx_proxy
+  selinux::module { 'nginx_proxy':
+    ensure => 'present',
+    source => 'puppet:///modules/profiles/nginx_proxy.te'
   }
 
-  package{'gunicorn' :
-    ensure   => installed,
-    provider => pip3,
-    require  => File['/usr/bin/pip3']
+  # Set up wsgi application
+  wsgi::application { $application :
+    bind       => '5000',
+    source     => $source,
+    vars       => $vars,
+    wsgi_entry => $wsgi_entry,
+    require    => File['/var/log/applications/'],
+    manage     => $manage
   }
 
-  package{'flask' :
-    ensure   => installed,
-    provider => pip3,
-    require  => File['/usr/bin/pip3']
-  }
-
+  # Set up Nginx proxy
   nginx::resource::vhost { 'api_proxy':
     server_name    => [ $::hostname ],
     listen_port    => 80,
-    #proxy_set_header => ['X-Forward-For $proxy_add_x_forwrded_for',
+    #proxy_set_header => ['X-Forward-For $proxy_add_x_forwarded_for',
       #'Host $http_host'],
     proxy_redirect => 'off',
-    proxy          => 'http://127.0.0.1:8000',
-
+    proxy          => 'http://127.0.0.1:5000',
   }
 }
