@@ -4,3 +4,17 @@
 
   classes:
     - profiles::digitalregister_app
+
+  profiles::digitalregister_app::manage: false
+
+
+  profiles::digitalregister_app::application: 'login-api'
+  profiles::digitalregister_app::source: 'https://github.com/LandRegistry/login-api.git'
+  profiles::digitalregister_app::wsgi_entry: 'service.server:app'
+  profiles::digitalregister_app::vars:
+    SETTINGS: 'dev'
+    LOGGING_CONFIG_FILE_PATH: logging_config.json
+    FAULT_LOG_FILE_PATH: '/var/log/applications/login-api-fault.log'
+    SQLALCHEMY_DATABASE_URI: postgresql+pg8000://postgres:password@172.16.42.43:5432/user_data
+    PASSWORD_SALT: passwordsalt
+    PORT: '5000'
