@@ -10,12 +10,14 @@
 #
 class profiles::digitalregister_app(
 
-  $application = undef,
-  $bind        = '5000',
-  $source      = 'undef',
-  $vars        = {},
-  $wsgi_entry  = undef,
-  $manage      = true,
+  $application  = undef,
+  $bind         = '5000',
+  $source       = 'undef',
+  $vars         = {},
+  $wsgi_entry   = undef,
+  $manage       = true,
+  $app_type     = 'wsgi',
+  $applications = hiera_hash('applications',false),
 
   ){
 
@@ -24,7 +26,7 @@ class profiles::digitalregister_app(
   include ::profiles::nginx
   include ::wsgi
 
-  #  Install required packages for Ruby and Java
+  #  Install required packages for Python
 
   $PKGLIST=['python','python-devel','python-pip']
 
@@ -57,14 +59,19 @@ class profiles::digitalregister_app(
     source => 'puppet:///modules/profiles/nginx_proxy.te'
   }
 
-  # Set up wsgi application
-  wsgi::application { $application :
-    bind       => '5000',
-    source     => $source,
-    vars       => $vars,
-    wsgi_entry => $wsgi_entry,
-    require    => File['/var/log/applications/'],
-    manage     => $manage
+  # # Set up wsgi application
+  # wsgi::application { $application :
+  #   bind       => $bind ,
+  #   source     => $source,
+  #   vars       => $vars,
+  #   wsgi_entry => $wsgi_entry,
+  #   app_type   => $app_type,
+  #   manage     => $manage,
+  #   require    => File['/var/log/applications/']
+  # }
+
+  if $applications {
+    create_resources('wsgi::application', $applications)
   }
 
   # Set up Nginx proxy

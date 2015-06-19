@@ -1,7 +1,6 @@
 ---
 
 classes:
-  #- 'profiles::appserver'
   - 'profiles::rabbitmq'
   - 'profiles::digitalregister_app'
 
@@ -16,16 +15,37 @@ rabbitmq_user_permissions:
     read_permission: '.*'
     write_permission: '.*'
 
-profiles::digitalregister_app::manage: false
-
-profiles::digitalregister_app::application: 'digital-register-elasticsearch-updater'
-profiles::digitalregister_app::source: 'https://github.com/LandRegistry/digital-register-elasticsearch-updater.git'
-profiles::digitalregister_app::wsgi_entry: 'service.server:app'
-profiles::digitalregister_app::vars:
-  SQLALCHEMY_DATABASE_URI: postgresql+pg8000://postgres:password@192.16.42.61:5432/register_data
-  INDEX_CONFIG_FILE_PATH: index_updaters.json
-  LOGGING_CONFIG_FILE_PATH: logging_config.json
-  ELASTICSEARCH_URI: http://192.16.42.55:9200
-  PAGE_SIZE: '100'
-  POLLING_INTERVAL_SECS: '5'
-  FAULT_LOG_FILE_PATH: '/var/log/applications/digital-register-elasticsearch-updater-fault.log'
+applications:
+  digital-register-feeder:
+    source: 'git@github.com:LandRegistry/digital-register-feeder.git'
+    app_type: 'python'
+    vars:
+      SETTINGS: 'dev'
+      REGISTER_FILES_PATH: 'data'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_HOST: '192.16.42.61'
+      POSTGRES_PORT: '5432'
+      POSTGRES_DB: 'register_data'
+      DIGITAL_REGISTER_URL: 'http://landregistry.local:8003'
+      ELASTICSEARCH_HOST: 'localhost'
+      ELASTICSEARCH_PORT: '9200'
+      INCOMING_QUEUE: 'publish_queue'
+      INCOMING_QUEUE_HOSTNAME: 'localhost'
+      LOGGING_CONFIG_FILE_PATH: 'logging_config.json'
+      FAULT_LOG_FILE_PATH: '/var/log/applications/digital-register-feeder-fault.log'
+      SHOW_PRIVATE_PROPRIETORS: 'true'
+      LOG_SCHEMA_VALIDATION_ERRORS: 'false'
+  digital-register-elasticsearch-updater:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry/digital-register-elasticsearch-updater.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'service.server:app'
+    vars:
+      SQLALCHEMY_DATABASE_URI: 'postgresql+pg8000://postgres:password@192.16.42.61:5432/register_data'
+      INDEX_CONFIG_FILE_PATH: 'index_updaters.json'
+      LOGGING_CONFIG_FILE_PATH: 'logging_config.json'
+      ELASTICSEARCH_URI: 'http://192.16.42.55:9200'
+      PAGE_SIZE: '100'
+      POLLING_INTERVAL_SECS: '5'
+      FAULT_LOG_FILE_PATH: '/var/log/applications/digital-register-elasticsearch-updater-fault.log'

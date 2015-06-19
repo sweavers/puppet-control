@@ -5,17 +5,18 @@
   classes:
     - profiles::digitalregister_app
 
-  profiles::digitalregister_app::manage: false
-
-  profiles::digitalregister_app::application: 'digital-register-frontend'
-  profiles::digitalregister_app::source: 'https://github.com/LandRegistry/digital-register-frontend.git'
-  profiles::digitalregister_app::wsgi_entry: 'service.server:app'
-  profiles::digitalregister_app::vars:
-    SETTINGS: 'dev'
-    REGISTER_TITLE_API: 'http://landregistry.local:8004/'
-    LOGGING_CONFIG_FILE_PATH: 'logging_config.json'
-    FAULT_LOG_FILE_PATH: '/var/log/applications/digital-register-frontend-fault.log'
-    GOOGLE_ANALYTICS_API_KEY: 'UA-59849906-2'
-    APPLICATION_SECRET_KEY: 'secretkeyshouldberandom'
-    LOGIN_API: 'http://landregistry.local:8005/'
-    SESSION_COOKIE_SECURE: 'False'
+  applications:
+    digital-register-frontend:
+      source: 'https://github.com/LandRegistry/digital-register-frontend.git'
+      bind: '5000'
+      wsgi_entry: 'service.server:app'
+      manage: false
+      vars:
+        SETTINGS: 'dev'
+        REGISTER_TITLE_API: 'http://landregistry.local:8004/'
+        LOGGING_CONFIG_FILE_PATH: 'logging_config.json'
+        FAULT_LOG_FILE_PATH: '/var/log/applications/digital-register-frontend-fault.log'
+        GOOGLE_ANALYTICS_API_KEY: 'UA-59849906-2'
+        APPLICATION_SECRET_KEY: 'secretkeyshouldberandom'
+        LOGIN_API: 'http://landregistry.local:8005/'
+        SESSION_COOKIE_SECURE: 'False'
