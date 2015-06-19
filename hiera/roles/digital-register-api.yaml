@@ -5,21 +5,22 @@
   classes:
     - profiles::digitalregister_app
 
-  profiles::digitalregister_app::manage: false
 
-
-  profiles::digitalregister_app::application: 'digital-register-api'
-  profiles::digitalregister_app::source: 'https://github.com/LandRegistry/digital-register-api.git'
-  profiles::digitalregister_app::wsgi_entry: 'service.server:app'
-  profiles::digitalregister_app::vars:
-    SETTINGS: 'dev'
-    POSTGRES_USER: 'postgres'
-    POSTGRES_PASSWORD: 'password'
-    POSTGRES_HOST: '172.16.42.43'
-    POSTGRES_PORT: '5432'
-    POSTGRES_DB: 'register_data'
-    LOGGING_CONFIG_FILE_PATH: 'logging_config.json'
-    FAULT_LOG_FILE_PATH: '/opt/landregistry/applications/digital-register-api/logs/error.log'
-    ELASTIC_SEARCH_ENDPOINT: 'http://localhost:9200'
-    MAX_NUMBER_SEARCH_RESULTS: '50'
-    SEARCH_RESULTS_PER_PAGE: '20'
+  applications:
+    digital-register-api:
+      source: 'https://github.com/LandRegistry/digital-register-api.git'
+      bind: '5000'
+      wsgi_entry: 'service.server:app'
+      manage: false
+      vars:
+        SETTINGS: 'dev'
+        POSTGRES_USER: 'postgres'
+        POSTGRES_PASSWORD: 'password'
+        POSTGRES_HOST: '192.16.42.61'
+        POSTGRES_PORT: '5432'
+        POSTGRES_DB: 'register_data'
+        LOGGING_CONFIG_FILE_PATH: 'logging_config.json'
+        FAULT_LOG_FILE_PATH: '/opt/landregistry/applications/digital-register-api/logs/error.log'
+        ELASTIC_SEARCH_ENDPOINT: 'http://localhost:9200'
+        MAX_NUMBER_SEARCH_RESULTS: '50'
+        SEARCH_RESULTS_PER_PAGE: '20'
