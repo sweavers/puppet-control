@@ -26,7 +26,7 @@ class profiles::digitalregister_app(
   include ::profiles::nginx
   include ::wsgi
 
-  #  Install required packages for Ruby and Java
+  #  Install required packages for Python
 
   $PKGLIST=['python','python-devel','python-pip']
 
@@ -71,7 +71,7 @@ class profiles::digitalregister_app(
   # }
 
   if $applications {
-    create_resources('applications', $applications)
+    create_resources('wsgi::application', $applications)
   }
 
   # Set up Nginx proxy
