@@ -13,7 +13,7 @@ mod 'ispavailability/file_concat',     '0.2.1'
 mod 'jfryman/nginx',                   '0.2.2'
 mod 'jfryman/selinux',                 '0.2.3'
 mod 'LandRegistry-Ops/puppet-wsgi',    :git => 'https://github.com/LandRegistry-Ops/puppet-wsgi.git',
-                                       :ref => '7258634915eb4b3c1bfa6596c97ea38223d5a5ff'
+                                       :ref => 'fab3597d34184dfaeccaff0450f6bab90135667c'
 mod 'leinaddm/htpasswd',               '0.0.3'
 mod 'maestrodev/wget',                 '1.5.7'
 mod 'openstackci/pip',                 :git => 'https://github.com/openstack-infra/puppet-pip.git',
