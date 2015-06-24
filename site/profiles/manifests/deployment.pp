@@ -41,10 +41,4 @@ class profiles::deployment (
       key  => $public_key,
     }
   }
-
-  sudo::conf { 'deployment':
-    priority => 10,
-    content  => "%${user} ALL=(ALL) NOPASSWD: ALL",
-  }
-
 }
