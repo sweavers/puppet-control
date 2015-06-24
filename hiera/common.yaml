@@ -14,6 +14,14 @@ classes:
 sudo::purge: false
 sudo::config_file_replace: false
 
+# Allow deployment to run ssh commands with sudo
+sudo::configs:
+    deployment:
+        content |
+          Defaults:%deployment !requiretty
+          %deployment ALL=(ALL) NOPASSWD: ALL
+        priority : 10
+
 # Set SELinux to enforcing
 selinux::mode: enforcing
 
