@@ -14,10 +14,11 @@
 class profiles::puppet(
 
   $master_fqdn   = 'puppet',
-  $environment   = 'production',
   $do_not_manage = false
 
 ){
+
+  $environment = hiera( environment , 'production')
 
   case $do_not_manage{
     default: {

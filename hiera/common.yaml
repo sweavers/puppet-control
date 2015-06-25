@@ -17,8 +17,8 @@ sudo::config_file_replace: false
 # Allow deployment to run ssh commands with sudo
 sudo::configs:
     deployment:
-        content |
-          Defaults:%deployment !requiretty
+        content: |
+          Defaults: %deployment !requiretty
           %deployment ALL=(ALL) NOPASSWD: ALL
         priority : 10
 
@@ -29,7 +29,7 @@ profiles::ntp::ntp_restrict_array:
   - '127.0.1.0'
   - '127.0.1.1'
 
-profiles::puppet::environment: development
+environment: ddevelopment
 
 #Add test user NB must be removed (in hiera)for all internal and AWS deployments
 accounts:
