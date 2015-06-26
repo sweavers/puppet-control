@@ -102,4 +102,12 @@ class profiles::jenkins (
     ensure   => 'installed',
     provider => 'gem',
   }
+
+  jenkins::job { 'jenkins-job-puppet-artifact-create':
+    config => template('profiles/jenkins-job-puppet-artifact-create.xml.erb')
+  }
+
+  jenkins::job { 'jenkins-job-puppet-deploy':
+    config => template('profiles/jenkins-job-puppet-deploy.xml.erb')
+  }
 }
