@@ -1,3 +1,4 @@
+
     upstream puppetmaster_unicorn {
         server unix:/var/run/puppet/puppetmaster_unicorn.sock fail_timeout=0;
     }
@@ -12,6 +13,7 @@
         #ssl_verify_client on;
         ssl_verify_client optional;
         root /usr/share/empty;
+        client_max_body_size 50M;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
