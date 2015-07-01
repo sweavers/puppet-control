@@ -23,6 +23,7 @@ class profiles::firewall (
 
   $firewall_state    = 'off',
   $ssh_allowed_range = '0.0.0.0/0',
+  $nat               = undef,
   $services          = {}
 
   ){
