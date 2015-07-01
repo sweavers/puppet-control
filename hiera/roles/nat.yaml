@@ -4,4 +4,4 @@ classes:
   - 'profiles::nat'
 
 profiles::firewall::firewall_state: 'on'
-profiles::firewall::nat: '10.100.20.0/24'
+profiles::firewall::nat: '192.168.1.0/24'
