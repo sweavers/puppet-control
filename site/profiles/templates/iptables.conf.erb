@@ -71,5 +71,12 @@
 # first go. If the machine then tries to connect again more than 3 times in 15
 # seconds or 5 times in 15 minutes their connection is dropped.
 #
+COMMIT
 
+*nat
+#-A POSTROUTING -s 10.100.20.0/24 -j MASQUERADE
+<% puts nat.inspect -%>
+<% if @nat -%>
+-A POSTROUTING -s <%= @nat %> -j MASQUERADE
+<% end -%>
 COMMIT
