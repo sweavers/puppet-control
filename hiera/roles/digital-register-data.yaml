@@ -4,13 +4,13 @@ classes:
   - profiles::postgresql
 
 postgres_databases:
-  registerdata:
+  register_data:
     user: register_data
-    password: md5b84f21541ef11f3e5d07840ed6f98cd9
+    password: md5085815e3463853f3a1e9731b61ddb3a7
     owner: register_data
-  userdata:
+  user_data:
     user: user_data
-    password: md5f9c9ad05de8e8127913a9149dd64959c
+    password: md5f5e1477d2e90a5760642db71ea5307d1
     owner: user_data
 
 postgres_users:
