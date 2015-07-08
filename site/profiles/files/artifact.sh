@@ -100,9 +100,10 @@ for environment in ${DIR}/environments/*; do
   fi
 
   # Check to see if branch exists in secrets repository that matches environment
-  git -C ${TEMPDIR} checkout ${envname} >/dev/null 2>&1
-  #cd ${TEMPDIR}
-  #git -C checkout ${envname} >/dev/null 2>&1
+  # -C option not available on version of git included with CentOS7
+  #git -C ${TEMPDIR} checkout ${envname} >/dev/null 2>&1
+  cd ${TEMPDIR}
+  git checkout ${envname} >/dev/null 2>&1
   if [[ $? == '0' ]]; then
     # Deploy new secrets
     cp -R ${TEMPDIR}/* ${environment}/${HIERA_PATH}
