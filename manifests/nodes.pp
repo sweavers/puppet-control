@@ -2,9 +2,9 @@
 #if empty($machine_role) {
 #  $machine_role = regsubst($::hostname, '^(.*)-\d+$', '\1')
 #}
-notify{"Puppet Role: ${::puppet_role}": loglevel => err,}
-notify{"Network Location: ${::network_location}": loglevel => err,}
-notify{"Application Environment: ${::application_environment}": loglevel => err,}
+notify{"Puppet Role: ${::puppet_role}": loglevel => debug,}
+notify{"Network Location: ${::network_location}": loglevel => debug,}
+notify{"Application Environment: ${::application_environment}": loglevel => debug,}
 
 # Default nodes
 node default {
