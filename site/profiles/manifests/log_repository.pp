@@ -35,7 +35,7 @@ class profiles::log_repository(
 
   # The cluster name has to match that in log_repository_logstash_config for elasticsearch
   class { 'profiles::elasticsearch':
-    clustername => $::machine_region,
+    clustername => $::application_environment,
     nodenumber  => $hostnumber
   }
 
