@@ -88,3 +88,151 @@ profiles::jenkins::deploy_from_jenkins_rsa: |
 
 
 profiles::deployment::public_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDky5bUs3nlN78+0d+nzt2z2ZeZ4lUsiDSV2FPl3Oc0HZ2tkwM+FF++QJp8VycEoQ+fRIB9ZMksYDghJBymNG0paNH1YwjXtRz3/bfc/qtXm1BBG1s+L+9LKnncjiYHCh+9uQ65IZQ+r/eandUnGnOzVZQAgX69Qd+PlafLH/W1W6pfrRTq8sI/yyINWhXfDlSX5WuZ3hp783dt6WptyEaQdptTz74A5MG9Szp31eLL+mJl8UYWelDH/S8jzNOiLuh9sQzv9hKqHeRXZzZjk+MVAcb1UoJjNUvLA0+N26fWhqa8mSrtXHo/4wjCt1Yo2J+fU967oV3KJNbyY84kFysB
+
+log_repository_ip_address: 192.16.42.49
+
+log_repository_logstash_forwarder_key: |
+  -----BEGIN PRIVATE KEY-----
+  MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDa8ZDcpR0C7oXH
+  j0xPE5Z+ClGkBKGk1z0QN0H1qFJthEfZqIci03J9BvD+SAgZduWJXGk/JdIF9J7+
+  Lzuf6ozp5JFv0Mwm2nPBY+RAN+QXkn7TwU5ghNgwQs+Jgs3M19gesp65A8oBlP/T
+  3Rb7bPahGzQVZuBVkn1jpTNFCtOohNlsL60oQpcob5I8KfNtAk7vkkWbwdivQuC5
+  V1wxXwGR8NZOkb+NRIPtiRXgt5aXLA33e+ikAPdX/Lvp7Shv8+V6fPzQhfP5CR1q
+  ZBbYrgNHNjDEIPHx0zWWjYtxkRPcXOgjjPIZe2F/FF0YV4TpaOo5uFXOIcS2xKI2
+  kI4gt9RDAgMBAAECggEAMLOfV5Va2LYaCAP2I3jl9u9wrZ1iH3rJWHwSLgTdIQNV
+  wDLerH6AbxNGNCnts0xhTqbBuow9JZn+a+gxySaxZa20ND0rzFC3gwMnWKmWETBD
+  CfNr7chfFo0mAR6ZjMFOj7WH3PvcyXFNXuFFJXRdgAS/FyulJyPIxIuQ1gDMiCVr
+  eJXbZoc/DXnVa4IJPq9LroaFriKEoXz92p6LRxzeIq25Xfo7MOiB/g3b+TCVQ0s8
+  oVUb3a5ifiuP/V5aKTWVdGIuFrMVIEVPtoVmnUhdQx4h0DCbuqNh2DK2vY8W2MB5
+  DznjwTYm1R9BgWAq8ISn4ASgxOlabK0v8qoDAjAxIQKBgQD7441TcPgiohteMkin
+  nH3PZkbgYm8Im0lH8gwn/B3Rv8hiUqYxLZ3DmH1AIX2WG1ncCzOFnIrFbjWowcCp
+  llnOKQPXTeI0dDuEmnYQjVMTnyiXrjLDvyIfAPjzPGj54Xd2eOqJJc6izRvvfWeE
+  b5fKsABshWq9u+SHmDpQus4nSwKBgQDehFx1hn7vFfW+/Y/fGeBwiugRhJ7NVqRe
+  YN9rCeCLvdw9ITDmgiVZIrhH1omUPdut20DiiofJqcAVNnZUOGYrg34XIVUvQFgC
+  vcmebabS760jY12fRF+ZGlRgSiCLEuVphg5tHKnCQVWhHgQw7m1WGtTNZ92RLqa0
+  YfbAHdKT6QKBgQD7N11yBM9VKzwEXD4d/HN1b9nsW//FI6qYeI0rK8VJte5SMX/S
+  uF4J/4GbfktUc/7Q+NLvxMqaUWpu3p4aBPuYI0vTZbfe/LWHcM2jgG+EuE2xyWiT
+  1YJgTYX8gRlpbjbJD5tKIUzPDaV42yds7CcFXTdvBDkK9ePcYDR443ZLtQKBgQCH
+  EIievbimnwm/mGGP5kEZjvc2Su2pbgHvV5XFfwVRTTk10cPA5xaMeEqrMEnqNXH2
+  obNMzxGFEwiI17oTfPhnSTVsDMuMFt5VK6YKCDzOpLTPWi0l03bDk/vLRrNiN2IR
+  H1H6YP+Z7dZwKawZl1++eCLbW0ReL5b4vs3r5y4+oQKBgHraFkzR7qpcWT5Bmbzm
+  bJI7gKawBGQ5PJ73ks1onDxmTi67myEUbWVb99n6abIKRjVizlMkC7Z8DxokTZCK
+  a4OuzP04V835dOa+LOAX5z/hYqlsLS6pHGHNI+M3Di6LJhlYL+16mH4lARy4//Lg
+  BHg9862OJl19vEmjkIZaWVY5
+  -----END PRIVATE KEY-----
+
+log_repository_logstash_forwarder_cert: |
+  -----BEGIN CERTIFICATE-----
+  MIIDaDCCAlCgAwIBAgIJAOlqiWEqMVESMA0GCSqGSIb3DQEBCwUAMEIxCzAJBgNV
+  BAYTAlhYMRUwEwYDVQQHDAxEZWZhdWx0IENpdHkxHDAaBgNVBAoME0RlZmF1bHQg
+  Q29tcGFueSBMdGQwHhcNMTUwNjAxMTM1MDQzWhcNMjUwNTI5MTM1MDQzWjBCMQsw
+  CQYDVQQGEwJYWDEVMBMGA1UEBwwMRGVmYXVsdCBDaXR5MRwwGgYDVQQKDBNEZWZh
+  dWx0IENvbXBhbnkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+  2vGQ3KUdAu6Fx49MTxOWfgpRpAShpNc9EDdB9ahSbYRH2aiHItNyfQbw/kgIGXbl
+  iVxpPyXSBfSe/i87n+qM6eSRb9DMJtpzwWPkQDfkF5J+08FOYITYMELPiYLNzNfY
+  HrKeuQPKAZT/090W+2z2oRs0FWbgVZJ9Y6UzRQrTqITZbC+tKEKXKG+SPCnzbQJO
+  75JFm8HYr0LguVdcMV8BkfDWTpG/jUSD7YkV4LeWlywN93vopAD3V/y76e0ob/Pl
+  enz80IXz+QkdamQW2K4DRzYwxCDx8dM1lo2LcZET3FzoI4zyGXthfxRdGFeE6Wjq
+  ObhVziHEtsSiNpCOILfUQwIDAQABo2EwXzAPBgNVHREECDAGhwTAECoxMB0GA1Ud
+  DgQWBBTtYgNdjU/ALFvM52+S2Q8P1Ii77TAfBgNVHSMEGDAWgBTtYgNdjU/ALFvM
+  52+S2Q8P1Ii77TAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQCCKZ2f
+  6v8/rMSxDX+Wp2HBBO6JytIqr+0sXi7Oee25aWDl7+C6a3DG2+xUi6fnGZ/mrmjF
+  y7NFpmAV7fL2M/+I+NxhadbHVPA59zYqmp2OfGg29z15tHv14fQbJ4o3riMiZ946
+  tz3WkzN3ZSL7gY+Zl6osAPYtHcit4xOsE3D8mTqkqtqGv08gjbvqs8a84dFJ9OQ7
+  4zJD2F3S9T9wTSCy0DpfOI/f5BkGE31SY9b2WH0tEQNuRda1VoKUP6QsQocYtR+w
+  whWxKWn2mdzdSksp+UFewiNfY0YRFk7z7s40vjBptq7Av37YDfaYZVpubEX0m5gY
+  znmb4esLhXJOejeA
+  -----END CERTIFICATE-----
+
+log_repository_logstash_config: |
+  input {
+    lumberjack {
+      port => 5000
+      type => "logs"
+      ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
+      ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
+    }
+    redis {
+      host => '192.16.42.48'
+      data_type => "list"
+      key => "logstash"
+      codec => json
+    }
+  }
+  output {
+    elasticsearch { host => localhost
+                    cluster => development }
+  }
+
+log_broker_ip_address: 192.16.42.48
+
+log_broker_logstash_forwarder_key: |
+  -----BEGIN PRIVATE KEY-----
+  MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCxC2hCyDX+YYAN
+  mfFpqnq1mhuxlUY9Umb2vUptsmcvCaASJk1aMKWc1t7S/7XzpK3n1cX7VhTHrYYv
+  iOeEdjPyHlo8NXC2/rqiuwVrH8ReN8+CsXA0Q0lcdrGkz03ZNSy/WfI2Gst98Il6
+  s2j8B5JlSqlFdv6hl+XQbpCJOipclgGmZGjzSDumdurpcXtqPN+4Cvu+gS2WbVsg
+  rpSBkdnydp3UTmiFLRTKVJcovOrAQ+Q4v59hcdetk9VHBz6cmAUc4dRuFv2Vm43T
+  ePOXKR2FvWLCRWmoOfqhHaUeAzzq5J+R26YDjanOYqO10/zePYfsR3E7bI72UARC
+  8qA7VEEFAgMBAAECggEABUlm6p+Z5Se6MC3JpLMfiO66JvpjJ4+fXXzXjSEHrcLm
+  0cPtCWVsfJt5+ekC4Oyo+MRMbi3q3u+SkzbOWwlAkdlQLn4WCJDgt91H0yQWtA2M
+  l8V+qUDdHvK4aUh7daH93RTtg6oXK4KUSGK1HtmHCJlLJrTf86lahnfWvxJKk4sm
+  cxKLjv8bL3RZUzOuGYRCIRpj0Q1v7uvHWux1jpsk3Z+uRgo2sUuvpjqTEPZWXNLE
+  t3E6VpvqGCkknncHM8uLO4jKzAhy+J8dhvnuEp6X2UC9Ryp8ZhBm2lUBdRfAOO+w
+  7vt7witoVlZ6bXbC+uw12UcMjxQ+wslLKH6YLhtJfQKBgQDhlTAtGgVTVHCacJ9J
+  u+eS80/nVTrbHjjCXAXrOnDYkSeXYeGohtYAZO7XHR+PDaqrlMBKHGpYBZhhFhVJ
+  P4YZAPP1FUwr+13jZktSOo9MMy8z1k+oJcZTavstXfQdthPNjXlI7cRq0B3etuxA
+  lr0sa63/bdbOm70V7pU40iOQ7wKBgQDI6r7xefFjNfX923P4OoRwTVykxTPhI5uC
+  kaqPf89RE0XhuadjksNEzs2ToTYayyyThxhY0qqHoDu2LAU7PZPQwlHFE49t6gZx
+  gtVTU1tb336MEpSegr1Pu5T0y0gdanXKu/2Khb1oGgZnFHbqwk8zq+lkcYTERij6
+  6k7tI+3lSwKBgDeZhtNG+5MLV+mo4onQ54XftI0HA8eoDkNRXSAaOmAWftSgCnd4
+  LFzSg8+/XNzseGlr820QzeE+F82uHLb+EjYtdvOsOScKAJ0gxGXTCyiz4Ol85AtE
+  rDo5Pwlyg82i6ASc3wzrlaLiAsq2+Un+HUhKjgtL7krkNdmnAV6M5Lk/AoGAMjNt
+  SDq21Jor/6TwogpFAyZhSo43ez6BYatx2W8O5uwQ3uibaWbHQY8GkKeMND+lwKrV
+  q4PftgmUQd1X5UhqgZO8CKjtgoIh4ATXtn0ya485OFiAJ+b01FJDUrLkLu1lxyUX
+  oZ/vBm7SQLk9SUUJsxh2NXGjwcLiBGe9FsWOcGcCgYEAhNxuyqnPW/oiB9Uxg4O8
+  z7bukvKcHVtXpQQWWl6sh0ud+RINb5NTVKKgh+2bZ9h+2JpHw8uC3q00UyfIkwwp
+  LAjOu729+JOHIMGw47lQUbSIVvGxTpTwRYfgxe5h8LNNQX/2JuYEZfftjvVOC8C6
+  RXATlL0V4UsrlDzBhDak5Tk=
+  -----END PRIVATE KEY-----
+
+log_broker_logstash_forwarder_cert: |
+  -----BEGIN CERTIFICATE-----
+  MIIDaDCCAlCgAwIBAgIJAOl/7TkHTq5/MA0GCSqGSIb3DQEBCwUAMEIxCzAJBgNV
+  BAYTAlhYMRUwEwYDVQQHDAxEZWZhdWx0IENpdHkxHDAaBgNVBAoME0RlZmF1bHQg
+  Q29tcGFueSBMdGQwHhcNMTUwNjAxMTM0NjE3WhcNMjUwNTI5MTM0NjE3WjBCMQsw
+  CQYDVQQGEwJYWDEVMBMGA1UEBwwMRGVmYXVsdCBDaXR5MRwwGgYDVQQKDBNEZWZh
+  dWx0IENvbXBhbnkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+  sQtoQsg1/mGADZnxaap6tZobsZVGPVJm9r1KbbJnLwmgEiZNWjClnNbe0v+186St
+  59XF+1YUx62GL4jnhHYz8h5aPDVwtv66orsFax/EXjfPgrFwNENJXHaxpM9N2TUs
+  v1nyNhrLffCJerNo/AeSZUqpRXb+oZfl0G6QiToqXJYBpmRo80g7pnbq6XF7ajzf
+  uAr7voEtlm1bIK6UgZHZ8nad1E5ohS0UylSXKLzqwEPkOL+fYXHXrZPVRwc+nJgF
+  HOHUbhb9lZuN03jzlykdhb1iwkVpqDn6oR2lHgM86uSfkdumA42pzmKjtdP83j2H
+  7EdxO2yO9lAEQvKgO1RBBQIDAQABo2EwXzAPBgNVHREECDAGhwTAECowMB0GA1Ud
+  DgQWBBS/9XO1aWSnSYjRzf/xKlrQ94zuvzAfBgNVHSMEGDAWgBS/9XO1aWSnSYjR
+  zf/xKlrQ94zuvzAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBJ6hy0
+  qaC3V6HtdjO4t8j8+J3+DE30kisq8HbQFlYkdXissqA9xJx4Xtoe/lA8TeDURe29
+  6XqjrW9AqNplXhJU8qOpHjtb9Hu4AyNkfUnl2fDj/PL7+GORhGAkuGgOO2Bqi7m2
+  p4ByHlDOnD0cyTclj6UL0kcdA9bP4ICeKAXppi3wznnsrvPt2i9hLXeZpFhR/Dj/
+  8LgZICKDZKVe+0FhkgdstD8Zum/NMyTrjKdMA5OteA0p9u/sIQ6zrP2/+QerJHLM
+  iYVf75Yv+FFlqM+dZO3jjfm2kKAlKx4mFFLyh7yan1nLsbau4oJZ52jafjP20mYP
+  8Cd10QQNvFo4jr9u
+  -----END CERTIFICATE-----
+
+log_broker_logstash_config: |
+  input {
+    lumberjack {
+      port => 5000
+      type => "logs"
+      ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
+      ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
+    }
+  }
+  output {
+    redis {
+      host => "localhost"
+      data_type => "list"
+      key => "logstash"
+      codec => json
+    }
+  }
