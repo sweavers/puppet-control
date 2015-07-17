@@ -8,62 +8,79 @@
 # Sample Usage:
 #   class { 'profiles::digitalregister_app': }
 #
-class profiles::digitalregister_app{
+class profiles::digitalregister_app(
+
+  $application  = undef,
+  $bind         = '5000',
+  $source       = 'undef',
+  $vars         = {},
+  $wsgi_entry   = undef,
+  $manage       = true,
+  $app_type     = 'wsgi',
+  $applications = hiera_hash('applications',false),
+
+  ){
 
   include ::stdlib
   include ::profiles::deployment
   include ::profiles::nginx
+  include ::wsgi
 
-  #  Install required packages for Ruby and Java
-  case $::osfamily{
-    'RedHat': {
-      $PKGLIST=['python','python-devel','python-pip','epel-release']
-      $PYTHON='lr-python3-3.4.3-1.x86_64'
-      $PYPGK="${PYTHON}.rpm"
-      $PKGMAN='rpm'
-    }
-    'Debian': {
-      $PKGLIST=['python','python-dev','python-pip']
-      $PYTHON='lr-python3_3.4.3_amd64'
-      $PYPGK="${PYTHON}.deb"
-      $PKGMAN='dpkg'
-    }
-    default: {
-      fail("Unsupported OS type - ${::osfamily}")
-    }
-  }
-  ensure_packages($PKGLIST)
+  #  Install required packages for Python
 
-  file{'LR Python package':
-    ensure => 'file',
-    path   => "/tmp/${PYPGK}",
-    source => "puppet:///modules/profiles/${PYPGK}"
+  $PKGLIST=['python','python-devel','python-pip']
+
+  package { 'epel-release' :
+    ensure => installed
   }
 
-  # Install custom Python 3.4.3 build
-  package{ $PYTHON :
-    ensure   => installed,
-    provider => $PKGMAN,
-    source   => "/tmp/${PYPGK}",
-    require  => File['LR Python package']
+  package{ $PKGLIST :
+    ensure  => installed,
+    require => Package[epel-release]
   }
 
-  file{'/usr/bin/pip3' :
-    ensure  => link,
-    target  => '/usr/local/bin/pip3',
-    require => Package[$PYTHON]
+  # Dirty hack to address hard coded logging location in manage.py
+  file { '/var/log/applications/' :
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755'
   }
 
-  package{'gunicorn' :
-    ensure   => installed,
-    provider => pip3,
-    require  => File['/usr/bin/pip3']
+  # Dirty hack required to complie pip dependacies for frontend (should be
+  # removed ASAP)
+  package { 'gcc-c++' :
+    ensure => present
   }
 
-  package{'flask' :
-    ensure   => installed,
-    provider => pip3,
-    require  => File['/usr/bin/pip3']
+  # Load SELinuux policy for Nginx_proxy
+  selinux::module { 'nginx_proxy':
+    ensure => 'present',
+    source => 'puppet:///modules/profiles/nginx_proxy.te'
   }
 
+  # # Set up wsgi application
+  # wsgi::application { $application :
+  #   bind       => $bind ,
+  #   source     => $source,
+  #   vars       => $vars,
+  #   wsgi_entry => $wsgi_entry,
+  #   app_type   => $app_type,
+  #   manage     => $manage,
+  #   require    => File['/var/log/applications/']
+  # }
+
+  if $applications {
+    create_resources('wsgi::application', $applications)
+  }
+
+  # Set up Nginx proxy
+  nginx::resource::vhost { 'api_proxy':
+    server_name    => [ $::hostname ],
+    listen_port    => 80,
+    #proxy_set_header => ['X-Forward-For $proxy_add_x_forwarded_for',
+      #'Host $http_host'],
+    proxy_redirect => 'off',
+    proxy          => 'http://127.0.0.1:5000',
+  }
 }

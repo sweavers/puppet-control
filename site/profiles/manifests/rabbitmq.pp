@@ -22,6 +22,12 @@ class profiles::rabbitmq(
 
 ){
 
+  # Load SELinuux policy for RabbitMQ
+  selinux::module { 'rabbit':
+    ensure => 'present',
+    source => 'puppet:///modules/profiles/rabbit.te'
+  }
+
   # Red Hat uses weird version numbers
   if $::osfamily == 'RedHat' {
     $ver = "${version}-1"

@@ -26,3 +26,9 @@ profiles::jenkins::plugins:
     version: 1.54
   mapdb-api:
     version: latest
+  # rbenv:
+  #   version: latest
+  ansicolor:
+    version: latest
+  scm-sync-configuration:
+    version: latest   

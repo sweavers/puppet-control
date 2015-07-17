@@ -19,12 +19,15 @@
 class profiles::puppet::agent (
 
   $master_fqdn = 'puppet',
-  $environment = 'production',
   $arguments   = '--no-daemonize --onetime --logdest syslog > /dev/null 2>&1',
   $run_hours   = '08-16',
   $run_days    = '1-5',
+  $environment = hiera( environment , 'production')
 
 ){
+
+
+
 
   # stephenrjohnson/puppet
   class { '::puppet::agent':
