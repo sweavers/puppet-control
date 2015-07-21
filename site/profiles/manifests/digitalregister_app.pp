@@ -18,6 +18,10 @@ class profiles::digitalregister_app(
   $manage       = true,
   $app_type     = 'wsgi',
   $applications = hiera_hash('applications',false),
+  $port         = 80,
+  $ssl          = false,
+  $ssl_crt      = '',
+  $ssl_key      = ''
 
   ){
 
@@ -59,28 +63,47 @@ class profiles::digitalregister_app(
     source => 'puppet:///modules/profiles/nginx_proxy.te'
   }
 
-  # # Set up wsgi application
-  # wsgi::application { $application :
-  #   bind       => $bind ,
-  #   source     => $source,
-  #   vars       => $vars,
-  #   wsgi_entry => $wsgi_entry,
-  #   app_type   => $app_type,
-  #   manage     => $manage,
-  #   require    => File['/var/log/applications/']
-  # }
-
   if $applications {
     create_resources('wsgi::application', $applications)
   }
 
   # Set up Nginx proxy
+  file { '/etc/ssl/keys/' :
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0700'
+  }
+
+  file { '/etc/ssl/certs/ssl.crt' :
+    ensure  => present,
+    content => $ssl_crt,
+    owner   => root,
+    group   => root,
+    mode    => '0644'
+  }
+
+  file { '/etc/ssl/keys/ssl.key' :
+    ensure  => present,
+    content => $ssl_key,
+    owner   => root,
+    group   => root,
+    mode    => '0400',
+    require => File['/etc/ssl/keys/']
+  }
+
   nginx::resource::vhost { 'api_proxy':
     server_name    => [ $::hostname ],
-    listen_port    => 80,
+    listen_port    => $port,
+
     #proxy_set_header => ['X-Forward-For $proxy_add_x_forwarded_for',
       #'Host $http_host'],
+
     proxy_redirect => 'off',
     proxy          => 'http://127.0.0.1:5000',
+    ssl            => $ssl,
+    ssl_cert       => '/etc/ssl/certs/ssl.crt',
+    ssl_key        => '/etc/ssl/keys/ssl.key',
+    require        => File['/etc/ssl/certs/ssl.crt','/etc/ssl/keys/ssl.key']
   }
 }
