@@ -25,7 +25,7 @@
         MORE_PROPRIETOR_DETAILS: 'true'
         SHOW_FULL_TITLE_DATA: 'true'
 
-  profiles::https_redirect::server_name: localhost
+  profiles::digitalregister_app::frontend_url: localhost
 
   profiles::digitalregister_app::port: 80
 
