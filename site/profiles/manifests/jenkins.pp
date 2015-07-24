@@ -20,9 +20,76 @@
 class profiles::jenkins (
 
   $plugins                 = undef,
-  $deploy_from_jenkins_rsa = undef
+  $deploy_from_jenkins_rsa = undef,
 
-) {
+  $jenkins_url             = [ $::hostname ],
+  $jenkins_ssl             = false,
+  $ssl_protocols           = 'TLSv1 SSLv3',
+  $ssl_ciphers             = 'RC4:HIGH:!aNULL:MD5:@STRENGTH',
+  $ssl_crt                 = '',
+  $ssl_key                 = ''
+
+  ){
+
+  # HTTPS redirect / proxy
+  if $jenkins_ssl == true {
+
+    include ::profiles::nginx
+
+    file { '/etc/ssl/keys/' :
+      ensure => directory,
+      owner  => root,
+      group  => root,
+      mode   => '0700'
+    }
+
+    file { '/etc/ssl/certs/ssl.crt' :
+      ensure  => present,
+      content => $ssl_crt,
+      owner   => root,
+      group   => root,
+      mode    => '0644'
+    }
+
+    file { '/etc/ssl/keys/ssl.key' :
+      ensure  => present,
+      content => $ssl_key,
+      owner   => root,
+      group   => root,
+      mode    => '0400',
+      require => File['/etc/ssl/keys/']
+    }
+
+    # Load SELinuux policy for NginX
+      selinux::module { 'nginx_jenkins':
+      ensure => 'present',
+      source => 'puppet:///modules/profiles/nginx_jenkins.te'
+    }
+
+    nginx::resource::vhost { 'https_redirect':
+      server_name      => [ $jenkins_url ],
+      listen_port      => 80,
+      www_root         => '/usr/share/nginx/html',
+      vhost_cfg_append => {
+        'return' => '301 https://$server_name$request_uri'}
+    }
+
+    nginx::resource::vhost { 'jenkins_proxy':
+      server_name    => [ $jenkins_url ],
+      listen_port    => 443,
+      # proxy_set_header => ['X-Forward-For $proxy_add_x_forwarded_for',
+      # 'X-Real-IP $remote_addr', 'Client-IP $remote_addr', 'Host $http_host'],
+      proxy_redirect => 'off',
+      proxy          => 'http://127.0.0.1:8080',
+      ssl            => true,
+      ssl_cert       => '/etc/ssl/certs/ssl.crt',
+      ssl_key        => '/etc/ssl/keys/ssl.key',
+      ssl_protocols  => $ssl_protocols,
+      ssl_ciphers    => $ssl_ciphers,
+      require        => File['/etc/ssl/certs/ssl.crt',
+      '/etc/ssl/keys/ssl.key'],
+    }
+  }
 
   # rtyler/jenkins
   class { '::jenkins':
