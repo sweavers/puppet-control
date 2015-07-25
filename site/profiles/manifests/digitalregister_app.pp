@@ -134,13 +134,16 @@ class profiles::digitalregister_app(
                                 '/etc/ssl/keys/ssl.key'],
 
       vhost_cfg_prepend => {
-          'error_page' => '502 /index.html',
-          'root'       => '/usr/share/nginx/html/digital-register-static-error-page/service-unavailable'
+          'error_page' => '502 = @maintenance'
           },
 
-      raw_append        => ['','location /index.html {',
-        '  root /usr/share/nginx/html/digital-register-static-error-page/service-unavailable;'
-        ,'  internal;','}']
+      raw_append        => ['','location @maintenance {',
+      '  root /usr/share/nginx/html/digital-register-static-error-page/service-unavailable;',
+      '  if (!-f $request_filename) {',
+      '    rewrite ^ /index.html break;',
+      '  }',
+      '}']
+
     }
   } else {
     nginx::resource::vhost { 'api_proxy':
