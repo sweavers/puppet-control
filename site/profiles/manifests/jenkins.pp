@@ -27,7 +27,8 @@ class profiles::jenkins (
   $ssl_protocols           = 'TLSv1 SSLv3',
   $ssl_ciphers             = 'RC4:HIGH:!aNULL:MD5:@STRENGTH',
   $ssl_crt                 = '',
-  $ssl_key                 = ''
+  $ssl_key                 = '',
+  $ci_test_tools           = false
 
   ){
 
@@ -168,5 +169,25 @@ class profiles::jenkins (
   package { 'r10k':
     ensure   => 'installed',
     provider => 'gem',
+  }
+
+  if $ci_test_tools == true {
+
+    package { 'bundler':
+      ensure   => 'installed',
+      provider => 'gem',
+    }
+
+    class { '::phantomjs':
+      package_version => '1.9.8',
+      package_update => true,
+      install_dir => '/usr/local/bin',
+      source_dir => '/opt',
+      timeout => 300
+    }
+
+    ensure_packages(['libcurl-devel', 'patch', 'libxml2-devel',
+      'libxslt-devel', 'gcc', 'ruby-devel', 'zlib-devel', 'postgresql-devel'])
+
   }
 }
