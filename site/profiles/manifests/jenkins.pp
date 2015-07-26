@@ -180,10 +180,10 @@ class profiles::jenkins (
 
     class { '::phantomjs':
       package_version => '1.9.8',
-      package_update => true,
-      install_dir => '/usr/local/bin',
-      source_dir => '/opt',
-      timeout => 300
+      package_update  => true,
+      install_dir     => '/usr/local/bin',
+      source_dir      => '/opt',
+      timeout         => 300
     }
 
     ensure_packages(['libcurl-devel', 'patch', 'libxml2-devel',
