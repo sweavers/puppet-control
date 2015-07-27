@@ -8,7 +8,7 @@
 
   before_install:
     # Clean up production lock files
-    - rm Gemfile.lock Puppetfile.lock
+    - rm Gemfile.lock #Puppetfile.lock
     # Ensure we are getting Puppet straight from source
     #- wget https://apt.puppetlabs.com/puppetlabs-release-precise.deb
     #- sudo dpkg -i puppetlabs-release-precise.deb

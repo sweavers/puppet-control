@@ -19,8 +19,8 @@
 #
 class profiles::jenkins (
 
-  $plugins,
-  $deploy_from_jenkins_rsa,
+  $plugins                 = undef,
+  $deploy_from_jenkins_rsa = undef
 
 ) {
 

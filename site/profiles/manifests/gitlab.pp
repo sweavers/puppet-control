@@ -16,6 +16,7 @@
 #
 class profiles::gitlab (
 
+  $enable_backup   = false,
   $backup_location = undef,
   $smtp_relay      = undef,
   $local_login     = false,
@@ -25,6 +26,9 @@ class profiles::gitlab (
   $ldap_base       = undef,
   $ldap_bind_dn    = undef,
   $ldap_password   = undef,
+  $gitlab_crt      = '',
+  $gitlab_key      = '',
+  $https_redirect  = false
 
 ){
 
@@ -34,9 +38,32 @@ class profiles::gitlab (
     Ubuntu     => 'https://downloads-packages.s3.amazonaws.com/ubuntu-14.04/gitlab_7.5.1-omnibus.5.2.0.ci-1_amd64.deb',
   }
 
+  file { '/etc/gitlab/ssl' :
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0700'
+  }
+
+  file { '/etc/gitlab/ssl/gitlab.crt' :
+    ensure  => present,
+    content => $gitlab_crt,
+    owner   => root,
+    group   => root,
+    mode    => '0644'
+  }
+
+  file { '/etc/gitlab/ssl/gitlab.key' :
+    ensure  => present,
+    content => $gitlab_key,
+    owner   => root,
+    group   => root,
+    mode    => '0400'
+  }
+
   class { '::gitlab' :
     puppet_manage_config          => true,
-    puppet_manage_backups         => true,
+    puppet_manage_backups         => $enable_backup,
     gitlab_branch                 => '7.5.1',
     gitlab_download_link          => $gitlab_download_link,  # Should be pulled from Hiera
     external_url                  => $external_url,
@@ -56,7 +83,14 @@ class profiles::gitlab (
     ldap_base                     => $ldap_base,
     ldap_bind_dn                  => $ldap_bind_dn,
     ldap_password                 => $ldap_password,
-    ldap_uid                      => 'sAMAccountName'
+    ldap_uid                      => 'sAMAccountName',
+
+    #ssl configuration
+    ssl_certificate               => '/etc/gitlab/ssl/gitlab.crt',
+    ssl_certificate_key           => '/etc/gitlab/ssl/gitlab.key',
+    redirect_http_to_https        => true,
+    require                       => File['/etc/gitlab/ssl/gitlab.crt', '/etc/gitlab/ssl/gitlab.key']
+
   }
 
   #ensure that nfs package is installed
@@ -71,13 +105,15 @@ class profiles::gitlab (
     ensure => present
   }
 
-  mount { '/var/opt/gitlab/backups':
-    ensure  => 'mounted',
-    device  => $backup_location,
-    fstype  => 'nfs',
-    options => 'defaults',
-    atboot  => true,
-    require => Package [ $nfs_package ]
+  if $enable_backup == true {
+      mount { '/var/opt/gitlab/backups':
+        ensure  => 'mounted',
+        device  => $backup_location,
+        fstype  => 'nfs',
+        options => 'defaults',
+        atboot  => true,
+        require => Package [ $nfs_package ]
+    }
   }
 
   file_line { 'internal smtp relay config':
@@ -85,5 +121,4 @@ class profiles::gitlab (
     line   => "relayhost = ${smtp_relay}",
     path   => '/etc/postfix/main.cf',
   }
-
 }

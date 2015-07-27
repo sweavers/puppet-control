@@ -42,10 +42,13 @@
 
 class profiles::postgresql(
 
-  $port     = 5432,
-  $version  = '9.3',
-  $remote   = true,
-  $dbroot   = '/postgres',
+  $port        = 5432,
+  $version     = '9.3',
+  $remote      = true,
+  $dbroot      = '/postgres',
+  $databases   = hiera_hash('postgres_databases',false),
+  $users       = hiera_hash('postgres_users', false),
+  $pg_hba_rule = hiera_hash('pg_hba_rule', false)
 
 ){
 
@@ -111,17 +114,33 @@ class profiles::postgresql(
       force  => true,
       before => Class[Postgresql::Server]
     }
+    package { 'epel-release' :
+      ensure => installed
+    }
   }
 
 
   include stdlib
   include postgresql::client
   include postgresql::server::contrib
-  include postgresql::server::postgis
+  #include postgresql::server::postgis
+
+  package{ 'postgis2_93' :
+    ensure  => installed,
+    require => Package['epel-release']
+  }
+
   include postgresql::lib::devel
-  create_resources('postgresql::server::db', hiera_hash('postgres_databases'))
-  create_resources('postgresql::server::role', hiera_hash('postgres_users'))
+
+  if $databases {
+    create_resources('postgresql::server::db', $databases)
+  }
+  if $users {
+    create_resources('postgresql::server::role', $users)
+  }
   #Will allow hba rules to be set for specific users/dbs via hiera
-  #create_resources('postgresql::server::pg_hba_rule', hiera_hash('pg_hba_rule'))
+  if $pg_hba_rule {
+    create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
+  }
 
 }

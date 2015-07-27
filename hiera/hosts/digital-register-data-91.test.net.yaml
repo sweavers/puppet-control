@@ -1,0 +1,7 @@
+---
+
+profiles::firewall::firewall_state: 'on'
+profiles::firewall::services:
+  Postgres:
+    port: 5432
+    range: 192.16.42.0/24

@@ -18,3 +18,17 @@ rabbitmq_user_permissions:
     configure_permission: '.*'
     read_permission: '.*'
     write_permission: '.*'
+
+postgres_databases:
+  systemofrecord:
+    user: systemofrecord
+    password: md511c5a6395e27555ef43eb7b05c76d7c1
+    owner: systemofrecord
+  verification:
+    user: verification
+    password: md51f9f5bb065dcc48f72ec3e7c4de17e33
+    owner: verification
+
+postgres_users:
+  deployment:
+    password_hash: md5dddbab2fa26c65fadeaa8b1076329a14

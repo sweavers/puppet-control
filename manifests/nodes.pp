@@ -1,12 +1,16 @@
 # Set role based on hostname
-if empty($machine_role) {
-  $machine_role = regsubst($::hostname, '^(.*)-\d+$', '\1')
-}
+#if empty($machine_role) {
+#  $machine_role = regsubst($::hostname, '^(.*)-\d+$', '\1')
+#}
+notify{"Puppet Role: ${::puppet_role}": loglevel => debug,}
+notify{"Network Location: ${::network_location}": loglevel => debug,}
+notify{"Application Environment: ${::application_environment}": loglevel => debug,}
 
 # Default nodes
 node default {
 
   if $virtual == 'xenhvm' {
+
 
     user {
         'webapp':
@@ -46,6 +50,12 @@ node default {
 
   # Create accounts from Hiera data
   create_resources( 'account', hiera_hash('accounts', {require => Group['lr-admin']}) )
-}
 
+  # Disable root login with password
+  user { root :
+    ensure   => present,
+    password => '!'
+  }
+
+}
 }
