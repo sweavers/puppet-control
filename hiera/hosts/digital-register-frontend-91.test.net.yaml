@@ -2,6 +2,9 @@
 
 profiles::firewall::firewall_state: 'on'
 profiles::firewall::services:
-  ElasticSearch:
-    port: 9200
+  HTTP:
+    port: 80
+    range: 192.16.42.0/24
+  HTTPS:
+    port: 443
     range: 192.16.42.0/24
