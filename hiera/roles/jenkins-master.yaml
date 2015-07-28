@@ -24,15 +24,29 @@ profiles::jenkins::plugins:
     version: latest
   subversion:
     version: 1.54
+  analysis-core:
+    version: latest
+  tasks:
+    version: latest
   mapdb-api:
     version: latest
-  # rbenv:
-  #   version: latest
+  ruby-runtime:
+    version: latest
+  rbenv:
+    version: latest
   ansicolor:
     version: latest
   scm-sync-configuration:
     version: latest
   role-strategy:
+    version: latest
+  github-api:
+    version: latest
+  github:
+    version: latest
+  xunit:
+    version: latest
+  cobertura:
     version: latest
 
 profiles::jenkins::jenkins_ssl: true
