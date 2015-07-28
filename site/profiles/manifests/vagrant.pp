@@ -29,7 +29,7 @@ class profiles::vagrant{
         'python-devel','ruby','rubygems','autoconf','automake',
         'binutils','bison','flex','gcc','gcc-c++','gettext','libtool',
         'make','patch','pkgconfig','redhat-rpm-config','rpm-build',
-        'rpm-sign','epel-release','libxml2','libxslt','libxml2-devel','wget',
+        'rpm-sign','libxml2','libxslt','libxml2-devel','wget',
         'psmisc','rabbitmq-server']
       $PYTHON='lr-python3-3.4.3-1.x86_64'
       $PYPGK="${PYTHON}.rpm"

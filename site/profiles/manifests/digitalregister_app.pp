@@ -116,6 +116,15 @@ class profiles::digitalregister_app(
   }
 
   if $::puppet_role == 'digital-register-frontend' {
+
+    $FRNTEND_PKGS = ['cairo','pango','gdk-pixbuf2','libffi-devel',
+                    'libxslt-devel','libxml2-devel']
+
+    package{ $FRNTEND_PKGS :
+      ensure  => installed,
+      require => Package[epel-release]
+    }
+
     nginx::resource::vhost { 'frontend_proxy':
       server_name       => [ $frontend_url ],
       listen_port       => 443,
@@ -134,13 +143,16 @@ class profiles::digitalregister_app(
                                 '/etc/ssl/keys/ssl.key'],
 
       vhost_cfg_prepend => {
-          'error_page' => '502 /index.html',
-          'root'       => '/usr/share/nginx/html/digital-register-static-error-page/service-unavailable'
+          'error_page' => '502 = @maintenance'
           },
 
-      raw_append        => ['','location /index.html {',
-        '  root /usr/share/nginx/html/digital-register-static-error-page/service-unavailable;'
-        ,'  internal;','}']
+      raw_append        => ['','location @maintenance {',
+      '  root /usr/share/nginx/html/digital-register-static-error-page/service-unavailable;',
+      '  if (!-f $request_filename) {',
+      '    rewrite ^ /index.html break;',
+      '  }',
+      '}']
+
     }
   } else {
     nginx::resource::vhost { 'api_proxy':
