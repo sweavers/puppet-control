@@ -187,7 +187,8 @@ class profiles::jenkins (
     }
 
     ensure_packages(['libcurl-devel', 'patch', 'libxml2-devel',
-      'libxslt-devel', 'gcc', 'ruby-devel', 'zlib-devel', 'postgresql-devel'])
+      'libxslt-devel', 'gcc', 'ruby-devel', 'zlib-devel', 'postgresql-devel',
+      'openssl-devel', 'readline-devel'])
 
   }
 }
