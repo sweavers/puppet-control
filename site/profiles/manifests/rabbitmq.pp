@@ -17,9 +17,10 @@
 #
 class profiles::rabbitmq(
 
-  $port     = 5672,
-  $version  = '3.4.4',
-
+  $port              = 5672,
+  $version           = '3.4.4',
+  $delete_guest_user = true
+  
 ){
 
   # Load SELinuux policy for RabbitMQ
@@ -43,7 +44,7 @@ class profiles::rabbitmq(
     version           => $ver,
     port              => $port,
     require           => Class[erlang],
-    delete_guest_user => true
+    delete_guest_user => $delete_guest_user
   }
 
   include stdlib
