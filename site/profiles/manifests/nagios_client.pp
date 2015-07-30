@@ -16,7 +16,7 @@
 #
 class profiles::nagios_client (
 
-  $nagios_server = '172.16.42.69'
+  $nagios_server = '192.16.42.58'
 
   ) {
 

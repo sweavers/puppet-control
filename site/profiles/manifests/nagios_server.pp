@@ -17,7 +17,7 @@
 class profiles::nagios_server (
 
   $nagios_user   = nagiosadmin,
-  $nagios_passwd = RbdO4ou4PNyMg #nagiospasswd
+  $nagios_passwd = '$apr1$.M8zJFqn$J8h.8S2w31aSd8yrnqvUo/' #nagiospasswd
 
   ) {
 
