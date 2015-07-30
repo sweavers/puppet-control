@@ -9,6 +9,7 @@ classes:
   - 'profiles::firewall'
   - 'selinux'
   - 'sudo'
+  - 'profiles::nagios_client'
 
 # Prevent sudo from purging unmanaged sudo configs (for vagrant)
 sudo::purge: false
