@@ -48,6 +48,8 @@ profiles::jenkins::plugins:
     version: latest
   cobertura:
     version: latest
+  pyenv:
+    version: latest
 
 profiles::jenkins::jenkins_ssl: true
 profiles::jenkins::ssl_crt: |
