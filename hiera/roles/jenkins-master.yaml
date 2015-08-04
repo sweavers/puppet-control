@@ -2,6 +2,7 @@
 
 classes:
   - 'profiles::jenkins'
+  - 'profiles::ansible'
 
 profiles::jenkins::plugins:
   git:
