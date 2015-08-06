@@ -147,3 +147,5 @@ log_broker_logstash_config: |
       codec => json
     }
   }
+
+profiles::nagios_client::nagios_server: 192.16.42.47
