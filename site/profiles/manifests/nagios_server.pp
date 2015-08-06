@@ -24,7 +24,8 @@ class profiles::nagios_server (
     include ::stdlib
 
     # Install nagios packages
-    $PKGLIST=['nagios', 'nagios-plugins-all']
+    $PKGLIST=['nagios','nagios-plugins','nagios-plugins-all',
+              'nagios-plugins-nrpe']
     ensure_packages($PKGLIST)
 
     # Set nagios password
@@ -47,6 +48,15 @@ class profiles::nagios_server (
     service { 'nagios':
       ensure  =>'running',
       require => Package['nagios']
+    }
+
+    nagios_command { 'check_nrpe' :
+      command_name => 'check_nrpe',
+      command_line => '/usr/lib64/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -c $ARG1$',
+      target       => '/etc/nagios/conf.d/nagios_command.cfg',
+      mode         => '0644',
+      owner        => 'root',
+      require      => Package['nagios']
     }
 
     # Auto populate nagios configuration from puppetdb

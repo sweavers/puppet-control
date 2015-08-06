@@ -16,20 +16,20 @@
 #
 class profiles::nagios_client (
 
-  $nagios_server = '192.16.42.58'
+  $nagios_server = '192.16.42.58,10.0.2.15'
 
   ) {
 
     include ::stdlib
 
     # Install nagios client packages
-    $PKGLIST=['nrpe', 'nagios-plugins-all', 'openssl']
+    $PKGLIST=['nrpe','nagios-plugins','nagios-plugins-all','openssl']
     ensure_packages($PKGLIST)
 
     # Set ip address of nagios server
     file_line { '/etc/nagios/nrpe.cfg':
       path    => '/etc/nagios/nrpe.cfg',
-      line    => "allowed_hosts=127.0.0.1 ${nagios_server}",
+      line    => "allowed_hosts=127.0.0.1,${nagios_server}",
       match   => '^allowed_hosts.*$',
       require => Package['nrpe'],
       notify  => Service['nrpe']
@@ -53,6 +53,24 @@ class profiles::nagios_client (
       check_period          => '24x7',
       notification_interval => '30',
       notification_period   => '24x7'
+    }
+
+    # Install mem_check plugin
+    file { '/usr/lib64/nagios/plugins/check_mem' :
+      ensure  => present,
+      content => file('profiles/check_mem.pl'),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      require => Package['nagios-plugins-all']
+    }
+
+    # Configure mem_check plugin
+    file_line { 'check_mem':
+      path    => '/etc/nagios/nrpe.cfg',
+      line    => 'command[check_mem]=/usr/lib64/nagios/plugins/check_mem -f -w 20 -c 10',
+      require => Package['nrpe'],
+      notify  => Service['nrpe']
     }
 
     # Export nagios service configuration
@@ -124,5 +142,15 @@ class profiles::nagios_client (
       host_name           => $::hostname,
       notification_period => '24x7',
       service_description => 'Total Processes'
+    }
+
+    @@nagios_service { "check_mem_${::hostname}":
+      check_command       => 'check_nrpe!check_mem',
+      mode                => '0644',
+      owner               => root,
+      use                 => 'generic-service',
+      host_name           => $::hostname,
+      notification_period => '24x7',
+      service_description => 'Ram Usage'
     }
 }
