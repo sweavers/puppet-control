@@ -23,4 +23,10 @@ if versioncmp($::puppetversion,'3.6.1') >= 0 {
   Package {
     allow_virtual => $allow_virtual_packages,
   }
+
+}
+
+@@file_line { "ansible_host_${::fqdn}":
+  line => $::fqdn,
+  tag  => 'ansible_hosts'
 }

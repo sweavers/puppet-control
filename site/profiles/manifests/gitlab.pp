@@ -28,9 +28,15 @@ class profiles::gitlab (
   $ldap_password   = undef,
   $gitlab_crt      = '',
   $gitlab_key      = '',
-  $https_redirect  = false
+  $https_redirect  = false,
+  $aws_acccess_key = undef,
+  $aws_secret_key  = undef
 
 ){
+
+  package { 'epel-release' :
+    ensure => installed
+  }
 
   $gitlab_download_link = $::operatingsystem ? {
     CentOS     => 'https://downloads-packages.s3.amazonaws.com/centos-7.0.1406/gitlab-7.5.1_omnibus.5.2.0.ci-1.el7.x86_64.rpm',
@@ -93,6 +99,21 @@ class profiles::gitlab (
 
   }
 
+  #Set up s3 backups if on AWS
+  if $::hosting_platform == AWS {
+
+    package { 's3cmd':
+      ensure  => present,
+      require => Package[epel-release]
+    }
+    cron  { 's3-backup-syc':
+      command => "s3cmd sync /var/opt/gitlab/backups s3://lr-gitlab-backups --access_key=${aws_acccess_key} --secret_key=${aws_secret_key}",
+      user    => root,
+      hour    => 2,
+      minute  => 30
+    }
+  }
+
   #ensure that nfs package is installed
   #determin the package name based on the OS
   $nfs_package = $::operatingsystem ? {
@@ -105,14 +126,16 @@ class profiles::gitlab (
     ensure => present
   }
 
-  if $enable_backup == true {
-      mount { '/var/opt/gitlab/backups':
-        ensure  => 'mounted',
-        device  => $backup_location,
-        fstype  => 'nfs',
-        options => 'defaults',
-        atboot  => true,
-        require => Package [ $nfs_package ]
+  if $::hosting_platform == 'internal' {
+    if $enable_backup == true {
+        mount { '/var/opt/gitlab/backups':
+          ensure  => 'mounted',
+          device  => $backup_location,
+          fstype  => 'nfs',
+          options => 'defaults',
+          atboot  => true,
+          require => Package [ $nfs_package ]
+      }
     }
   }
 

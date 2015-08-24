@@ -12,9 +12,9 @@ Vagrant.configure(2) do |config|
 
   config.librarian_puppet.puppetfile_dir = "."
   config.librarian_puppet.placeholder_filename = ".PLACEHOLDER"
-  
+
   config.vm.box = "landregistry/centos"
-  config.vm.box_version = "0.1.0"
+  config.vm.box_version = "0.1.1"
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
     puppet.manifest_file = "site.pp"
@@ -43,5 +43,5 @@ Vagrant.configure(2) do |config|
       v.customize ['modifyvm', :id, '--memory', '2048']
     end
   end
-  
+
 end

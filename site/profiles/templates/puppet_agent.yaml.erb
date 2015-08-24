@@ -1,0 +1,15 @@
+---
+
+# Basic play book to run puppet agent on all hosts
+
+- hosts: all
+  remote_user: <%= @ansible_user %>
+  sudo: yes
+  serial: 2
+
+  tasks:
+    - name: run puppet agent
+      command: /usr/bin/puppet agent -t
+      register: puppet_agent_result
+      changed_when: puppet_agent_result.rc == 2
+      failed_when: puppet_agent_result.rc != 2 and puppet_agent_result.rc != 0

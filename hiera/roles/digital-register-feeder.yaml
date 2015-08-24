@@ -15,6 +15,9 @@ rabbitmq_user_permissions:
     read_permission: '.*'
     write_permission: '.*'
 
+# gues user is currently requied for the feeder app - issue raised with dev team
+profiles::rabbitmq::delete_guest_user: false
+
 applications:
   digital-register-feeder:
     source: 'git@github.com:LandRegistry/digital-register-feeder.git'
