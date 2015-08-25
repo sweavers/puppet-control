@@ -77,7 +77,7 @@ class profiles::digitalregister_app(
       before   => File['/etc/ssl/keys/']
     }
   }
-  if $api_ssl == true {
+  if ($api_ssl == true) or ($frontend_ssl == true) {
 
     # Set up Nginx proxy
     file { '/etc/ssl/keys/' :
