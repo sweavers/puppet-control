@@ -34,9 +34,6 @@ class profiles::gitlab (
 
 ){
 
-  package { 'epel-release' :
-    ensure => installed
-  }
 
   $gitlab_download_link = $::operatingsystem ? {
     CentOS     => 'https://downloads-packages.s3.amazonaws.com/centos-7.0.1406/gitlab-7.5.1_omnibus.5.2.0.ci-1.el7.x86_64.rpm',
@@ -104,7 +101,6 @@ class profiles::gitlab (
 
     package { 's3cmd':
       ensure  => present,
-      require => Package[epel-release]
     }
     cron  { 's3-backup-syc':
       command => "s3cmd sync /var/opt/gitlab/backups s3://lr-gitlab-backups --access_key=${aws_acccess_key} --secret_key=${aws_secret_key}",

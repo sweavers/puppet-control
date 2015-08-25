@@ -16,7 +16,7 @@ class profiles::ansible (
   ){
 
   # Install  ansible
-  ensure_packages(['epel-release','ansible'])
+  ensure_packages(['ansible'])
 
   #  Set up the anssible hosts file
   file { '/etc/ansible/hosts':

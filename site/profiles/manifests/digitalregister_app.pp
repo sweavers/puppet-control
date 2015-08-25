@@ -38,13 +38,9 @@ class profiles::digitalregister_app(
 
   $PKGLIST=['python','python-devel','python-pip']
 
-  package { 'epel-release' :
-    ensure => installed
-  }
 
   package{ $PKGLIST :
     ensure  => installed,
-    require => Package[epel-release]
   }
 
   # Dirty hack to address hard coded logging location in manage.py
@@ -81,38 +77,41 @@ class profiles::digitalregister_app(
       before   => File['/etc/ssl/keys/']
     }
   }
+  if $api_ssl == true {
 
-  # Set up Nginx proxy
-  file { '/etc/ssl/keys/' :
-    ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => '0700'
-  }
+    # Set up Nginx proxy
+    file { '/etc/ssl/keys/' :
+      ensure => directory,
+      owner  => root,
+      group  => root,
+      mode   => '0700'
+    }
 
-  file { '/etc/ssl/certs/ssl.crt' :
-    ensure  => present,
-    content => $ssl_crt,
-    owner   => root,
-    group   => root,
-    mode    => '0644'
-  }
+    file { '/etc/ssl/certs/ssl.crt' :
+      ensure  => present,
+      content => $ssl_crt,
+      owner   => root,
+      group   => root,
+      mode    => '0644'
+    }
 
-  file { '/etc/ssl/keys/ssl.key' :
-    ensure  => present,
-    content => $ssl_key,
-    owner   => root,
-    group   => root,
-    mode    => '0400',
-    require => File['/etc/ssl/keys/']
-  }
+    file { '/etc/ssl/keys/ssl.key' :
+      ensure  => present,
+      content => $ssl_key,
+      owner   => root,
+      group   => root,
+      mode    => '0400',
+      require => File['/etc/ssl/keys/']
+    }
 
-  nginx::resource::vhost { 'https_redirect':
-    server_name      => [ $frontend_url ],
-    listen_port      => $port,
-    www_root         => '/usr/share/nginx/html',
-    vhost_cfg_append => {
-            'return' => '301 https://$server_name$request_uri'}
+    nginx::resource::vhost { 'https_redirect':
+      server_name      => [ $frontend_url ],
+      listen_port      => $port,
+      www_root         => '/usr/share/nginx/html',
+      vhost_cfg_append => {
+              'return' => '301 https://$server_name$request_uri'}
+    }
+
   }
 
   if $::puppet_role == 'digital-register-frontend' {
@@ -122,7 +121,6 @@ class profiles::digitalregister_app(
 
     package{ $FRNTEND_PKGS :
       ensure  => installed,
-      require => Package[epel-release]
     }
 
     nginx::resource::vhost { 'frontend_proxy':
@@ -157,7 +155,7 @@ class profiles::digitalregister_app(
   } else {
     nginx::resource::vhost { 'api_proxy':
       server_name    => [ $::hostname ],
-      listen_port    => 80,
+      listen_port    => $port,
       # proxy_set_header => ['X-Forward-For $proxy_add_x_forwarded_for',
       # 'X-Real-IP $remote_addr', 'Client-IP $remote_addr', 'Host $http_host'],
       proxy_redirect => 'off',
