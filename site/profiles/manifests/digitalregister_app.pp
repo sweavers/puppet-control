@@ -137,8 +137,8 @@ class profiles::digitalregister_app(
       ssl_key           => '/etc/ssl/keys/ssl.key',
       ssl_protocols     => $ssl_protocols,
       ssl_ciphers       => $ssl_ciphers,
-      require           => File['/etc/ssl/certs/ssl.crt',
-                                '/etc/ssl/keys/ssl.key'],
+      # require           => File['/etc/ssl/certs/ssl.crt',
+      #                           '/etc/ssl/keys/ssl.key'],
 
       vhost_cfg_prepend => {
           'error_page' => '502 = @maintenance'
@@ -165,8 +165,8 @@ class profiles::digitalregister_app(
       ssl_key        => '/etc/ssl/keys/ssl.key',
       ssl_protocols  => $ssl_protocols,
       ssl_ciphers    => $ssl_ciphers,
-      require        => File['/etc/ssl/certs/ssl.crt',
-      '/etc/ssl/keys/ssl.key'],
+      # require        => File['/etc/ssl/certs/ssl.crt',
+      # '/etc/ssl/keys/ssl.key'],
     }
   }
 }
