@@ -21,9 +21,10 @@
         APPLICATION_SECRET_KEY: 'secretkeyshouldberandom'
         LOGIN_API: 'http://landregistry.local:8005/'
         SESSION_COOKIE_SECURE: 'False'
-        SERVICE_NOTICE_HTML: '<h2>Downtime notice</h2><p>This service will be offline between 2.00&ndash;5.00 on 31st July</p>'
         MORE_PROPRIETOR_DETAILS: 'true'
+        SERVICE_NOTICE_HTML: ''
         SHOW_FULL_TITLE_DATA: 'true'
+        SHOW_FULL_TITLE_PDF: 'true'
 
   profiles::digitalregister_app::frontend_url: localhost
 
