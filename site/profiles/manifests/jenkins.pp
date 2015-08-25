@@ -67,6 +67,12 @@ class profiles::jenkins (
       source => 'puppet:///modules/profiles/nginx_jenkins.te'
     }
 
+    # Load SELinuux policy for NginX
+    selinux::module { 'nginx_unreservedport':
+      ensure => 'present',
+      source => 'puppet:///modules/profiles/nginx_unreservedport.te'
+    }
+
     nginx::resource::vhost { 'https_redirect':
       server_name      => [ $jenkins_url ],
       listen_port      => 80,

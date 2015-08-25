@@ -4,7 +4,7 @@
 DIR="/var/lib/jenkins/artifact_r10k"
 PUPPETMASTER=${PUPPET_MASTER:-""}
 REMOTECI=${REMOTECI:-""}
-ARTIFACT=`ls ${DIR}/artifacts/ | sort -n | head -1`
+ARTIFACT=`ls ${DIR}/artifacts/ | sort -nr | tail -1`
 
 # Purely cosmetic function to prettify output
 # Set OUTPUT_LABEL to change the label
