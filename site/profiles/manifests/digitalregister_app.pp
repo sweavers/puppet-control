@@ -116,12 +116,21 @@ class profiles::digitalregister_app(
 
   if $::puppet_role == 'digital-register-frontend' {
 
+    # install pkgs requires for PDF geeneration
     $FRNTEND_PKGS = ['cairo','pango','gdk-pixbuf2','libffi-devel',
                     'libxslt-devel','libxml2-devel']
 
     package{ $FRNTEND_PKGS :
       ensure  => installed,
     }
+
+    # install fonts requied for PDF geneation
+    file { '/usr/share/fonts/':
+      ensure  => directory,
+      source  => 'puppet:///modules/profiles/fonts',
+      recurse => true,
+    }
+
 
     nginx::resource::vhost { 'frontend_proxy':
       server_name       => [ $frontend_url ],
