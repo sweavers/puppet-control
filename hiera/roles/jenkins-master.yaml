@@ -6,51 +6,53 @@ classes:
 
 profiles::jenkins::plugins:
   git:
-    version: latest
+    version: 2.4.0
   credentials:
-    version: latest
+    version: 1.18
   git-client:
-    version: latest
+    version: 1.19.0
   scm-api:
-    version: latest
+    version: 0.2
   matrix-project:
-    version: latest
+    version: 1.4.1
   token-macro:
-    version: latest
+    version: 1.10
   ssh-credentials:
-    version: latest
+    version: 1.10
   mailer:
-    version: latest
+    version: 1.11
   scm-sync-configuration:
-    version: latest
+    version: 0.0.8
   subversion:
     version: 1.54
   analysis-core:
-    version: latest
+    version: 1.72
   tasks:
-    version: latest
+    version: 4.45
   mapdb-api:
-    version: latest
+    version: 1.0.6.0
   ruby-runtime:
-    version: latest
+    version: 0.12
   rbenv:
-    version: latest
+    version: 0.0.16
   ansicolor:
-    version: latest
+    version: 0.4.1
   scm-sync-configuration:
-    version: latest
+    version: 0.0.8
   role-strategy:
-    version: latest
+    version: 2.2.0
   github-api:
-    version: latest
+    version: 1.69
+  plain-credentials:
+    version: 1.1
   github:
-    version: latest
+    version: 1.13.0
   xunit:
-    version: latest
+    version: 1.97
   cobertura:
-    version: latest
+    version: 1.9.7
   pyenv:
-    version: latest
+    version: 0.0.7
 
 profiles::jenkins::jenkins_ssl: true
 profiles::jenkins::ssl_crt: |
