@@ -53,6 +53,8 @@ profiles::jenkins::plugins:
     version: 1.9.7
   pyenv:
     version: 0.0.7
+  github-oauth:
+    version: 0.22.2
 
 profiles::jenkins::jenkins_ssl: true
 profiles::jenkins::ssl_crt: |
