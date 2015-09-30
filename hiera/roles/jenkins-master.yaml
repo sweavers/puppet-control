@@ -109,3 +109,5 @@ profiles::jenkins::ssl_key: |
   uWLEl7PF7nFGUM7Btv23iWH84nZZgUFDcayXV288Pzba1miTosRI6F3tAXdiI4o3
   wU96va4MvaWpYSkYb5zQbng=
   -----END PRIVATE KEY-----
+
+profiles::jenkins::ci_test_tools: true
