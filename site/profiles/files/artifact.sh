@@ -77,7 +77,7 @@ fi
 
 # Run R10k to get puppet code from github and dependency modules from the puppet forge
 echo "Attempting to retrive puppet environment code and dependencies" | output
-r10k deploy environment -c ${R10KCONFDIR}/artifact_r10k.yaml > /dev/null 2>&1
+r10k deploy environment -c ${R10KCONFDIR}/artifact_r10k.yaml -p > /dev/null 2>&1
 if [[ $? == '0' ]]; then
   echo "Puppet environment code and dependencies successfully retrieved" | output SUCCESS
 else
