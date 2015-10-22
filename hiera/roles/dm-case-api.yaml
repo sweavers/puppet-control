@@ -1,8 +1,8 @@
 ---
 
 classes:
-  - 'profiles::postgresql'
-  - 'profiles::digitalregister_app'
+  - profiles::postgresql
+  - profiles::digitalregister_app
 
   postgres_databases:
     charges-case-api:
