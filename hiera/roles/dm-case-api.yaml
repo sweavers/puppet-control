@@ -15,7 +15,7 @@ applications:
     bind: '9070'
     source: 'https://github.com/LandRegistry/charges-case-api.git'
     app_type: 'wsgi'
-    wsgi_entry: 'app.create_manager().app'
+    wsgi_entry: 'app:create_manager().app'
     manage: false
     revision: 'managepy'
     vars:
