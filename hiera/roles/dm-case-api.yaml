@@ -13,7 +13,7 @@ postgres_databases:
 applications:
   charges-case-api:
     bind: '9070'
-    source: 'git@github.com:LandRegistry/charges-case-api.git'
+    source: 'https://github.com/LandRegistry/charges-case-api.git'
     app_type: 'wsgi'
     wsgi_entry: 'app.create_manager().app'
     manage: false
