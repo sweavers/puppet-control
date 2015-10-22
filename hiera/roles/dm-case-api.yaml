@@ -1,0 +1,24 @@
+---
+
+classes:
+  - 'profiles::postgresql'
+  - 'profiles::digitalregister_app'
+
+  postgres_databases:
+    charges-case-api:
+      user: charges-case-api
+      owner: charges-case-api
+      password: md5c8856a237056951118f64f56ed6285d2
+
+applications:
+  charges-case-api:
+    bind: '9070'
+    source: 'git@github.com:LandRegistry/charges-case-api.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'app.create_manager().app'
+    manage: false
+    revision: 'master'
+    vars:
+      DATABASE_URI: 'postgresql+pg8000://postgres:password@localhost:5432/charges-case-api'
+      DEED_API_BASE_HOST: 'http://deedapi.dev.service.gov.uk'
+      CASE_API_BASE_HOST: 'http://localhost:9070'
