@@ -16,7 +16,7 @@ applications:
     source: 'https://github.com/LandRegistry/charges-case-api.git'
     app_type: 'wsgi'
     wsgi_entry: 'app:create_manager().app'
-    manage: false
+    manage: true
     revision: 'managepy'
     vars:
       DATABASE_URI: 'postgresql://charges-case-api:charges-case-api@localhost:5432/charges-case-api'
