@@ -19,6 +19,6 @@ applications:
     manage: false
     revision: 'managepy'
     vars:
-      DATABASE_URI: 'postgresql://postgres:password@localhost:5432/charges-case-api'
+      DATABASE_URI: 'postgresql://charges-case-api:charges-case-api@localhost:5432/charges-case-api'
       DEED_API_BASE_HOST: 'http://deedapi.dev.service.gov.uk'
       CASE_API_BASE_HOST: 'http://192.168.250.21'
