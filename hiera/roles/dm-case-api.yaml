@@ -4,11 +4,11 @@ classes:
   - profiles::postgresql
   - profiles::digitalregister_app
 
-  postgres_databases:
-    charges-case-api:
-      user: charges-case-api
-      owner: charges-case-api
-      password: md5c8856a237056951118f64f56ed6285d2
+postgres_databases:
+  charges-case-api:
+    user: charges-case-api
+    owner: charges-case-api
+    password: md5c8856a237056951118f64f56ed6285d2
 
 applications:
   charges-case-api:
