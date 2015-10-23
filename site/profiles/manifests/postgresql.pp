@@ -41,13 +41,14 @@
 #
 
 class profiles::postgresql(
-  $port         = 5432,
-  $version      = '9.3',
-  $remote       = true,
-  $dbroot       = '/postgres',
-  $databases    = hiera_hash('postgres_databases',false),
-  $users        = hiera_hash('postgres_users', false),
-  $pg_hba_rule  = hiera_hash('pg_hba_rule', false),
+  $port          = 5432,
+  $version       = '9.3',
+  $remote        = true,
+  $dbroot        = '/postgres',
+  $databases     = hiera_hash('postgres_databases',false),
+  $users         = hiera_hash('postgres_users', false),
+  $pg_hba_rule   = hiera_hash('pg_hba_rule', false),
+  $split_version = split($version, '.'),
 ){
 
 
@@ -120,7 +121,7 @@ class profiles::postgresql(
   include postgresql::server::contrib
   #include postgresql::server::postgis
 
-  package{ "postgis2_${$version.split()[0]}{$version.split()[1]}" :
+  package { "postgis2_${$split_version}" :
     ensure => installed
   }
 
