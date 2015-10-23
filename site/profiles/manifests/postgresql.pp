@@ -120,7 +120,7 @@ class profiles::postgresql(
   include postgresql::server::contrib
   #include postgresql::server::postgis
 
-  package{ "postgis2_${$version.split(".")[0]}{$version.split(".")[1]}" :
+  package{ "postgis2_${$version.split()[0]}{$version.split()[1]}" :
     ensure => installed
   }
 
