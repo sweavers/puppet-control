@@ -1,0 +1,22 @@
+---
+
+classes:
+  - profiles::postgresql
+  - profiles::digitalregister_app
+
+postgres_databases:
+  charges-verify-api:
+    user: charges-verify-api
+    owner: charges-verify-api
+    password: md5c8033e5b29d337dca1ffec6b36a1bf4f
+
+applications:
+  charges-verify-api:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry/charges-verifudge.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'app:create_manager().app'
+    manage: true
+    revision: 'managepy'
+    vars:
+      VERIFUDGE_DATABASE_URI: 'postgresql://charges-verify-api:charges-verify-api@localhost:5432/charges-verify-api'
