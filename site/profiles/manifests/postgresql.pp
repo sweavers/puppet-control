@@ -122,7 +122,9 @@ class profiles::postgresql(
   include postgresql::server::contrib
   #include postgresql::server::postgis
 
-  package{ 'postgis2_93' :
+  $postgis_name = 'postgis2_' + $version.chomp(".")
+
+  package{ $postgis_name :
     ensure  => installed,
   }
 
