@@ -120,11 +120,8 @@ class profiles::postgresql(
   include postgresql::server::contrib
   #include postgresql::server::postgis
 
-  $version_split = split($version, '.')
-  $version_merged = 'postgis2_' + $version_split[0] + $version_split[1]
-
-  package{ $version_merged :
-    ensure  => installed,
+  package{ "postgis2_${$version_split[0]}{$version_split[1]}" :
+    ensure => installed,
   }
 
   include postgresql::lib::devel
