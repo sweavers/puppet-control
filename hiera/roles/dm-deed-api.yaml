@@ -1,0 +1,25 @@
+---
+
+classes:
+  - profiles::postgresql
+  - profiles::digitalregister_app
+
+postgres_databases:
+  charges-deed-api:
+    user: charges-deed-api
+    owner: charges-deed-api
+    password: md5ccb10289ed924101358857ab085b6b40
+
+applications:
+  charges-deed-api:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry/charges-deed-api.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'app:create_manager().app'
+    manage: true
+    revision: 'managepy'
+    vars:
+      DEED_DATABASE_URI: 'postgresql://charges-deed-api:charges-deed-api@localhost:5432/charges-deed-api'
+      CASE_API_BASE_HOST: 'http://192.168.250.21'
+
+profiles::postgresql::version: '9.4' 
