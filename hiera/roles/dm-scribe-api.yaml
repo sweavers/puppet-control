@@ -1,0 +1,23 @@
+---
+
+classes:
+  - profiles::postgresql
+  - profiles::digitalregister_app
+
+postgres_databases:
+  charges-scribe-api:
+    user: charges-scribe-api
+    owner: charges-scribe-api
+    password: md5c8856a237056951118f64f56ed6285d2
+
+applications:
+  charges-scribe-api:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry/charges-scribe.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'app:create_manager().app'
+    manage: true
+    revision: 'managepy'
+    vars:
+      DATABASE_URI: 'postgresql://charges-scribe-api:charges-scribe-api@localhost:5432/charges-scribe-api'
+      DEED_API_ADDRESS: 'http://deedapi.dev.service.gov.uk'
