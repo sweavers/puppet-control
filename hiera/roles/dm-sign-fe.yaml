@@ -1,0 +1,15 @@
+---
+
+classes:
+  - profiles::digitalregister_app
+
+applications:
+  charges-sign-fe:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry/charges-conveyancer-frontend'
+    app_type: 'wsgi'
+    wsgi_entry: 'app:create_manager().app'
+    manage: false 
+    vars:
+      DEED_API_BASE_HOST: '192.168.250.22'
+      SCRIBE_API_BASE_HOST: '192.168.250.24'
