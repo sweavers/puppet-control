@@ -20,5 +20,6 @@ applications:
     revision: 'managepy'
     vars:
       VERIFUDGE_DATABASE_URI: 'postgresql://charges-verify-api:charges-verify-api@localhost:5432/charges-verify-api'
+    require: 'Class[Postgresql::Server]'
 
 profiles::postgresql::version: '9.4' 
