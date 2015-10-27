@@ -3,7 +3,7 @@
 classes:
   - profiles::digitalregister_app
 
-environment: development
+environment: puppetdm
 
 applications:
   charges-verify-fe:

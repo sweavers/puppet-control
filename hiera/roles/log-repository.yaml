@@ -2,7 +2,7 @@
 
 # This role is to set up a server for the log respository
 
-environment: development
+environment: puppetdm 
 
   classes:
     - profiles::log_repository
