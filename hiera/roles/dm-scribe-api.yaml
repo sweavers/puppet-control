@@ -20,7 +20,7 @@ applications:
     revision: 'managepy'
     vars:
       DATABASE_URI: 'postgresql://charges-scribe-api:charges-scribe-api@localhost:5432/charges-scribe-api'
-      DEED_API_ADDRESS: 'http://deedapi.dev.service.gov.uk'
+      DEED_API_ADDRESS: 'http://192.168.250.22'
     require: 'Class[Postgresql::Server]'
 
 profiles::postgresql::version: '9.4'
