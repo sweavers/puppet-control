@@ -6,7 +6,7 @@ classes:
 applications:
   charges-sign-fe:
     bind: '5000'
-    source: 'https://github.com/LandRegistry/charges-conveyancer-frontend.git'
+    source: 'https://github.com/LandRegistry/charges-borrower-frontend.git'
     app_type: 'wsgi'
     wsgi_entry: 'app:create_manager().app'
     manage: false
