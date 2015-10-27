@@ -21,9 +21,6 @@ applications:
     vars:
       DEED_DATABASE_URI: 'postgresql://charges-deed-api:charges-deed-api@localhost:5432/charges-deed-api'
       CASE_API_BASE_HOST: 'http://192.168.250.21'
-<<<<<<< HEAD
-=======
     require: 'Class[Postgresql::Server]'
->>>>>>> 10cac89b2d31b13d48353259b4818f31f07baeb4
 
 profiles::postgresql::version: '9.4' 

@@ -9,9 +9,5 @@ applications:
     source: 'https://github.com/LandRegistry/charges-catalogue.git'
     app_type: 'wsgi'
     wsgi_entry: 'app:create_manager().app'
-<<<<<<< HEAD
-    manage: true
-=======
     manage: false
->>>>>>> 10cac89b2d31b13d48353259b4818f31f07baeb4
     revision: 'managepy'
