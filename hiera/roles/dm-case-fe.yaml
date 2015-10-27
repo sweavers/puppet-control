@@ -10,7 +10,7 @@ applications:
     app_type: 'wsgi'
     wsgi_entry: 'app:create_manager().app'
     manage: false
-    revision: 'managepy'
+    revision: 'master'
     vars:
       CASE_API_BASE_HOST: 'http://192.168.250.21'
       CASE_CLIENT: 'tests.mock.case_api_mock_client.CaseApiMockClient'
