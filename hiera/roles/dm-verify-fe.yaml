@@ -3,8 +3,6 @@
 classes:
   - profiles::digitalregister_app
 
-environment: puppetdm
-
 applications:
   charges-verify-fe:
     bind: '5000'
