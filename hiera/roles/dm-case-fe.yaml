@@ -13,4 +13,5 @@ applications:
     revision: 'master'
     vars:
       CASE_API_BASE_HOST: 'http://192.168.250.21'
-      CASE_CLIENT: 'tests.mock.case_api_mock_client.CaseApiMockClient'
+      DEED_API_BASE_HOST: 'http://192.168.250.22'
+      CONVEYANCER_FE_SECRET_KEY: 'a8a8652e-98e8-491f-aab5-d1faf31008ca'
