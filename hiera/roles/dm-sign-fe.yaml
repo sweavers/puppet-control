@@ -12,5 +12,5 @@ applications:
     manage: false
     revision: 'master'
     vars:
-      DEED_API_BASE_HOST: 'http://192.168.250.22'
-      SCRIBE_API_BASE_HOST: 'http://192.168.250.24'
+      DEED_API_ADDRESS: 'http://192.168.250.22'
+      SCRIBE_API_ADDRESS: 'http://192.168.250.24'
