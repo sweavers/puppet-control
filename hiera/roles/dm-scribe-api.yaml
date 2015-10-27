@@ -8,7 +8,7 @@ postgres_databases:
   charges-scribe-api:
     user: charges-scribe-api
     owner: charges-scribe-api
-    password: md5c8856a237056951118f64f56ed6285d2
+    password: md564a78919e00428dc2736861873b4146b
 
 applications:
   charges-scribe-api:
