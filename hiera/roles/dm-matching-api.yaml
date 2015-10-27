@@ -1,3 +1,4 @@
+<<<<<<< HEAD
   ---
 
   classes:
@@ -11,3 +12,18 @@
       wsgi_entry: 'app:create_manager().app'
       manage: true
       revision: 'managepy'
+=======
+---
+
+classes:
+  - profiles::digitalregister_app
+
+applications:
+  charges-matching-api:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry/charges-matching-service.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'app:create_manager().app'
+    manage: false
+    revision: 'managepy'
+>>>>>>> 10cac89b2d31b13d48353259b4818f31f07baeb4

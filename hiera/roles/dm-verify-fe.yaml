@@ -3,15 +3,14 @@
 classes:
   - profiles::digitalregister_app
 
+environment: development
+
 applications:
-  charges-catalogue-api:
+  charges-verify-fe:
     bind: '5000'
-    source: 'https://github.com/LandRegistry/charges-catalogue.git'
+    source: 'https://github.com/LandRegistry/charges-verifudge.git'
     app_type: 'wsgi'
     wsgi_entry: 'app:create_manager().app'
-<<<<<<< HEAD
-    manage: true
-=======
     manage: false
->>>>>>> 10cac89b2d31b13d48353259b4818f31f07baeb4
     revision: 'managepy'
+    vars:

@@ -8,7 +8,11 @@ postgres_databases:
   charges-scribe-api:
     user: charges-scribe-api
     owner: charges-scribe-api
+<<<<<<< HEAD
     password: md5c8856a237056951118f64f56ed6285d2
+=======
+    password: md564a78919e00428dc2736861873b4146b
+>>>>>>> 10cac89b2d31b13d48353259b4818f31f07baeb4
 
 applications:
   charges-scribe-api:
@@ -21,3 +25,9 @@ applications:
     vars:
       DATABASE_URI: 'postgresql://charges-scribe-api:charges-scribe-api@localhost:5432/charges-scribe-api'
       DEED_API_ADDRESS: 'http://deedapi.dev.service.gov.uk'
+<<<<<<< HEAD
+=======
+    require: 'Class[Postgresql::Server]'
+
+profiles::postgresql::version: '9.4'
+>>>>>>> 10cac89b2d31b13d48353259b4818f31f07baeb4
