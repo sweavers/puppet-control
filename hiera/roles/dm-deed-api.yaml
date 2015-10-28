@@ -20,6 +20,7 @@ applications:
     revision: 'managepy'
     vars:
       DEED_DATABASE_URI: 'postgresql://charges-deed-api:charges-deed-api@localhost:5432/charges-deed-api'
-      CASE_API_BASE_HOST: 'http://192.168.250.21'
+      CASE_API_ADDRESS: 'http://192.168.250.21'
+    require: 'Class[Postgresql::Server]'
 
-profiles::postgresql::version: '9.4' 
+profiles::postgresql::version: '9.4'

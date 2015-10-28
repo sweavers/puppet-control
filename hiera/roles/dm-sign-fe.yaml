@@ -1,0 +1,16 @@
+---
+
+classes:
+  - profiles::digitalregister_app
+
+applications:
+  charges-sign-fe:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry/charges-borrower-frontend.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'app:create_manager().app'
+    manage: false
+    revision: 'master'
+    vars:
+      DEED_API_ADDRESS: 'http://192.168.250.22'
+      SCRIBE_API_ADDRESS: 'http://192.168.250.24'

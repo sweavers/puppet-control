@@ -1,0 +1,17 @@
+---
+
+classes:
+  - profiles::digitalregister_app
+
+applications:
+  charges-case-fe:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry/charges-conveyancer-frontend.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'app:create_manager().app'
+    manage: false
+    revision: 'master'
+    vars:
+      CASE_API_BASE_HOST: 'http://192.168.250.21'
+      DEED_API_BASE_HOST: 'http://192.168.250.22'
+      CONVEYANCER_FE_SECRET_KEY: 'a8a8652e-98e8-491f-aab5-d1faf31008ca'
