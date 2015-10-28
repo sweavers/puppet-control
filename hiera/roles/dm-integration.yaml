@@ -24,7 +24,7 @@ postgres_databases:
 
 applications:
   charges-case-api:
-    bind: '5000'
+    bind: '5008'
     source: 'https://github.com/LandRegistry/charges-case-api.git'
     app_type: 'wsgi'
     wsgi_entry: 'app:create_manager().app'
@@ -33,7 +33,7 @@ applications:
     vars:
       DATABASE_URI: 'postgresql://charges-case-api:charges-case-api@localhost:5432/charges-case-api'
       DEED_API_BASE_HOST: 'http://localhost:5003'
-      CASE_API_BASE_HOST: 'http://localhost:5000'
+      CASE_API_BASE_HOST: 'http://localhost:5008'
     require: 'Class[Postgresql::Server]'
   charges-case-fe:
     bind: '5001'
@@ -43,7 +43,7 @@ applications:
     manage: false
     revision: 'master'
     vars:
-      CASE_API_BASE_HOST: 'http://localhost:5000'
+      CASE_API_BASE_HOST: 'http://localhost:5008'
       DEED_API_BASE_HOST: 'http://localhost:5003'
       CONVEYANCER_FE_SECRET_KEY: 'a8a8652e-98e8-491f-aab5-d1faf31008ca'
   charges-catalogue-api:
@@ -62,7 +62,7 @@ applications:
     revision: 'managepy'
     vars:
       DEED_DATABASE_URI: 'postgresql://charges-deed-api:charges-deed-api@localhost:5432/charges-deed-api'
-      CASE_API_ADDRESS: 'http://localhost:5000'
+      CASE_API_ADDRESS: 'http://localhost:5008'
     require: 'Class[Postgresql::Server]'
   charges-matching-api:
     bind: '5004'
