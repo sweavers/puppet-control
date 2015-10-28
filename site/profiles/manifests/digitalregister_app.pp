@@ -77,7 +77,6 @@ class profiles::digitalregister_app(
       before   => File['/etc/ssl/keys/']
     }
   }
-  if ($api_ssl == true) or ($frontend_ssl == true) {
 
     # Set up Nginx proxy
     file { '/etc/ssl/keys/' :
@@ -103,6 +102,8 @@ class profiles::digitalregister_app(
       mode    => '0400',
       require => File['/etc/ssl/keys/']
     }
+
+  if ($api_ssl == true) or ($frontend_ssl == true) {
 
     nginx::resource::vhost { 'https_redirect':
       server_name      => [ $frontend_url ],
