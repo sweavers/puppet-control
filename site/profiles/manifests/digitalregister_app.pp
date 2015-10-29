@@ -19,6 +19,7 @@ class profiles::digitalregister_app(
   $app_type      = 'wsgi',
   $applications  = hiera_hash('applications',false),
   $port          = 80,
+  $frontend_port = 80,
   $frontend_url  = [ $::hostname ],
   $frontend_ssl  = false,
   $api_ssl       = false,
@@ -112,8 +113,14 @@ class profiles::digitalregister_app(
       vhost_cfg_append => {
               'return' => '301 https://$server_name$request_uri'}
     }
-
   }
+
+  else {
+    nginx::resource::vhost { 'https_redirect':
+      ensure => absent
+    }
+  }
+
 
   if $::puppet_role == 'digital-register-frontend' {
 
@@ -135,7 +142,7 @@ class profiles::digitalregister_app(
 
     nginx::resource::vhost { 'frontend_proxy':
       server_name       => [ $frontend_url ],
-      listen_port       => 443,
+      listen_port       => $frontend_port,
 
       proxy_set_header  => ['X-Forward-For $proxy_add_x_forwarded_for',
         'X-Real-IP $remote_addr', 'Client-IP $remote_addr', 'Host $http_host'],
