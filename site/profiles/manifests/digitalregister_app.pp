@@ -117,7 +117,8 @@ class profiles::digitalregister_app(
 
   else {
     nginx::resource::vhost { 'https_redirect':
-      ensure => absent
+      ensure   => absent,
+      www_root => '/usr/share/nginx/html'
     }
   }
 
@@ -182,8 +183,8 @@ class profiles::digitalregister_app(
       ssl_key        => '/etc/ssl/keys/ssl.key',
       ssl_protocols  => $ssl_protocols,
       ssl_ciphers    => $ssl_ciphers,
-      # require        => File['/etc/ssl/certs/ssl.crt',
-      # '/etc/ssl/keys/ssl.key'],
+      require        => File['/etc/ssl/certs/ssl.crt',
+      '/etc/ssl/keys/ssl.key'],
     }
   }
 }
