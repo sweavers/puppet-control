@@ -42,16 +42,21 @@
 
 class profiles::postgresql(
 
-  $port        = 5432,
-  $version     = '9.3',
-  $remote      = true,
-  $dbroot      = '/postgres',
-  $databases   = hiera_hash('postgres_databases',false),
-  $users       = hiera_hash('postgres_users', false),
-  $pg_hba_rule = hiera_hash('pg_hba_rule', false)
+  $port          = 5432,
+  $version       = '9.3',
+  $remote        = true,
+  $dbroot        = '/postgres',
+  $databases     = hiera_hash('postgres_databases',false),
+  $users         = hiera_hash('postgres_users', false),
+  $pg_hba_rule   = hiera_hash('pg_hba_rule', false)
 
 ){
 
+  case $version {
+    '9.3': { $postgis_version = 'postgis2_93' }
+    '9.4': { $postgis_version = 'postgis2_94' }
+    default: { $postgis_version = 'postgis2_93' }
+  }
 
   # Set bind address to 0.0.0.0 if remote is enabled, 127.0.0.1 if not
   # Merge remote into an address array if it's anything other than a boolean
@@ -122,8 +127,8 @@ class profiles::postgresql(
   include postgresql::server::contrib
   #include postgresql::server::postgis
 
-  package{ 'postgis2_93' :
-    ensure  => installed,
+  package { $postgis_version :
+    ensure => installed,
   }
 
   include postgresql::lib::devel
