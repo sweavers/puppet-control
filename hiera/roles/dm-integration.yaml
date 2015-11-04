@@ -5,82 +5,22 @@ classes:
   - profiles::digitalregister_app
 
 postgres_databases:
-  charges-case-api:
-    user: charges-case-api
-    owner: charges-case-api
-    password: md5c8856a237056951118f64f56ed6285d2
   charges-deed-api:
     user: charges-deed-api
     owner: charges-deed-api
     password: md5ccb10289ed924101358857ab085b6b40
-  charges-scribe-api:
-    user: charges-scribe-api
-    owner: charges-scribe-api
-    password: md564a78919e00428dc2736861873b4146b
-  charges-verify-api:
-    user: charges-verify-api
-    owner: charges-verify-api
-    password: md5c8033e5b29d337dca1ffec6b36a1bf4f
 
 applications:
-  charges-case-api:
-    bind: '5008'
-    source: 'https://github.com/LandRegistry/charges-case-api.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'app:create_manager().app'
-    manage: true
-    revision: 'managepy'
-    vars:
-      DATABASE_URI: 'postgresql://charges-case-api:charges-case-api@localhost:5432/charges-case-api'
-      DEED_API_BASE_HOST: 'http://localhost:5003'
-      CASE_API_BASE_HOST: 'http://localhost:5008'
-    require: 'Class[Postgresql::Server]'
-  charges-case-fe:
-    bind: '5001'
-    source: 'https://github.com/LandRegistry/charges-conveyancer-frontend.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'app:create_manager().app'
-    manage: false
-    revision: 'master'
-    vars:
-      CASE_API_BASE_HOST: 'http://localhost:5008'
-      DEED_API_BASE_HOST: 'http://localhost:5003'
-      CONVEYANCER_FE_SECRET_KEY: 'a8a8652e-98e8-491f-aab5-d1faf31008ca'
-  charges-catalogue-api:
-    bind: '5002'
-    source: 'https://github.com/LandRegistry/charges-catalogue.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'app:create_manager().app'
-    manage: false
-    revision: 'managepy'
-  charges-deed-api:
+charges-deed-api:
     bind: '5003'
     source: 'https://github.com/LandRegistry/charges-deed-api.git'
     app_type: 'wsgi'
     wsgi_entry: 'app:create_manager().app'
     manage: true
-    revision: 'managepy'
+    revision: 'develop'
     vars:
       DEED_DATABASE_URI: 'postgresql://charges-deed-api:charges-deed-api@localhost:5432/charges-deed-api'
       CASE_API_ADDRESS: 'http://localhost:5008'
-    require: 'Class[Postgresql::Server]'
-  charges-matching-api:
-    bind: '5004'
-    source: 'https://github.com/LandRegistry/charges-matching-service.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'app:create_manager().app'
-    manage: false
-    revision: 'managepy'
-  charges-scribe-api:
-    bind: '5005'
-    source: 'https://github.com/LandRegistry/charges-scribe.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'app:create_manager().app'
-    manage: true
-    revision: 'managepy'
-    vars:
-      DATABASE_URI: 'postgresql://charges-scribe-api:charges-scribe-api@localhost:5432/charges-scribe-api'
-      DEED_API_ADDRESS: 'http://localhost:5003'
     require: 'Class[Postgresql::Server]'
   charges-sign-fe:
     bind: '5006'
@@ -88,19 +28,9 @@ applications:
     app_type: 'wsgi'
     wsgi_entry: 'app:create_manager().app'
     manage: false
-    revision: 'master'
+    revision: 'develop'
     vars:
       DEED_API_ADDRESS: 'http://localhost:5003'
       SCRIBE_API_ADDRESS: 'http://localhost:5005'
-  charges-verify-api:
-    bind: '5007'
-    source: 'https://github.com/LandRegistry/charges-verifudge.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'app:create_manager().app'
-    manage: true
-    revision: 'managepy'
-    vars:
-      VERIFUDGE_DATABASE_URI: 'postgresql://charges-verify-api:charges-verify-api@localhost:5432/charges-verify-api'
-    require: 'Class[Postgresql::Server]'
 
 profiles::postgresql::version: '9.4'
