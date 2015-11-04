@@ -160,10 +160,33 @@ log_repository_logstash_config: |
       codec => json
     }
   }
-  output {
-    elasticsearch { host => localhost
-                    cluster => development }
+filter {
+  if [type] == "syslog" {
+    	grok {
+      		match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
+      		add_field => [ "received_at", "%{@timestamp}" ]
+      		add_field => [ "received_from", "%{host}" ]
+    		}
+    syslog_pri { }
+    date {
+      match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+    }
   }
+}
+
+filter {
+if [type] == "application" {
+	
+    grok {
+	match => { "message" => "%{TIMESTAMP_ISO8601:time} %{DATA:level} %{DATA:logger} %{DATA:thread} %{GREEDYDATA:detail} %{DATA:exception}"}
+    	}
+}
+}
+
+output {
+	elasticsearch { host => localhost
+	cluster => "drv-integration" }
+}
 
 log_broker_ip_address: 192.16.42.48
 
