@@ -45,7 +45,7 @@ class profiles::log_forwarder{
     }
 
     logstashforwarder::file { 'applogs':
-      paths  => [ '/var/log/applications/*' ],
+      paths  => [ '/opt/landregistry/applications/*/logs/*.log' ],
       fields => {
         'type' => 'application'
       }
