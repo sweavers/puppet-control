@@ -13,7 +13,7 @@ postgres_databases:
 applications:
 charges-deed-api:
     bind: '5003'
-    source: 'https://github.com/LandRegistry/charges-deed-api.git'
+    source: 'https://github.com/LandRegistry/dm-deed-api.git'
     app_type: 'wsgi'
     wsgi_entry: 'app:create_manager().app'
     manage: true
@@ -24,7 +24,7 @@ charges-deed-api:
     require: 'Class[Postgresql::Server]'
   charges-sign-fe:
     bind: '5006'
-    source: 'https://github.com/LandRegistry/charges-borrower-frontend.git'
+    source: 'https://github.com/LandRegistry/dm-borrower-frontend.git'
     app_type: 'wsgi'
     wsgi_entry: 'app:create_manager().app'
     manage: false
