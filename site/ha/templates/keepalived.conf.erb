@@ -1,0 +1,18 @@
+vrrp_script haproxy {
+  script "pgrep haproxy"
+  interval 1
+  wait 1
+}
+vrrp_instance <%= @fqdn %> {
+    state MASTER
+    interface <%= @interface %>
+    virtual_router_id <%= @virtual_ip.split('.').last %>
+    priority <%= @vip_priority %>
+    advert_int 1
+    virtual_ipaddress {
+        <%= @virtual_ip %>
+    }
+    track_script {
+      haproxy
+    }
+}
