@@ -6,12 +6,12 @@ classes:
 
 postgres_databases:
   dm-deeds:
-    user:dm-deeds 
+    user: dm-deeds 
     owner: dm-deeds 
     password: md50b6171dccaa63335d4e4f00090c32245 
 
 applications:
-dm-deed-api:
+  dm-deed-api:
     bind: '5003'
     source: 'https://github.com/LandRegistry/dm-deed-api.git'
     app_type: 'wsgi'
