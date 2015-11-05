@@ -5,32 +5,30 @@ classes:
   - profiles::digitalregister_app
 
 postgres_databases:
-  charges-deed-api:
-    user: charges-deed-api
-    owner: charges-deed-api
-    password: md5ccb10289ed924101358857ab085b6b40
+  dm-deeds:
+    user:dm-deeds 
+    owner: dm-deeds 
+    password: md50b6171dccaa63335d4e4f00090c32245 
 
 applications:
-charges-deed-api:
+dm-deed-api:
     bind: '5003'
     source: 'https://github.com/LandRegistry/dm-deed-api.git'
     app_type: 'wsgi'
-    wsgi_entry: 'app:create_manager().app'
+    wsgi_entry: 'application:app'
     manage: true
     revision: 'develop'
     vars:
-      DEED_DATABASE_URI: 'postgresql://charges-deed-api:charges-deed-api@localhost:5432/charges-deed-api'
-      CASE_API_ADDRESS: 'http://localhost:5008'
+      DEED_DATABASE_URI: 'postgresql://dm-deeds:dm-deeds@localhost:5432/dm-deeds'
     require: 'Class[Postgresql::Server]'
-  charges-sign-fe:
+  dm-borrower-frontend:
     bind: '5006'
     source: 'https://github.com/LandRegistry/dm-borrower-frontend.git'
     app_type: 'wsgi'
-    wsgi_entry: 'app:create_manager().app'
+    wsgi_entry: 'application:app'
     manage: false
     revision: 'develop'
     vars:
       DEED_API_ADDRESS: 'http://localhost:5003'
-      SCRIBE_API_ADDRESS: 'http://localhost:5005'
 
 profiles::postgresql::version: '9.4'
