@@ -21,7 +21,7 @@ class ha (
      fail("$virtual_ip is not a valid IP address")
    }
 
-   $haproxy_cfg    = '/etc/haproxy/haproxy.conf'
+   $haproxy_cfg    = '/etc/haproxy/haproxy.cfg'
    $keepalived_cfg = '/etc/keepalived/keepalived.conf'
    $vip_priority   = fqdn_rand_string(2,'0123456789')
 
@@ -41,7 +41,7 @@ class ha (
      ensure    => running,
      enable    => true,
      require   => Package['haproxy'],
-     subscribe => File[$haproxy]
+     subscribe => File[$haproxy_cfg]
    }
 
    file { $keepalived_cfg :
@@ -58,7 +58,7 @@ class ha (
      ensure    => running,
      enable    => true,
      require   => Package['keepalived'],
-     subscribe => File[$keepalived]
+     subscribe => File[$keepalived_cfg]
    }
 
 }
