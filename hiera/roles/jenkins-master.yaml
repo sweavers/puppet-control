@@ -57,6 +57,8 @@ profiles::jenkins::plugins:
     version: 0.22.2
   build-monitor-plugin:
     version: 1.6+build.142
+  parameterized-trigger:
+    version: 2.29
 
 profiles::jenkins::jenkins_ssl: true
 profiles::jenkins::ssl_crt: |
