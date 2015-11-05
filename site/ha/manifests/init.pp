@@ -15,10 +15,10 @@ class ha (
   validate_string($virtual_ip)
 
   unless has_interface_with($interface) {
-    fail("$interface is not a valid network port")
+    fail("${interface} is not a valid network port")
   }
   unless is_ip_address($virtual_ip) {
-    fail("$virtual_ip is not a valid IP address")
+    fail("${virtual_ip} is not a valid IP address")
   }
 
   $haproxy_cfg    = '/etc/haproxy/haproxy.cfg'
