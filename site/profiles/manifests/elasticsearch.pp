@@ -22,4 +22,9 @@ class profiles::elasticsearch(
 
   elasticsearch::instance { "es-${nodenumber}": }
 
+  $plugins     = hiera_hash('elasticsearch_plugins',false)
+  if $plugins {
+    create_resources('elasticsearch::plugin', $plugins)
+  }
+
 }
