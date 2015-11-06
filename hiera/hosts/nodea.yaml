@@ -1,0 +1,18 @@
+---
+
+classes:
+  - profiles::postgresql
+
+postgres_databases:
+  register_data:
+    user: register_data
+    password: md5085815e3463853f3a1e9731b61ddb3a7
+    owner: register_data
+  user_data:
+    user: user_data
+    password: md5f5e1477d2e90a5760642db71ea5307d1
+    owner: user_data
+
+postgres_users:
+  deployment:
+    password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
