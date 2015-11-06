@@ -1,0 +1,24 @@
+global
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    user        haproxy
+    group       haproxy
+    daemon
+    stats socket /var/lib/haproxy/stats
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option                  http-server-close
+    option                  redispatch
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+listen loadbalancer *:<%= @listen_port %>
+    balance roundrobin
+    option  httpchk GET <%= @healthcheck %>
+<% @backends.each do |config| -%>
+    server  <%= config.split(':')[0].split('.')[0] %> <%= config %> check
+<% end -%>
