@@ -32,6 +32,9 @@ mod 'stephenrjohnson/puppet',          '1.3.1'
 mod 'thias/sysctl',                    '1.0.2'
 mod 'zack/r10k',                       '2.6.2'
 mod '3fs/phantomjs',                   '0.0.8'
+mod 'gini-gradle',                     '0.2.0'
+mod 'puppet-gradle_deploy',            :git => 'https://github.com/LandRegistry-Ops/puppet-gradle_deploy.git',
+                                       :ref => '7fd9cda48df932399e66315e89b26e23677a3703'
 
 # Dependency modules
 mod 'croddy/make',                     '0.0.5'

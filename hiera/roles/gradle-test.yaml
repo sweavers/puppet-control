@@ -1,0 +1,50 @@
+---
+
+classes:
+  - profiles::digitalregister_app
+  - profiles::gradle_app
+  - profiles::postgresql
+  - profiles::rabbitmq
+
+rabbitmq_users:
+  rabbitmqadmin:
+    admin: true
+    password: 'rabbitmqadminrabbitmqadmin'
+
+rabbitmq_user_permissions:
+  rabbitmqadmin@/:
+    configure_permission: '.*'
+    read_permission: '.*'
+    write_permission: '.*'
+
+postgres_databases:
+  testdb:
+    user: testdb
+    owner: testdb
+    password: md55bd4c9f7ccd44632d8115de6088200d2
+
+gradle_applications:
+  gradle-test:
+    source: 'https://github.com/mooreandrew/gradle-test.git'
+    bind: '5001'
+    revision: 'fix-simple-json'
+    vars:
+      SETTINGS: 'dev'
+
+applications:
+  app-list:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry-Ops/app-list.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'application.server:app'
+    manage: false
+    revision: 'master'
+    vars:
+      SETTINGS: 'config.DevelopmentConfig'
+      TITLE: 'gradle test env'
+      DISPLAY_LOGS: 'True'
+      BASIC_AUTH_FORCE: 'False'
+      BASIC_AUTH_USERNAME: 'username'
+      BASIC_AUTH_PASSWORD: 'password'
+
+profiles::postgresql::version: '9.4'
