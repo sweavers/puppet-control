@@ -34,7 +34,7 @@ gradle_applications:
 applications:
   app-list:
     bind: '5000'
-    source: 'https://github.com/mooreandrew/app-list.git'
+    source: 'https://github.com/LandRegistry-Ops/app-list.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.server:app'
     manage: false
