@@ -33,6 +33,7 @@ profiles::jenkins::plugins:
     version: 1.0.6.0
   ruby-runtime:
     version: 0.12
+    timeout: 240
   rbenv:
     version: 0.0.16
   ansicolor:
