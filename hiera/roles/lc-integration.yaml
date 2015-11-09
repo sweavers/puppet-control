@@ -43,6 +43,20 @@ rabbitmq_user_permissions:
 
 
 applications:
+  app-list:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry-Ops/app-list.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'application.server:app'
+    manage: false
+    revision: 'master'
+    vars:
+      SETTINGS: 'config.DevelopmentConfig'
+      TITLE: 'Land Charges Integration Test Environment'
+      DISPLAY_LOGS: 'True'
+      BASIC_AUTH_FORCE: 'False'
+      BASIC_AUTH_USERNAME: 'username'
+      BASIC_AUTH_PASSWORD: 'password'
   landcharges-b2b-api:
     bind: '5001'
     source: 'https://github.com/LandRegistry/lc-alpha-b2b-api.git'
