@@ -12,11 +12,11 @@ class es (
   validate_bool($manage_java)
 
   if ($interface == 'eth0') {
-    $listen = $ipaddress_eth0
+    $listen = $::ipaddress_eth0
   } elsif ($interface == 'eth1') {
-    $listen = $ipaddress_eth1
+    $listen = $::ipaddress_eth1
   } else {
-    $listen = $ipaddress
+    $listen = $::ipaddress
   }
   $repo_version = '1.7'
   $version      = '1.7.3'
@@ -39,7 +39,7 @@ class es (
     config => {
       'cluster.name'  => $name,
       'node'          => {
-        'name'   => "${hostname}-${name}",
+        'name'   => "${::hostname}-${name}",
         'master' => true,
         'data'   => true
       },
