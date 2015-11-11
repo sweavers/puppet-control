@@ -2,7 +2,7 @@
 
 classes:
   - profiles::postgresqlha
-  - profiles::postgresqlha_nodeb
+  - profiles::postgresqlha_nodec
 
 postgres_databases:
   register_data:
