@@ -24,13 +24,17 @@ mod 'puppetlabs/ntp',                  '3.3.0'
 mod 'puppetlabs/postgresql',           '4.6.0'
 mod 'puppetlabs/puppetdb',             '4.1.0'
 mod 'puppetlabs/rabbitmq',             '5.0.0'
-mod 'rtyler/jenkins',                  '1.3.0'
+mod 'rtyler/jenkins',                  :git => 'https://github.com/jenkinsci/puppet-jenkins.git',
+                                       :ref => 'f2f086130f390220b33edf09b25d3adf76efc28a'
 mod 'saz/sudo',                        '3.0.9'
 mod 'spuder/gitlab',                   '2.3.5'
 mod 'stephenrjohnson/puppet',          '1.3.1'
 mod 'thias/sysctl',                    '1.0.2'
 mod 'zack/r10k',                       '2.6.2'
 mod '3fs/phantomjs',                   '0.0.8'
+mod 'puppet-gradle_deploy',            :git => 'https://github.com/LandRegistry-Ops/puppet-gradle_deploy.git',
+                                       :ref => '18e5ead89798366fc6f097ef3d9626e2dfe89158'
+mod 'camptocamp/archive',              '0.8.1'
 
 # Dependency modules
 mod 'croddy/make',                     '0.0.5'
