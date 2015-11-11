@@ -5,7 +5,7 @@
   :datadir: /etc/puppet/environments/%{environment}/hiera
 :hierarchy:
   - secrets/nodes/%{::fqdn}
-  - secrets/types/${::server_type}
+  - secrets/types/%{::server_type}
   - secrets/application_environment/%{::application_environment}
   - secrets/secrets
   - application_environment/%{::application_environment}
