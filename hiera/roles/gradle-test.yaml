@@ -41,10 +41,13 @@ applications:
     revision: 'master'
     vars:
       SETTINGS: 'config.DevelopmentConfig'
-      TITLE: 'gradle test env'
+      APPTITLE: ''
+      SERVICE: 'Gradle Service'
+      ENVIRONMENT: 'Integration'
       DISPLAY_LOGS: 'True'
       BASIC_AUTH_FORCE: 'False'
       BASIC_AUTH_USERNAME: 'username'
       BASIC_AUTH_PASSWORD: 'password'
+      HOMEADDR: 'localhost'
 
 profiles::postgresql::version: '9.4'
