@@ -10,6 +10,10 @@ postgres_databases:
     user: systemofrecord
     password: md511c5a6395e27555ef43eb7b05c76d7c1
     owner: systemofrecord
+  audit:
+    user: audit
+    password: md59b17b5b73604c92182a4575ab96f4be8
+    owner: audit
 
 postgres_users:
   deployment:
