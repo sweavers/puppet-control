@@ -37,8 +37,7 @@ class profiles::digitalregister_app(
 
   #  Install required packages for Python
 
-  $PKGLIST=['python','python-devel','python-pip']
-
+  $PKGLIST=['python','python-devel','python-pip', 'libxml2-devel', 'libxslt-devel']
 
   package{ $PKGLIST :
     ensure  => installed,
