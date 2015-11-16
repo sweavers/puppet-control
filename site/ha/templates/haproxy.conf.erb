@@ -16,9 +16,13 @@ defaults
     timeout http-keep-alive 10s
     timeout check           10s
     maxconn                 3000
-listen loadbalancer *:<%= @listen_port %>
+<% if @lb_instances.length > 0 -%>
+<% @lb_instances.each do |name,config| -%>
+listen <%= name %> *:<%= config['port'] %>
     balance roundrobin
-    option  httpchk GET <%= @healthcheck %>
-<% @backends.each do |config| -%>
-    server  <%= config.split(':')[0].split('.')[0] %> <%= config %> check
+    option httpchk GET  <%= config['healthcheck'] %>
+<% config['backends'].each do |backend| -%>
+    server <%= backend.split(':')[0] %> <%= backend %> check
+<% end -%>
+<% end -%>
 <% end -%>
