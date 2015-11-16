@@ -1,7 +1,7 @@
 #
 class es (
   $interface     = 'eth0',
-  $name          = 'elasticsearch',
+  $cluster_name  = 'elasticsearch',
   $manage_java   = true,
   $minimum_nodes = 1,
   $shards        = 5,
@@ -20,7 +20,7 @@ class es (
   }
   $repo_version = '1.7'
   $version      = '1.7.3'
-  $data_dir = "/var/lib/elasticsearch-data/${name}"
+  $data_dir = "/var/lib/elasticsearch-data/${cluster_name}"
 
   class { 'elasticsearch' :
     ensure       => present,
@@ -32,14 +32,14 @@ class es (
   }
 
   elasticsearch::plugin { 'royrusso/elasticsearch-HQ' :
-    instances => $name
+    instances => $cluster_name
   }
 
-  elasticsearch::instance { $name :
+  elasticsearch::instance { $cluster_name :
     config => {
-      'cluster.name'  => $name,
+      'cluster.name'  => $cluster_name,
       'node'          => {
-        'name'   => "${::hostname}-${name}",
+        'name'   => "${::hostname}-${cluster_name}",
         'master' => true,
         'data'   => true
       },
