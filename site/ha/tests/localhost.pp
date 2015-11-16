@@ -7,10 +7,10 @@ class { 'ha':
       'healthcheck' => '/',
       'backends'    => [ 'localhost:8080', 'localhost:8081']
     },
-    'test'          => {
+    'test'    => {
       'listen_port' => 9000,
       'healthcheck' => '/health',
       'backends'    => [ 'airbnb.com' ]
     }
   }
- }
+}
