@@ -1,16 +1,29 @@
 #
+# Hash example:
+# class { 'ha':
+#   virtual_ip   => '192.168.99.10',
+#   interface    => 'eth1',
+#   lb_instances => {
+#     'default' => {
+#       'port'        => 80,
+#       'healthcheck' => '/',
+#       'backends'    => [ 'localhost:8080', 'localhost:8081']
+#     },
+#     'test'          => {
+#       'listen_port' => 9000,
+#       'healthcheck' => '/health',
+#       'backends'    => [ 'airbnb.com' ]
+#     }
+#   }
+#  }
 class ha (
-  $listen_port = 80,
-  $healthcheck = '/',
-  $backends    = [],
+  $lb_instances = undef,
   $interface   = 'eth0',
   $virtual_ip  = undef,
 ) {
 
   include stdlib
-  validate_integer($listen_port)
-  validate_string($healthcheck)
-  validate_array($backends)
+  validate_hash($lb_instances)
   validate_string($interface)
   validate_string($virtual_ip)
 
