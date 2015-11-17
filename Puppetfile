@@ -37,7 +37,7 @@ mod 'puppet-gradle_deploy',            :git => 'https://github.com/LandRegistry-
 mod 'camptocamp/archive',              '0.8.1'
 
 # Dependency modules
-mod 'ceritsc/yum'                      '0.9.6'
+mod 'ceritsc/yum',                     '0.9.6'
 mod 'croddy/make',                     '0.0.5'
 mod 'darin/zypprepo',                  '1.0.2'
 mod 'garethr/erlang',                  '0.3.0'
