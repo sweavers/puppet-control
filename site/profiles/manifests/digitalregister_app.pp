@@ -125,8 +125,7 @@ class profiles::digitalregister_app(
   if $::puppet_role == 'digital-register-frontend' {
 
     # install pkgs requires for PDF geeneration
-    $FRNTEND_PKGS = ['cairo','pango','gdk-pixbuf2','libffi-devel',
-                    'libxslt-devel','libxml2-devel']
+    $FRNTEND_PKGS = ['cairo','pango','gdk-pixbuf2','libffi-devel']
 
     package{ $FRNTEND_PKGS :
       ensure  => installed,
