@@ -43,7 +43,7 @@
 class profiles::postgresqlha_nodea(
 
   $port          = 5432,
-  $version       = '9.4',
+  $version       = '9.3',
   $remote        = true,
   $dbroot        = '/postgres',
   $databases     = hiera_hash('postgres_databases',false),
@@ -52,27 +52,26 @@ class profiles::postgresqlha_nodea(
 
 ){
 
-  file { '/etc/repmgr/9.4/repmgr.conf':
+
+  file { "/etc/repmgr/${version}/repmgr.conf":
     ensure => file,
-    source => "/vagrant/puppet-control/site/profiles/files/postgres_repmgr_nodea.conf",
+    source => '/vagrant/puppet-control/site/profiles/files/postgres_repmgr_nodea.conf',
   }
 
   file { '/etc/keepalived/keepalived.conf':
     ensure => file,
-    source => "/vagrant/puppet-control/site/profiles/files/postgres_keepalived_nodea.conf",
+    source => '/vagrant/puppet-control/site/profiles/files/postgres_keepalived_nodea.conf',
   }
 
-  file { '/var/lib/pgsql/9.4/data/postgresql.conf':
+  file { "/var/lib/pgsql/${version}/data/postgresql.conf":
     ensure => file,
-    source => "/vagrant/puppet-control/site/profiles/files/postgres_postgresql.conf",
+    source => '/vagrant/puppet-control/site/profiles/files/postgres_postgresql.conf',
   }
 
-
-  file { '/var/lib/pgsql/9.4/data/pg_hba.conf':
+  file { "/var/lib/pgsql/${version}/data/pg_hba.conf":
     ensure => file,
-    source => "/vagrant/puppet-control/site/profiles/files/postgres_pg_hba.conf",
+    source => '/vagrant/puppet-control/site/profiles/files/postgres_pg_hba.conf',
   }
-
 
   service {'keepalived':
     ensure => running,

@@ -43,9 +43,9 @@
 class profiles::postgresql(
 
   $port          = 5432,
-  $version       = '9.3',
+  $version       = '9.4',
   $remote        = true,
-  $dbroot        = '/postgres',
+  $dbroot        = '/var/lib/pgsql/',
   $databases     = hiera_hash('postgres_databases',false),
   $users         = hiera_hash('postgres_users', false),
   $pg_hba_rule   = hiera_hash('pg_hba_rule', false)
@@ -75,7 +75,7 @@ class profiles::postgresql(
     datadir             => "${dbroot}/data",
     confdir             => "${dbroot}/data",
     needs_initdb        => true,
-    service_name        => 'postgresql', # confirm on ubuntu
+    service_name        => "postgresql-${version}", # confirm on ubuntu
     require             => File[$dbroot]
   } ->
 
