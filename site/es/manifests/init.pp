@@ -79,7 +79,18 @@ class es (
     require => Package ['elasticsearch']
   }
 
+  # Install jq - required for ESbackup script
   package { 'jq' :
     ensure => installed
+  }
+
+  # ensure ESBackup script is installed
+  file { '/usr/bin/elasticsearch_snapshot':
+    ensure => present,
+    path   => '/usr/local/bin/elasticsearch_snapshot',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    source => 'puppet:///modules/profiles/elasticsearch_snapshot.sh'
   }
 }
