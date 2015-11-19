@@ -4,7 +4,8 @@ class { 'ha' :
   lb_instances => {
     'elasticsearch' => {
       'backends'    => [ '192.168.99.11:9200', '192.168.99.12:9200', '192.168.99.13:9200' ],
-      'healthcheck' => '/'
+      'healthcheck' => '/',
+      'port'        => 80
     }
   }
 }

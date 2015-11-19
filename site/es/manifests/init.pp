@@ -20,7 +20,9 @@ class es (
   }
   $repo_version = '1.7'
   $version      = '1.7.3'
-  $data_dir = "/var/lib/elasticsearch-data/${cluster_name}"
+  $data_dir = "/var/lib/elasticsearch/${cluster_name}/data"
+  $backup_dir = '/backups'
+  $log_dir =  "/var/lib/elasticsearch/${cluster_name}/logs"
 
   class { 'elasticsearch' :
     ensure       => present,
@@ -36,8 +38,11 @@ class es (
   }
 
   elasticsearch::instance { $cluster_name :
-    config => {
+    datadir => $data_dir,
+    config  => {
       'cluster.name'  => $cluster_name,
+      'path.repo'     => "[${backup_dir}]",
+      'path.logs'     => $log_dir,
       'node'          => {
         'name'   => "${::hostname}-${cluster_name}",
         'master' => true,
@@ -66,4 +71,15 @@ class es (
     }
   }
 
+  #Create Elasticsearch backup directory
+  file { $backup_dir :
+    ensure  => directory,
+    owner   => elasticsearch,
+    group   => elasticsearch,
+    require => Package ['elasticsearch']
+  }
+
+  package { 'jq' :
+    ensure => installed
+  }
 }
