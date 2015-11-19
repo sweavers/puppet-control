@@ -4,9 +4,10 @@
 # Creates (backup) repo if required
 # Creates new snapshots
 # Tidy up old snapshots
-
+ESHOST=$1
+USAGE=`basename $0`" [ELASTICSERCH HOST] e.g. localhost:9200"
 TIMESTAMP=$(date +%d%m%y-%H%M)
-RETENTION=-1 # Retention period in days
+RETENTION=30 # Retention period in days
 
 # Purely cosmetic function to prettify output
 # Set OUTPUT_LABEL to change the label
@@ -26,9 +27,12 @@ function output() {
   done
 }
 
+# Check that a elastic search host has been specified
+[ -z "$ESHOST" ] && echo -e "ERROR - You must specify an elastic search host! \n Usage: ${USAGE}" | output ERROR && exit 1
+
 # Check if  a (backup) repo is already registered - register if not
-if [[ $(curl -s -XGET 'http://localhost:9200/_snapshot') == '{}' ]]; then
-  OUTPUT=$(curl -s -XPUT 'http://localhost:9200/_snapshot/backups?wait_for_completion=true' -d '{
+if [[ $(curl -s -XGET "http://${ESHOST}/_snapshot") == '{}' ]]; then
+  OUTPUT=$(curl -s -XPUT "http://${ESHOST}/_snapshot/backups?wait_for_completion=true" -d '{
     "type": "fs",
     "settings": {
       "location": "/backups",
@@ -45,7 +49,7 @@ else
 fi
 
 # Create new snapshot
-OUTPUT=$(curl -s -XPUT "http://localhost:9200/_snapshot/backups/${TIMESTAMP}?wait_for_completion=true")
+OUTPUT=$(curl -s -XPUT "http://${ESHOST}/_snapshot/backups/${TIMESTAMP}?wait_for_completion=true")
 if [[ `echo $OUTPUT | grep -o SUCCESS | wc -l` -ge 1 ]]; then
   echo "Sucsessfully created snapshot ${TIMESTAMP}" | output SUCCESS
 else
@@ -54,7 +58,7 @@ fi
 
 # # Tidy up old snapshots
 # Get snapshot info
-JSON=$(curl -s -XGET 'http://localhost:9200/_snapshot/backups/_all')
+JSON=$(curl -s -XGET "http://${ESHOST}/_snapshot/backups/_all")
 # return only snapshot name and end time
 JSON=$(echo $JSON | jq '.snapshots[] | "\(.snapshot) \(.end_time)"' | sed 's/"//g')
 # pair snapshot and timestamp
@@ -64,10 +68,10 @@ for PAIR in $JSON; do
   TIMESTAMP=$(echo $PAIR | cut -f 2 -d ',')
   DAYS_SINCE=$(((`date -d "$timestamp" +%s` - `date +%s`)/86400))
   # debug only
-  #echo " snapshot = ${SNAPSHOT} timstamp = ${TIMESTAMP} ${DAYS_SINCE} days old"
+  # echo " snapshot = ${SNAPSHOT} timstamp = ${TIMESTAMP} ${DAYS_SINCE} days old"
   if [[ $DAYS_SINCE -gt $RETENTION ]]; then
     echo "Deleting old snapshot ${SNAPSHOT}" | output WARN
-    OUTPUT=$(curl -s -XDELETE "http://localhost:9200/_snapshot/backups/${SNAPSHOT}")
+    OUTPUT=$(curl -s -XDELETE "http://${ESHOST}/_snapshot/backups/${SNAPSHOT}")
     if [[ $OUTPUT == '{"acknowledged":true}' ]]; then
       echo "Sucsessfully deleted old snapshot ${SNAPSHOT}" | output SUCCESS
     else
