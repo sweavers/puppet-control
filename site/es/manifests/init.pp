@@ -20,7 +20,9 @@ class es (
   }
   $repo_version = '1.7'
   $version      = '1.7.3'
-  $data_dir = "/var/lib/elasticsearch-data/${cluster_name}"
+  $data_dir = "/var/lib/elasticsearch/${cluster_name}/data"
+  $backup_dir = '/backups'
+  $log_dir =  "/var/lib/elasticsearch/${cluster_name}/logs"
 
   class { 'elasticsearch' :
     ensure       => present,
@@ -36,8 +38,11 @@ class es (
   }
 
   elasticsearch::instance { $cluster_name :
-    config => {
+    datadir => $data_dir,
+    config  => {
       'cluster.name'  => $cluster_name,
+      'path.repo'     => "[${backup_dir}]",
+      'path.logs'     => $log_dir,
       'node'          => {
         'name'   => "${::hostname}-${cluster_name}",
         'master' => true,
@@ -66,4 +71,26 @@ class es (
     }
   }
 
+  #Create Elasticsearch backup directory
+  file { $backup_dir :
+    ensure  => directory,
+    owner   => elasticsearch,
+    group   => elasticsearch,
+    require => Package ['elasticsearch']
+  }
+
+  # Install jq - required for ESbackup script
+  package { 'jq' :
+    ensure => installed
+  }
+
+  # ensure ESBackup script is installed
+  file { '/usr/bin/elasticsearch_snapshot':
+    ensure => present,
+    path   => '/usr/local/bin/elasticsearch_snapshot',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    source => 'puppet:///modules/profiles/elasticsearch_snapshot.sh'
+  }
 }
