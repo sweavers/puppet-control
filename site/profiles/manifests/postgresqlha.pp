@@ -50,34 +50,104 @@ class profiles::postgresqlha(
     $databases     = hiera_hash('postgres_databases',false),
     $users         = hiera_hash('postgres_users', false),
     $pg_hba_rule   = hiera_hash('pg_hba_rule', false),
-    $dbs           = hiera_hash('postgres_dbs', false)
+    $dbs           = hiera_hash('postgres_dbs', false),
+    $repmgr_hash   = 'md58ea99ab1ec3bd8d8a6162df6c8e1ddcd'
 
   ){
 
+  include ::stdlib
 
-  package {"repmgr${shortversion}":
-    ensure => present,
-    before => [
-        File["/etc/repmgr/${version}/auto_failover.sh"],
-        File["/etc/repmgr/${version}/repmgr.conf"],
-    ],
+  $pkglist = [
+    'rsync',
+    'keepalived',
+    'haproxy',
+    "repmgr${shortversion}"
+  ]
+  ensure_packages($pkglist)
+
+  user { 'postgres' :
+    ensure     => present,
+    comment    => 'PostgreSQL Database Server',
+    system     => true,
+    home       => $dbroot,
+    managehome => true,
+    shell      => '/bin/bash',
   }
 
-  package {'rsync':
-    ensure => present,
+  file { $dbroot :
+    ensure  => 'directory',
+    owner   => 'postgres',
+    group   => 'postgres',
+    mode    => '0750',
+    require => User[postgres]
   }
 
-  package {'keepalived':
-    ensure => present,
+  class { 'postgresql::globals' :
+    manage_package_repo => true,
+    version             => $version,
+    datadir             => "${dbroot}/${version}/data",
+    confdir             => "${dbroot}/${version}/data",
+    needs_initdb        => true,
+    service_name        => "postgresql-${version}", # confirm on ubuntu
+    require             => File[$dbroot],
   }
 
-  package {'haproxy':
-    ensure => present,
+  # Set bind address to 0.0.0.0 if remote is enabled, 127.0.0.1 if not
+  # Merge remote into an address array if it's anything other than a boolean
+  if $remote == true {
+    $bind = '*'
+  } elsif $remote == false {
+    $bind = '127.0.0.1'
+  } else {
+    $bind_array = delete(any2array($remote),'127.0.0.1')
+    $bind = join(concat(['127.0.0.1'],$bind_array),',')
   }
+
+  class { 'postgresql::server' :
+    port                    => $port,
+    listen_addresses        => $bind,
+    # The following needs to be replaced with propper hba managment
+    ip_mask_allow_all_users => '0.0.0.0/0',
+    require                 => Class['postgresql::globals'],
+    before                  => Package['repmgr94']
+  }
+
+  $pg_conf = '/var/lib/pgsql/9.4/data/postgresql.conf'
+  postgresql_conf { 'archive_command':
+    target  => $pg_conf,
+    value   => 'cd .',
+    require => Class['postgresql::server'],
+  }
+
+  if $::osfamily == 'RedHat' {
+    file { '/usr/lib/systemd/system/postgresql.service':
+      ensure => link,
+      target => "/usr/lib/systemd/system/postgresql-${version}.service",
+      force  => true,
+      before => Class[Postgresql::Server]
+    }
+  }
+
+  postgresql::server::role { 'repmgr':
+    #ensure        => present,
+    login         => true,
+    superuser     => true,
+    replication   => true,
+    password_hash => $repmgr_hash
+  } ->
+
+  postgresql::server::database { 'repmgr' :
+    #ensure => present,
+    owner  => 'repmgr'#,
+    #require => Postgresql::server::role['repmgr']
+  }
+
+
 
   file { "/etc/repmgr/${version}/auto_failover.sh":
-    ensure => file,
-    source => '/vagrant/puppet-control/site/profiles/files/postgres_auto_failover.sh',
+    ensure  => file,
+    source  => '/vagrant/puppet-control/site/profiles/files/postgres_auto_failover.sh',
+    require => Package['repmgr94']
   }
 
   file { '/etc/haproxy/haproxy.cfg':
@@ -105,55 +175,6 @@ class profiles::postgresqlha(
     default: { $postgis_version = 'postgis2_93' }
   }
 
-  # Set bind address to 0.0.0.0 if remote is enabled, 127.0.0.1 if not
-  # Merge remote into an address array if it's anything other than a boolean
-  if $remote == true {
-    $bind = '*'
-  } elsif $remote == false {
-    $bind = '127.0.0.1'
-  } else {
-    $bind_array = delete(any2array($remote),'127.0.0.1')
-    $bind = join(concat(['127.0.0.1'],$bind_array),',')
-  }
-
-  class { 'postgresql::globals':
-    manage_package_repo => true,
-    version             => $version,
-    datadir             => "${dbroot}/${version}/data",
-    confdir             => "${dbroot}/${version}/data",
-    needs_initdb        => true,
-    service_name        => "postgresql-${version}", # confirm on ubuntu
-    require             => File[$dbroot]
-  } ->
-
-  class { 'postgresql::server':
-    port                    => $port,
-    listen_addresses        => $bind,
-    # The following needs to be replaced with propper hba managment
-    ip_mask_allow_all_users => '0.0.0.0/0',
-    before                  => [
-          Package[ "repmgr${shortversion}"],
-          File["/var/lib/pgsql/${version}/data/postgresql.conf"],
-    ],
-  }
-
-  user { 'postgres':
-    ensure     => present,
-    comment    => 'PostgreSQL Database Server',
-    system     => true,
-    home       => $dbroot,
-    managehome => true,
-    shell      => '/bin/bash',
-  }
-
-  file { $dbroot:
-    ensure  => 'directory',
-    owner   => 'postgres',
-    group   => 'postgres',
-    mode    => '0750',
-    require => User[postgres]
-  }
-
   file { 'PSQL History':
     ensure  => 'file',
     path    => "${dbroot}/.psql_history",
@@ -163,17 +184,6 @@ class profiles::postgresqlha(
     require => File[$dbroot]
   }
 
-  if $::osfamily == 'RedHat' {
-    file { '/usr/lib/systemd/system/postgresql.service':
-      ensure => link,
-      target => "/usr/lib/systemd/system/postgresql-${version}.service",
-      force  => true,
-      before => Class[Postgresql::Server]
-    }
-  }
-
-
-  include stdlib
   include postgresql::client
   include postgresql::server::contrib
   #include postgresql::server::postgis
@@ -186,14 +196,11 @@ class profiles::postgresqlha(
 
   if $users {
     create_resources('postgresql::server::role', $users)
-    if $dbs {
-      create_resources('postgresql::server::database', $dbs)
-    }
   }
 
   if $databases {
     create_resources('postgresql::server::db', $databases)
-  } ->
+  }
 
   #Will allow hba rules to be set for specific users/dbs via hiera
   if $pg_hba_rule {
@@ -203,10 +210,10 @@ class profiles::postgresqlha(
 
 
   file { "/etc/repmgr/${version}/repmgr.conf":
-    ensure => file,
-    source => '/vagrant/puppet-control/site/profiles/files/postgres_repmgr_nodea.conf',
-    before => Exec['master_register_repmgrd'],
-
+    ensure  => file,
+    source  => '/vagrant/puppet-control/site/profiles/files/postgres_repmgr_nodea.conf',
+    require => Package['repmgr94'], ###
+    before  => Exec['master_register_repmgrd'],
   }
 
   file { '/etc/keepalived/keepalived.conf':
@@ -214,10 +221,10 @@ class profiles::postgresqlha(
     source => '/vagrant/puppet-control/site/profiles/files/postgres_keepalived_nodea.conf',
   }
 
-  file { "/var/lib/pgsql/${version}/data/postgresql.conf":
-    ensure => file,
-    source => '/vagrant/puppet-control/site/profiles/files/postgres_postgresql.conf',
-  }
+  # file { "/var/lib/pgsql/${version}/data/postgresql.conf":
+  #   ensure => file,
+  #   source => '/vagrant/puppet-control/site/profiles/files/postgres_postgresql.conf',
+  # }
 
 
 
@@ -233,21 +240,30 @@ class profiles::postgresqlha(
   }
 
 
+  file { '/usr/lib/systemd/system/repmgr.service' :
+    ensure  => file,
+    owner   => 'postgres',
+    group   => 'postgres',
+    mode    => '0664',
+    content => template('profiles/repmgrd.service.erb')
+  }
 
   file { '/root/.pgpass':
     ensure => file,
     source => '/vagrant/puppet-control/site/profiles/files/.pgpass',
     mode   => '0600',
-  } ->
+  }
 
   exec { 'master_register_repmgrd':
     command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register",
     user    => 'root',
+    require => File['/root/.pgpass']
   } ->
 
-  exec { 'start_repmgrd':
-    command => "/usr/pgsql-${version}/bin/repmgrd -f /etc/repmgr/${version}/repmgr.conf --daemonize",
-    user    => 'postgres',
+  service { 'repmgr' :
+    ensure  => running,
+    enable  => true,
+    require => File['/usr/lib/systemd/system/repmgr.service']
   }
 
 }

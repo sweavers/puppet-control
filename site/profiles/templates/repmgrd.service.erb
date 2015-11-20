@@ -1,0 +1,19 @@
+# SystemD service script for RepMgr
+
+[Unit]
+Description=Replication Manager daemon
+After=network.target
+
+[Service]
+Type=simple
+PIDFile=/var/run/repmgr
+User=postgres
+Group=postgres
+WorkingDirectory=<%= @dbroot %>
+ExecStart=/usr/pgsql-<%= @version %>/bin/repmgrd -f /etc/repmgr/<%= @version %>/repmgr.conf
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
