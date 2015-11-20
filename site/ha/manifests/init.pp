@@ -67,10 +67,15 @@ class ha (
     notify  => Service['keepalived']
   }
 
+  selboolean { 'haproxy_connect_any' :
+    value      => 'on',
+    persistent => true,
+  }
+
   service { 'keepalived':
     ensure    => running,
     enable    => true,
-    require   => Package['keepalived'],
+    require   => [ Package['keepalived'], Selboolean['haproxy_connect_any'] ],
     subscribe => File[$keepalived_cfg]
   }
 
