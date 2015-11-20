@@ -30,7 +30,7 @@ profiles::ntp::ntp_restrict_array:
   - '127.0.1.0'
   - '127.0.1.1'
 
-environment: development
+environment: production
 
 #Add test user NB must be removed (in hiera)for all internal and AWS deployments
 accounts:
