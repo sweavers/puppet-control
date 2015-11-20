@@ -49,7 +49,8 @@ class profiles::postgresqlha(
     $dbroot        = "/var/lib/pgsql/${version}",
     $databases     = hiera_hash('postgres_databases',false),
     $users         = hiera_hash('postgres_users', false),
-    $pg_hba_rule   = hiera_hash('pg_hba_rule', false)
+    $pg_hba_rule   = hiera_hash('pg_hba_rule', false),
+    $dbs           = hiera_hash('postgres_dbs', false)
 
   ){
 
@@ -80,13 +81,17 @@ class profiles::postgresqlha(
   }
 
   file { '/etc/haproxy/haproxy.cfg':
-    ensure => file,
-    source => '/vagrant/puppet-control/site/profiles/files/postgres_haproxy.cfg',
+    ensure  => file,
+    source  => '/vagrant/puppet-control/site/profiles/files/postgres_haproxy.cfg',
+    require => Package['haproxy'],
+    notify  => Service['haproxy']
   }
 
   service {'haproxy':
-    ensure => running,
-    enable => true,
+    ensure    => running,
+    enable    => true,
+    require   => File['/etc/haproxy/haproxy.cfg'],
+    subscribe => File['/etc/haproxy/haproxy.cfg']
   }
 
   # service {"postgresql-${version}":
@@ -131,69 +136,6 @@ class profiles::postgresqlha(
           File["/var/lib/pgsql/${version}/data/postgresql.conf"],
     ],
   }
-
-  # postgresql::server::pg_hba_rule { 'repmgr_local_rule':
-  #   description => 'repmgr local access',
-  #   type        => 'host',
-  #   database    => 'repmgr',
-  #   user        => 'repmgr',
-  #   address     => '127.0.0.1/32',
-  #   auth_method => 'trust',
-  # }
-  #
-  # postgresql::server::pg_hba_rule { 'repmgr_nodea_rule':
-  #   description => 'repmgr nodea access',
-  #   type        => 'host',
-  #   database    => 'repmgr',
-  #   user        => 'repmgr',
-  #   address     => '192.168.33.10/32',
-  #   auth_method => 'trust',
-  # }
-  #
-  # postgresql::server::pg_hba_rule { 'replication_nodea_rule':
-  #   description => 'repmgr nodea access',
-  #   type        => 'host',
-  #   database    => 'replication',
-  #   user        => 'all',
-  #   address     => '192.168.33.10/32',
-  #   auth_method => 'trust',
-  # }
-  #
-  # postgresql::server::pg_hba_rule { 'repmgr_nodeb_rule':
-  #   description => 'repmgr nodeb access',
-  #   type        => 'host',
-  #   database    => 'repmgr',
-  #   user        => 'repmgr',
-  #   address     => '192.168.33.20/32',
-  #   auth_method => 'trust',
-  # }
-  #
-  # postgresql::server::pg_hba_rule { 'replication_nodeb_rule':
-  #   description => 'repmgr nodeb access',
-  #   type        => 'host',
-  #   database    => 'replication',
-  #   user        => 'all',
-  #   address     => '192.168.33.20/32',
-  #   auth_method => 'trust',
-  # }
-  #
-  # postgresql::server::pg_hba_rule { 'repmgr_nodec_rule':
-  #   description => 'repmgr nodec access',
-  #   type        => 'host',
-  #   database    => 'repmgr',
-  #   user        => 'repmgr',
-  #   address     => '192.168.33.30/32',
-  #   auth_method => 'trust',
-  # }
-  #
-  # postgresql::server::pg_hba_rule { 'replication_nodec_rule':
-  #   description => 'repmgr nodec access',
-  #   type        => 'host',
-  #   database    => 'replication',
-  #   user        => 'all',
-  #   address     => '192.168.33.30/32',
-  #   auth_method => 'trust',
-  # }
 
   user { 'postgres':
     ensure     => present,
@@ -242,16 +184,23 @@ class profiles::postgresqlha(
 
   include postgresql::lib::devel
 
-  if $databases {
-    create_resources('postgresql::server::db', $databases)
-  }
   if $users {
     create_resources('postgresql::server::role', $users)
+    if $dbs {
+      create_resources('postgresql::server::database', $dbs)
+    }
   }
+
+  if $databases {
+    create_resources('postgresql::server::db', $databases)
+  } ->
+
   #Will allow hba rules to be set for specific users/dbs via hiera
   if $pg_hba_rule {
     create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
   }
+
+
 
   file { "/etc/repmgr/${version}/repmgr.conf":
     ensure => file,
@@ -271,6 +220,8 @@ class profiles::postgresqlha(
   }
 
 
+
+
   # file { '/var/lib/pgsql/data/pg_hba.conf':
   #   ensure => file,
   #   source => '/vagrant/puppet-control/site/profiles/files/postgres_pg_hba.conf',
@@ -280,6 +231,14 @@ class profiles::postgresqlha(
     ensure => running,
     enable => true,
   }
+
+
+
+  file { '/root/.pgpass':
+    ensure => file,
+    source => '/vagrant/puppet-control/site/profiles/files/.pgpass',
+    mode   => '0600',
+  } ->
 
   exec { 'master_register_repmgrd':
     command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register",
