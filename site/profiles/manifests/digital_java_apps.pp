@@ -22,10 +22,4 @@ class profiles::digital_java_apps(){
       provider => 'rpm'
     }
 
-    $PKGLIST=['libjpeg-turbo-devel', 'zlib-devel']
-
-    package{ $PKGLIST :
-      ensure => installed,
-    }
-
 }

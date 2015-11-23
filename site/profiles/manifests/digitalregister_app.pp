@@ -37,7 +37,8 @@ class profiles::digitalregister_app(
 
   #  Install required packages for Python
 
-  $PKGLIST=['python','python-devel','python-pip', 'libxml2-devel', 'libxslt-devel']
+  $PKGLIST=['python','python-devel','python-pip', 'libxml2-devel', 'libxslt-devel',
+    'libjpeg-turbo-devel', 'zlib-devel']
 
   package{ $PKGLIST :
     ensure  => installed,
@@ -77,7 +78,7 @@ class profiles::digitalregister_app(
       before   => File['/etc/ssl/keys/']
     }
   }
-  
+
   if ($api_ssl == true) or ($frontend_ssl == true) {
 
     # Set up Nginx proxy
