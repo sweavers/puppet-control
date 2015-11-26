@@ -46,7 +46,7 @@ class profiles::postgresqlha(
     $version       = '9.4',
     $shortversion  = '94',
     $remote        = true,
-    $dbroot        = "/var/lib/pgsql/${version}",
+    $dbroot        = "/var/lib/pgsql",
     $databases     = hiera_hash('postgres_databases',false),
     $users         = hiera_hash('postgres_users', false),
     $pg_hba_rule   = hiera_hash('pg_hba_rule', false),
@@ -83,13 +83,14 @@ class profiles::postgresqlha(
   }
 
   class { 'postgresql::globals' :
-    manage_package_repo => true,
-    version             => $version,
-    datadir             => "${dbroot}/${version}/data",
-    confdir             => "${dbroot}/${version}/data",
-    needs_initdb        => true,
-    service_name        => "postgresql-${version}", # confirm on ubuntu
-    require             => File[$dbroot],
+    manage_package_repo  => true,
+    version              => $version,
+    datadir              => "${dbroot}/${version}/data",
+    confdir              => "${dbroot}/${version}/data",
+    postgresql_conf_path => '/tmp/postgresql.conf',
+    needs_initdb         => true,
+    service_name         => "postgresql-${version}", # confirm on ubuntu
+    require              => File[$dbroot],
   }
 
   # Set bind address to 0.0.0.0 if remote is enabled, 127.0.0.1 if not
@@ -103,21 +104,70 @@ class profiles::postgresqlha(
     $bind = join(concat(['127.0.0.1'],$bind_array),',')
   }
 
-  class { 'postgresql::server' :
+  class { 'postgresql::server':
     port                    => $port,
-    listen_addresses        => $bind,
-    # The following needs to be replaced with propper hba managment
+    listen_addresses        => '127.0.0.5',
     ip_mask_allow_all_users => '0.0.0.0/0',
     require                 => Class['postgresql::globals'],
-    before                  => Package['repmgr94']
+    before                  => Package['repmgr94'],
   }
 
   $pg_conf = '/var/lib/pgsql/9.4/data/postgresql.conf'
-  postgresql_conf { 'archive_command':
-    target  => $pg_conf,
-    value   => 'cd .',
-    require => Class['postgresql::server'],
-  }
+
+  # postgresql_conf { 'archive_command':
+  #   target  => $pg_conf,
+  #   value   => 'cd .',
+  #   require => Class['postgresql::server'],
+  # }
+  #
+  # postgresql_conf { 'wal_level':
+  #   target  => $pg_conf,
+  #   value   => 'hot_standby',
+  #   require => Class['postgresql::server'],
+  # }
+  #
+  # postgresql_conf { 'archive_mode':
+  #   target  => $pg_conf,
+  #   value   => 'on',
+  #   require => Class['postgresql::server'],
+  # }
+  #
+  # postgresql_conf { 'max_wal_senders':
+  #   target  => $pg_conf,
+  #   value   => '10',
+  #   require => Class['postgresql::server'],
+  # }
+  #
+  # postgresql_conf { 'wal_keep_segments':
+  #   target  => $pg_conf,
+  #   value   => '5000',   # 80 GB required on pg_xlog
+  #   require => Class['postgresql::server'],
+  # }
+  #
+  # postgresql_conf { 'hot_standby':
+  #   target  => $pg_conf,
+  #   value   => 'on',
+  #   require => Class['postgresql::server'],
+  # }
+  #
+  # postgresql_conf { 'shared_preload_libraries':
+  #   target  => $pg_conf,
+  #   value   => 'repmgr_funcs',
+  #   require => Class['postgresql::server'],
+  # }
+  #
+  # postgresql_conf { 'max_replication_slots':
+  #   target  => $pg_conf,
+  #   value   => '10',
+  #   require => Class['postgresql::server'],
+  # }
+  #
+  # postgresql_conf { 'synchronous_commit':
+  #   target  => $pg_conf,
+  #   value   => 'on',
+  #   require => Class['postgresql::server'],
+  # }
+
 
   if $::osfamily == 'RedHat' {
     file { '/usr/lib/systemd/system/postgresql.service':
@@ -244,6 +294,14 @@ class profiles::postgresqlha(
     group   => 'postgres',
     mode    => '0664',
     content => template('profiles/repmgrd.service.erb')
+  } ->
+
+  file { '/var/lib/pgsql/.pgpass':
+    ensure => file,
+    source => 'puppet:///extra_files/.pgpass',
+    owner   => 'postgres',
+    group   => 'postgres',
+    mode   => '0600',
   } ->
 
   file { '/root/.pgpass':

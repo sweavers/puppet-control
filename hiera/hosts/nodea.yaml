@@ -40,28 +40,28 @@ pg_hba_rule:
     user: all
     address: 192.168.33.10/32
     auth_method: trust
-  repmgr_nodea_rule:
+  repmgr_nodeb_rule:
     description: repmgr nodeb access
     type: host
     database: repmgr
     user: repmgr
     address: 192.168.33.20/32
     auth_method: trust
-  replication_nodea_rule:
+  replication_nodeb_rule:
     description: repmgr nodeb access
     type: host
     database: replication
     user: all
     address: 192.168.33.20/32
     auth_method: trust
-  repmgr_nodea_rule:
+  repmgr_nodec_rule:
     description: repmgr nodec access
     type: host
     database: repmgr
     user: repmgr
     address: 192.168.33.30/32
     auth_method: trust
-  replication_nodea_rule:
+  replication_nodec_rule:
     description: repmgr nodec access
     type: host
     database: replication
