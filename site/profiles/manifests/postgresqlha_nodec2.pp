@@ -41,7 +41,7 @@
 #
 
 
-class profiles::postgresqlha_nodeb2(
+class profiles::postgresqlha_nodec2(
 
     $port          = 5432,
     $version       = '9.4',
@@ -264,7 +264,7 @@ class profiles::postgresqlha_nodeb2(
 
   file { "/etc/repmgr/${version}/repmgr.conf":
     ensure  => file,
-    source  => 'puppet:///extra_files/postgres_repmgr_nodeb.conf',
+    source  => 'puppet:///extra_files/postgres_repmgr_nodec.conf',
     require => Package["repmgr${shortversion}"],
     before  => Exec['standby_register_repmgrd'],
   }
@@ -348,7 +348,7 @@ class profiles::postgresqlha_nodeb2(
     command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register",
     user    => 'root',
     require => File['/root/.pgpass'],
-    unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=nodeb\"",
+    unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=nodec\"",
     #onlyif  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep -v '* master' | grep host=nodea"],
   } ->
 

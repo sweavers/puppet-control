@@ -1,7 +1,7 @@
 ---
 
 classes:
-  - profiles::postgresqlha_nodec
+  - profiles::postgresqlha_nodec2
 
 postgres_users:
   deployment:
