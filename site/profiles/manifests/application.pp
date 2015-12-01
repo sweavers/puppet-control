@@ -6,7 +6,15 @@ class profiles::application (
   include ::stdlib
 
   if $applications {
-    create_resources('wsgi::application', $applications)
+    # Dirty hack to address hard coded logging location in manage.py
+    file { '/var/log/applications/' :
+      ensure => directory,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755'
+    }
+    create_resources('wsgi::application', $applications,
+      {require => File['/var/log/applications/']})
   }
 
 }
