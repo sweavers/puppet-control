@@ -41,7 +41,7 @@
 #
 
 
-class profiles::postgresqlha_nodeb(
+class profiles::postgresqlha_nodeb2(
 
     $port          = 5432,
     $version       = '9.4',
@@ -92,12 +92,12 @@ class profiles::postgresqlha_nodeb(
     confdir              => "${dbroot}/${version}/data",
     postgresql_conf_path => $pg_conf,
     needs_initdb         => true,
-    service_name         => "postgresql-${version}", # confirm on ubuntu
+    service_name         => "postgresql-${version}",
     require              => File[$dbroot],
   }
 
-  # Set bind address to 0.0.0.0 if remote is enabled, 127.0.0.1 if not
-  # Merge remote into an address array if it's anything other than a boolean
+  # # Set bind address to 0.0.0.0 if remote is enabled, 127.0.0.1 if not
+  # # Merge remote into an address array if it's anything other than a boolean
   if $remote == true {
     $bind = '*'
   } elsif $remote == false {
@@ -112,7 +112,7 @@ class profiles::postgresqlha_nodeb(
     listen_addresses        => $bind,
     ip_mask_allow_all_users => '0.0.0.0/0',
     require                 => Class['postgresql::globals'],
-    before                  => Package['repmgr94']
+    before                  => Package["repmgr${shortversion}"],
   }
 
   postgresql_conf { 'archive_command':
@@ -204,11 +204,11 @@ class profiles::postgresqlha_nodeb(
   #   enable => true,
   # }
 
-  case $version {
-    '9.3': { $postgis_version = 'postgis2_93' }
-    '9.4': { $postgis_version = 'postgis2_94' }
-    default: { $postgis_version = 'postgis2_93' }
-  }
+  # case $version {
+  #   '9.3': { $postgis_version = 'postgis2_93' }
+  #   '9.4': { $postgis_version = 'postgis2_94' }
+  #   default: { $postgis_version = 'postgis2_93' }
+  # }
 
   file { 'PSQL History':
     ensure  => 'file',
@@ -220,7 +220,7 @@ class profiles::postgresqlha_nodeb(
   }
 
   include postgresql::client
-  include postgresql::server::contrib
+  #include postgresql::server::contrib
   #include postgresql::server::postgis
 
   # package { $postgis_version :
@@ -238,9 +238,9 @@ class profiles::postgresqlha_nodeb(
   # }
   #
   #Will allow hba rules to be set for specific users/dbs via hiera
-  if $pg_hba_rule {
-    create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
-  }
+  # if $pg_hba_rule {
+  #   create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
+  # }
 
 
 
@@ -261,9 +261,6 @@ class profiles::postgresqlha_nodeb(
   #   source => 'puppet:///extra_files/postgres_postgresql.conf',
   # }
 
-
-
-
   # file { '/var/lib/pgsql/data/pg_hba.conf':
   #   ensure => file,
   #   source => 'puppet:///extra_files/postgres_pg_hba.conf',
@@ -282,11 +279,11 @@ class profiles::postgresqlha_nodeb(
   #   password_hash => $repmgr_hash
   # } ->
 
-  postgresql::server::database { 'repmgr':
-    #ensure => present,
-    owner  => 'repmgr'#,
-    #require => Postgresql::server::role['repmgr']
-  } ->
+  # postgresql::server::database { 'repmgr':
+  #   #ensure => present,
+  #   owner  => 'repmgr'#,
+  #   #require => Postgresql::server::role['repmgr']
+  # } ->
 
   file { '/usr/lib/systemd/system/repmgr.service':
     ensure  => file,
@@ -310,15 +307,15 @@ class profiles::postgresqlha_nodeb(
     mode   => '0600',
   } ->
 
-  exec { 'delete_data_dir':
-    command => "rm -rf /var/lib/pgsql/${version}/data/*",
-    user    => root,
-    require => Package["repmgr${shortversion}"],
-    unless  => "su - postgres -c 'psql -c \"select pg_is_in_recovery();\" | grep \"^ t$\"'",
-  } ->
+  # exec { 'delete_data_dir':
+  #   command => "rm -rf /var/lib/pgsql/${version}/data/*",
+  #   user    => root,
+  #   require => Package["repmgr${shortversion}"],
+  #   unless  => "su - postgres -c 'psql -c \"select pg_is_in_recovery();\" | grep \"^ t$\"'",
+  # } ->
 
   exec { 'clone_database_master':
-    command => "/usr/pgsql-${version}/bin/repmgr -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr --verbose standby clone nodea",
+    command => "/usr/pgsql-${version}/bin/repmgr -D /var/lib/pgsql/${version}/data/ -U repmgr --verbose standby clone nodea -F",
     user    => 'postgres',
     cwd     => "/etc/repmgr/${version}/",
     unless  => "su - postgres -c 'psql -c \"select pg_is_in_recovery();\" | grep \"^ t$\"'",

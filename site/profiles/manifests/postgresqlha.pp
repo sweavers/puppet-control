@@ -83,10 +83,6 @@ class profiles::postgresqlha(
     require => User[postgres]
   }
 
-
-
-
-
   class { 'postgresql::globals' :
     manage_package_repo  => true,
     version              => $version,
@@ -116,8 +112,6 @@ class profiles::postgresqlha(
     require                 => Class['postgresql::globals'],
     before                  => Package['repmgr94'],
   }
-
-
 
   postgresql_conf { 'archive_command':
     target  => $pg_conf,
@@ -172,7 +166,6 @@ class profiles::postgresqlha(
     value   => 'on',
     require => Class['postgresql::server'],
   }
-
 
   if $::osfamily == 'RedHat' {
     file { '/usr/lib/systemd/system/postgresql.service':
@@ -247,6 +240,9 @@ class profiles::postgresqlha(
     create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
   }
 
+  # service { "postgresql-${version}" :
+  #
+  # }
 
 
   file { "/etc/repmgr/${version}/repmgr.conf":
@@ -313,7 +309,7 @@ class profiles::postgresqlha(
     ensure => file,
     source => 'puppet:///extra_files/.pgpass',
     mode   => '0600',
-  }
+  } ->
 
   exec { 'master_register_repmgrd':
     command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register",
@@ -326,6 +322,11 @@ class profiles::postgresqlha(
     ensure  => running,
     enable  => true,
     require => File['/usr/lib/systemd/system/repmgr.service']
+  } ->
+
+  exec { 'restart_postgres':
+    command => "/bin/systemctl restart postgresql-${version}",
+    user    => 'root',
   }
 
 }

@@ -1,7 +1,7 @@
 ---
 
 classes:
-  - profiles::postgresqlha_nodeb
+  - profiles::postgresqlha_nodeb2
 
 postgres_users:
   deployment:
@@ -23,7 +23,7 @@ pg_hba_rule:
     address: 192.168.33.10/32
     auth_method: trust
   replication_nodea_rule:
-    description: repmgr nodea access
+    description: replication nodea access
     type: host
     database: replication
     user: all
@@ -37,7 +37,7 @@ pg_hba_rule:
     address: 192.168.33.20/32
     auth_method: trust
   replication_nodeb_rule:
-    description: repmgr nodeb access
+    description: replication nodeb access
     type: host
     database: replication
     user: all
@@ -51,7 +51,7 @@ pg_hba_rule:
     address: 192.168.33.30/32
     auth_method: trust
   replication_nodec_rule:
-    description: repmgr nodec access
+    description: replication nodec access
     type: host
     database: replication
     user: all
