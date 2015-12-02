@@ -1,7 +1,15 @@
+<% case @hostname
+   when "nodea"
+     node_number = 1
+   when "nodeb"
+     node_number = 2
+   when "nodec"
+     node_number = 3
+end %>
 cluster=test
-node=1
-node_name=node1
-conninfo='host=nodea user=repmgr dbname=repmgr'
+node=<%= node_number %>
+node_name=node<%= node_number %>
+conninfo='host=<%= @hostname %> user=repmgr dbname=repmgr'
 pg_bindir=/usr/pgsql-9.4/bin
 master_response_timeout=60
 reconnect_attempts=6
@@ -9,6 +17,5 @@ reconnect_interval=10
 failover=automatic
 promote_command='/etc/repmgr/9.4/auto_failover.sh'
 follow_command='/usr/pgsql-9.4/bin/repmgr standby follow -f /etc/repmgr/9.4/repmgr.conf -W'
-priority=3
+priority=<%= 4 - node_number %>
 use_replication_slots=1
-

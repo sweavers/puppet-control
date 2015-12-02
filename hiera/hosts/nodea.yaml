@@ -1,8 +1,7 @@
 ---
 
 classes:
-  - profiles::postgresqlha
-#  - profiles::postgresqlha_nodea
+  - profiles::postgresqlha_master
 
 postgres_databases:
   register_data:
