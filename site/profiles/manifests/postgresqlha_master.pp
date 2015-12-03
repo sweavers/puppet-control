@@ -50,20 +50,16 @@ class profiles::postgresqlha_master(
     $databases     = hiera_hash('postgres_databases',false),
     $users         = hiera_hash('postgres_users', false),
     $pg_hba_rule   = hiera_hash('pg_hba_rule', false),
-    $dbs           = hiera_hash('postgres_dbs', false),
-    $repmgr_hash   = 'md58ea99ab1ec3bd8d8a6162df6c8e1ddcd'
+    $dbs           = hiera_hash('postgres_dbs', false)
   ){
 
   include ::stdlib
 
-  $this_hostname = $::hostname
   $master_hostname = 'nodea'
   $pg_conf = "${dbroot}/${version}/data/postgresql.conf"
 
   $pkglist = [
-    'rsync',
     'keepalived',
-    'haproxy',
     "repmgr${shortversion}"
   ]
   ensure_packages($pkglist)
@@ -107,7 +103,7 @@ class profiles::postgresqlha_master(
     $bind = join(concat(['127.0.0.1'],$bind_array),',')
   }
 
-  class { 'postgresql::server':
+  class { 'postgresql::server' :
     port                    => $port,
     listen_addresses        => $bind,
     ip_mask_allow_all_users => '0.0.0.0/0',
@@ -115,62 +111,62 @@ class profiles::postgresqlha_master(
     before                  => Package['repmgr94'],
   }
 
-  postgresql_conf { 'archive_command':
+  postgresql_conf { 'archive_command' :
     target  => $pg_conf,
     value   => 'cd .',
     require => Class['postgresql::server'],
   }
 
-  postgresql_conf { 'wal_level':
+  postgresql_conf { 'wal_level' :
     target  => $pg_conf,
     value   => 'hot_standby',
     require => Class['postgresql::server'],
   }
 
-  postgresql_conf { 'archive_mode':
+  postgresql_conf { 'archive_mode' :
     target  => $pg_conf,
     value   => 'on',
     require => Class['postgresql::server'],
   }
 
-  postgresql_conf { 'max_wal_senders':
+  postgresql_conf { 'max_wal_senders' :
     target  => $pg_conf,
     value   => '10',
     require => Class['postgresql::server'],
   }
 
-  postgresql_conf { 'wal_keep_segments':
+  postgresql_conf { 'wal_keep_segments' :
     target  => $pg_conf,
     value   => '5000',   # 80 GB required on pg_xlog
     require => Class['postgresql::server'],
   }
 
-  postgresql_conf { 'hot_standby':
+  postgresql_conf { 'hot_standby' :
     target  => $pg_conf,
     value   => 'on',
     require => Class['postgresql::server'],
   }
 
-  postgresql_conf { 'shared_preload_libraries':
+  postgresql_conf { 'shared_preload_libraries' :
     target  => $pg_conf,
     value   => 'repmgr_funcs',
     require => Class['postgresql::server'],
   }
 
-  postgresql_conf { 'max_replication_slots':
+  postgresql_conf { 'max_replication_slots' :
     target  => $pg_conf,
     value   => '10',
     require => Class['postgresql::server'],
   }
 
-  postgresql_conf { 'synchronous_commit':
+  postgresql_conf { 'synchronous_commit' :
     target  => $pg_conf,
     value   => 'on',
     require => Class['postgresql::server'],
   }
 
   if $::osfamily == 'RedHat' {
-    file { '/usr/lib/systemd/system/postgresql.service':
+    file { '/usr/lib/systemd/system/postgresql.service' :
       ensure => link,
       target => "/usr/lib/systemd/system/postgresql-${version}.service",
       force  => true,
@@ -178,24 +174,12 @@ class profiles::postgresqlha_master(
     }
   }
 
-  file { "/etc/repmgr/${version}/auto_failover.sh":
+  file { "/etc/repmgr/${version}/auto_failover.sh" :
     ensure  => file,
+    owner   => 'postgres',
     source  => 'puppet:///extra_files/postgres_auto_failover.sh',
-    require => Package['repmgr94']
-  }
-
-  file { '/etc/haproxy/haproxy.cfg':
-    ensure  => file,
-    source  => 'puppet:///extra_files/postgres_haproxy.cfg',
-    require => Package['haproxy'],
-    notify  => Service['haproxy']
-  }
-
-  service {'haproxy':
-    ensure    => running,
-    enable    => true,
-    require   => File['/etc/haproxy/haproxy.cfg'],
-    subscribe => File['/etc/haproxy/haproxy.cfg']
+    require => Package['repmgr94'],
+    mode    => '0544'
   }
 
   case $version {
@@ -204,7 +188,7 @@ class profiles::postgresqlha_master(
     default: { $postgis_version = 'postgis2_93' }
   }
 
-  file { 'PSQL History':
+  file { 'PSQL History' :
     ensure  => 'file',
     path    => "${dbroot}/.psql_history",
     owner   => 'postgres',
@@ -236,19 +220,19 @@ class profiles::postgresqlha_master(
     create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
   }
 
-  file { "/etc/repmgr/${version}/repmgr.conf":
+  file { "/etc/repmgr/${version}/repmgr.conf" :
     ensure  => file,
     content => template('profiles/postgres_repmgr_config.erb'),
     require => Package["repmgr${shortversion}"],
     before  => Exec['master_register_repmgrd'],
   }
 
-  file { '/etc/keepalived/keepalived.conf':
+  file { '/etc/keepalived/keepalived.conf' :
     ensure  => file,
     content => template('profiles/postgres_keepalived_config.erb'),
   }
 
-  service {'keepalived':
+  service {'keepalived' :
     ensure => running,
     enable => true,
   }
@@ -257,7 +241,7 @@ class profiles::postgresqlha_master(
     login         => true,
     superuser     => true,
     replication   => true,
-    password_hash => $repmgr_hash
+    password_hash => postgresql_password('repmgr', $::repmgr_password )
   } ->
 
   postgresql::server::database { 'repmgr' :
@@ -272,21 +256,21 @@ class profiles::postgresqlha_master(
     content => template('profiles/repmgrd.service.erb')
   } ->
 
-  file { '/var/lib/pgsql/.pgpass':
-    ensure => file,
-    source => 'puppet:///extra_files/.pgpass',
-    owner  => 'postgres',
-    group  => 'postgres',
-    mode   => '0600',
+  file { '/var/lib/pgsql/.pgpass' :
+    ensure  => file,
+    content => template('profiles/pgpass.erb'),
+    owner   => 'postgres',
+    group   => 'postgres',
+    mode    => '0600',
   } ->
 
-  file { '/root/.pgpass':
-    ensure => file,
-    source => 'puppet:///extra_files/.pgpass',
-    mode   => '0600',
+  file { '/root/.pgpass' :
+    ensure  => file,
+    content => template('profiles/pgpass.erb'),
+    mode    => '0600',
   } ->
 
-  exec { 'master_register_repmgrd':
+  exec { 'master_register_repmgrd' :
     command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register",
     user    => 'root',
     require => File['/root/.pgpass'],
@@ -299,7 +283,7 @@ class profiles::postgresqlha_master(
     require => File['/usr/lib/systemd/system/repmgr.service']
   } ->
 
-  exec { 'restart_postgres':
+  exec { 'restart_postgres' :
     command => "/bin/systemctl restart postgresql-${version}",
     user    => 'root',
   }

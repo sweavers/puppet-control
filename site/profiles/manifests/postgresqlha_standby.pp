@@ -20,8 +20,7 @@ class profiles::postgresqlha_standby (
   include ::stdlib
 
   $pkglist = [
-    'keepalived',
-    'haproxy'
+    'keepalived'
   ]
 
   exec { 'get_postgres_94' :
@@ -57,27 +56,15 @@ class profiles::postgresqlha_standby (
     require => User[postgres]
   }
 
-  file { "/etc/repmgr/${version}/auto_failover.sh":
+  file { "/etc/repmgr/${version}/auto_failover.sh" :
     ensure  => file,
+    owner   => 'postgres',
     source  => 'puppet:///extra_files/postgres_auto_failover.sh',
-    require => Package['repmgr94']
+    require => Package['repmgr94'],
+    mode    => '0555'
   }
 
-  file { '/etc/haproxy/haproxy.cfg':
-    ensure  => file,
-    source  => 'puppet:///extra_files/postgres_haproxy.cfg',
-    require => Package['haproxy'],
-    notify  => Service['haproxy']
-  }
-
-  service {'haproxy':
-    ensure    => running,
-    enable    => true,
-    require   => File['/etc/haproxy/haproxy.cfg'],
-    subscribe => File['/etc/haproxy/haproxy.cfg']
-  }
-
-  file { 'PSQL History':
+  file { 'PSQL History' :
     ensure  => 'file',
     path    => "${dbroot}/.psql_history",
     owner   => 'postgres',
@@ -89,24 +76,24 @@ class profiles::postgresqlha_standby (
   # include postgresql::client
   # include postgresql::lib::devel
 
-  file { "/etc/repmgr/${version}/repmgr.conf":
+  file { "/etc/repmgr/${version}/repmgr.conf" :
     ensure  => file,
     content => template('profiles/postgres_repmgr_config.erb'),
     require => Package["repmgr${shortversion}"],
     before  => Exec['standby_register_repmgrd'],
   }
 
-  file { '/etc/keepalived/keepalived.conf':
+  file { '/etc/keepalived/keepalived.conf' :
     ensure  => file,
     content => template('profiles/postgres_keepalived_config.erb'),
   }
 
-  service {'keepalived':
+  service {'keepalived' :
     ensure => running,
     enable => true,
   }
 
-  file { '/usr/lib/systemd/system/repmgr.service':
+  file { '/usr/lib/systemd/system/repmgr.service' :
     ensure  => file,
     owner   => 'postgres',
     group   => 'postgres',
@@ -114,40 +101,40 @@ class profiles::postgresqlha_standby (
     content => template('profiles/repmgrd.service.erb')
   } ->
 
-  file { '/var/lib/pgsql/.pgpass':
-    ensure => file,
-    source => 'puppet:///extra_files/.pgpass',
-    owner  => 'postgres',
-    group  => 'postgres',
-    mode   => '0600',
+  file { '/var/lib/pgsql/.pgpass' :
+    ensure  => file,
+    content => template('profiles/pgpass.erb'),
+    owner   => 'postgres',
+    group   => 'postgres',
+    mode    => '0600',
   } ->
 
-  file { '/root/.pgpass':
-    ensure => file,
-    source => 'puppet:///extra_files/.pgpass',
-    mode   => '0600',
+  file { '/root/.pgpass' :
+    ensure  => file,
+    content => template('profiles/pgpass.erb'),
+    mode    => '0600',
   } ->
 
-  exec { 'clone_database_master':
+  exec { 'clone_database_master' :
     command => "/usr/pgsql-${version}/bin/repmgr -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr --verbose standby clone ${master_hostname}",
     user    => 'postgres',
     cwd     => "/etc/repmgr/${version}/",
     unless  => 'psql -c "select pg_is_in_recovery();" | grep "^ t$"',
   } ->
 
-  service { "postgresql-${version}":
+  service { "postgresql-${version}" :
     ensure => running,
     enable => true
   } ->
 
-  exec { 'standby_register_repmgrd':
+  exec { 'standby_register_repmgrd' :
     command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register",
     user    => 'root',
     require => File['/root/.pgpass'],
     unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=${this_hostname}\"",
   } ->
 
-  service { 'repmgr':
+  service { 'repmgr' :
     ensure  => running,
     enable  => true,
     require => File['/usr/lib/systemd/system/repmgr.service']
