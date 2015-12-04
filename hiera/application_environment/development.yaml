@@ -149,5 +149,3 @@ log_broker_logstash_config: |
   }
 
 profiles::nagios_client::nagios_server: 192.16.42.47
-
-repmgr_password: 'repmgr'

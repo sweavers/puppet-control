@@ -215,7 +215,6 @@ class profiles::postgresqlha_master(
     create_resources('postgresql::server::db', $databases)
   }
 
-  #Will allow hba rules to be set for specific users/dbs via hiera
   if $pg_hba_rule {
     create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
   }
