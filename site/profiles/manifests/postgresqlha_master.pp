@@ -240,7 +240,7 @@ class profiles::postgresqlha_master(
     login         => true,
     superuser     => true,
     replication   => true,
-    password_hash => postgresql_password('repmgr', $::repmgr_password )
+    password_hash => postgresql_password('repmgr', hiera('repmgr_password') )
   } ->
 
   postgresql::server::database { 'repmgr' :
