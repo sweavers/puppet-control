@@ -1,0 +1,7 @@
+<%- scope.function_hiera(['postgresqlha_keys']).each do |server,config|
+  if server == hostname then
+    config.each do |user,keys| -%>
+<%= keys['public'] %> <%-
+    end
+  end
+end -%>

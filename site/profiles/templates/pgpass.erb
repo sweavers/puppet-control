@@ -1,3 +1,2 @@
-nodea:5432:repmgr:repmgr:<%= scope.function_hiera(['repmgr_password']) %>
-nodeb:5432:repmgr:repmgr:<%= scope.function_hiera(['repmgr_password']) %>
-nodec:5432:repmgr:repmgr:<%= scope.function_hiera(['repmgr_password']) %>
+*:5432:repmgr:repmgr:<%= scope.function_hiera(['repmgr_password']) %>
+*:5432:*:barman:<%= scope.function_hiera(['barman_password']) %>

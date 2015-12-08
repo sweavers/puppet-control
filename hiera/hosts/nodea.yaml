@@ -67,5 +67,13 @@ pg_hba_rule:
     user: all
     address: 192.168.33.30/32
     auth_method: trust
+  barman_rule:
+    description: barman access
+    type: local
+    database: all
+    user: barman
+    auth_method: md5
+    order: '001'
 
 repmgr_password: repmgr
+barman_password: barman

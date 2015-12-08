@@ -73,6 +73,46 @@ class profiles::postgresqlha_standby (
     require => File[$dbroot]
   }
 
+  service {'sshd' :
+    ensure => running,
+    enable => true,
+  }
+
+  file { '/etc/ssh/ssh_config' :
+    ensure => file,
+    source => 'puppet:///extra_files/postgres_ssh_config',
+    owner  => 'root',
+    mode   => '0644',
+    notify => Service['sshd']
+  }
+
+  file { '/var/lib/pgsql/.ssh' :
+    ensure => directory,
+    owner  => 'postgres',
+    mode   => '0700',
+  } ->
+
+  file { '/var/lib/pgsql/.ssh/authorized_keys' :
+    ensure  => file,
+    content => template('profiles/postgres_authorized_keys.erb'),
+    owner   => 'postgres',
+    mode    => '0600',
+  } ->
+
+  file { '/var/lib/pgsql/.ssh/id_rsa' :
+    ensure  => file,
+    content => template('profiles/postgres_id_rsa.erb'),
+    owner   => 'postgres',
+    mode    => '0600',
+  } ->
+
+  file { '/var/lib/pgsql/.ssh/id_rsa.pub' :
+    ensure  => file,
+    content => template('profiles/postgres_id_rsa_public.erb'),
+    owner   => 'postgres',
+    mode    => '0644',
+  }
+
   # include postgresql::client
   # include postgresql::lib::devel
 

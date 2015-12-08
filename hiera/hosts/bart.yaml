@@ -1,0 +1,6 @@
+---
+
+classes:
+  - profiles::postgresqlha_barman
+
+barman_password: barman
