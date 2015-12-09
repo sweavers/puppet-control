@@ -20,7 +20,8 @@ class profiles::postgresqlha_standby (
   include ::stdlib
 
   $pkglist = [
-    'keepalived'
+    'keepalived',
+    'rsync'
   ]
 
   exec { 'get_postgres_94' :

@@ -60,6 +60,7 @@ class profiles::postgresqlha_master(
 
   $pkglist = [
     'keepalived',
+    'rsync',
     "repmgr${shortversion}"
   ]
   ensure_packages($pkglist)
@@ -113,7 +114,7 @@ class profiles::postgresqlha_master(
 
   postgresql_conf { 'archive_command' :
     target  => $pg_conf,
-    value   => 'cd .',
+    value   => 'rsync -aq %p barman@bart:primary/incoming/%f',
     require => Class['postgresql::server'],
   }
 
