@@ -121,7 +121,7 @@ class profiles::postgresqlha_standby (
     ensure  => file,
     content => template('profiles/postgres_repmgr_config.erb'),
     require => Package["repmgr${shortversion}"],
-    before  => Exec['standby_register_repmgrd'],
+    #before  => Exec['standby_register_repmgrd'],
   }
 
   file { '/etc/keepalived/keepalived.conf' :
@@ -161,24 +161,24 @@ class profiles::postgresqlha_standby (
     user    => 'postgres',
     cwd     => "/etc/repmgr/${version}/",
     unless  => 'psql -c "select pg_is_in_recovery();" | grep "^ t$"',
-  } ->
+  } #->
 
-  service { "postgresql-${version}" :
-    ensure => running,
-    enable => true
-  } ->
-
-  exec { 'standby_register_repmgrd' :
-    command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register",
-    user    => 'root',
-    require => File['/root/.pgpass'],
-    unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=${this_hostname}\"",
-  } ->
-
-  service { 'repmgr' :
-    ensure  => running,
-    enable  => true,
-    require => File['/usr/lib/systemd/system/repmgr.service']
-  }
+  # service { "postgresql-${version}" :
+  #   ensure => running,
+  #   enable => true
+  # } ->
+  #
+  # exec { 'standby_register_repmgrd' :
+  #   command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register",
+  #   user    => 'root',
+  #   require => File['/root/.pgpass'],
+  #   unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=${this_hostname}\"",
+  # } ->
+  #
+  # service { 'repmgr' :
+  #   ensure  => running,
+  #   enable  => true,
+  #   require => File['/usr/lib/systemd/system/repmgr.service']
+  # }
 
 }

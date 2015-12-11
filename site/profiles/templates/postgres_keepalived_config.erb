@@ -7,7 +7,7 @@
      server_priority = 98
 end %>
 vrrp_script postgresql-9.4 {
-  script "pgrep postgres"
+  script "/usr/pgsql-9.4/bin/repmgr -f /etc/repmgr/9.4/repmgr.conf cluster show 2> /dev/null | grep 'master.*'`hostname`"
   interval 2
   wait 2
 }
@@ -22,23 +22,5 @@ vrrp_instance PG-CLUSTER {
     }
     track_script {
       postgresql-9.4
-    }
-}
-vrrp_script haproxy {
-  script "pgrep haproxy"
-  interval 2
-  wait 2
-}
-vrrp_instance HAPROXY-CLUSTER {
-    state MASTER
-    interface eth1
-    virtual_router_id 101
-    priority 100
-    advert_int 1
-    virtual_ipaddress {
-        192.168.33.101
-    }
-    track_script {
-      haproxy
     }
 }
