@@ -60,7 +60,7 @@ applications:
       BASIC_AUTH_USERNAME: 'username'
       BASIC_AUTH_PASSWORD: 'password'
       HOMEADDR: 'localhost'
-  landcharges-b2b-api:
+  public-api:
     bind: '5001'
     source: 'https://github.com/LandRegistry/lc-alpha-b2b-api.git'
     app_type: 'wsgi'
@@ -70,7 +70,7 @@ applications:
     vars:
       SETTINGS: 'config.PreviewConfig'
       B2B_PROCESSOR_URL: 'http://localhost:5002'
-  landcharges-b2b-processor:
+  automatic-process:
     bind: '5002'
     source: 'https://github.com/LandRegistry/lc-alpha-b2b-processor.git'
     app_type: 'wsgi'
@@ -82,7 +82,7 @@ applications:
       RULES_ENGINE_URL: 'http://localhost:5005'
       BANKRUPTCY_DATABASE_API: 'http://localhost:5004'
       CASEWORK_DATABASE_API: 'http://localhost:5006'
-  landcharges-demo-utilities:
+  demo-utilities:
     bind: '5003'
     source: 'https://github.com/LandRegistry/lc-alpha-demo-utilities.git'
     app_type: 'wsgi'
@@ -97,7 +97,7 @@ applications:
       DB2_MIGRATOR_URL: 'http://localhost:5009'
       DB2_LEGACY_URL: 'http://localhost:5007'
     require: 'Class[Postgresql::Server]'
-  landcharges-bankruptcy-registration:
+  land-charges:
     bind: '5004'
     source: 'https://github.com/LandRegistry/lc-alpha-bankruptcy-registration.git'
     app_type: 'wsgi'
@@ -111,16 +111,7 @@ applications:
       DATABASE_HOST: 'localhost'
       SETTINGS: 'config.PreviewConfig'
     require: 'Class[Postgresql::Server]'
-  landcharges-automation-rules:
-    bind: '5005'
-    source: 'https://github.com/LandRegistry/lc-alpha-automation-rules.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'application.routes:app'
-    manage: false
-    revision: 'develop'
-    vars:
-      SETTINGS: 'config.PreviewConfig'
-  landcharges-casework-working:
+  casework-api:
     bind: '5006'
     source: 'https://github.com/LandRegistry/lc-alpha-casework-working.git'
     app_type: 'wsgi'
@@ -134,7 +125,7 @@ applications:
       DATABASE_HOST: 'localhost'
       SETTINGS: 'config.PreviewConfig'
     require: 'Class[Postgresql::Server]'
-  landcharges-legacy-db:
+  legacy-adapter:
     bind: '5007'
     source: 'https://github.com/LandRegistry/lc-alpha-legacy-db.git'
     app_type: 'wsgi'
@@ -148,7 +139,7 @@ applications:
       DATABASE_HOST: 'localhost'
       SETTINGS: 'config.PreviewConfig'
     require: 'Class[Postgresql::Server]'
-  landcharges-synchroniser:
+  synchroniser:
     bind: '5008'
     source: 'https://github.com/LandRegistry/lc-alpha-synchroniser.git'
     app_type: 'wsgi'
@@ -160,7 +151,7 @@ applications:
       REGISTER_URI: 'http://localhost:5004'
       LEGACY_DB_URI: 'http://localhost:5007'
     require: 'Class[Postgresql::Server]'
-  landcharges-migrator:
+  migrator:
     bind: '5009'
     source: 'https://github.com/LandRegistry/lc-alpha-migrator.git'
     app_type: 'wsgi'
@@ -172,7 +163,7 @@ applications:
       B2B_LEGACY_URL: 'http://localhost:5007'
       BANKRUPTCY_DATABASE_API: 'http://localhost:5004'
     require: 'Class[Postgresql::Server]'
-  landcharges-casework-frontend:
+  casework-frontend:
     bind: '5010'
     source: 'https://github.com/LandRegistry/lc-alpha-casework-frontend.git'
     app_type: 'wsgi'
@@ -185,7 +176,7 @@ applications:
       BANKRUPTCY_DATABASE_URL: 'http://localhost:5004'
       DOCUMENT_URL: 'http://localhost:5014'
       LEGACY_URL: 'http://localhost:5007'
-  landcharges-error-reporting:
+  error-reporting:
     bind: '5011'
     source: 'https://github.com/LandRegistry/lc-alpha-error-reporting.git'
     app_type: 'wsgi'
@@ -196,7 +187,7 @@ applications:
       SETTINGS: 'config.PreviewConfig'
       LEGACY_DB_URI: 'http://localhost:5007'
     require: 'Class[Postgresql::Server]'
-  landcharges-name-index-generator:
+  name-indexing:
     bind: '5012'
     source: 'https://github.com/LandRegistry/lc-alpha-name-index-generator.git'
     app_type: 'wsgi'
@@ -206,7 +197,7 @@ applications:
     vars:
       SETTINGS: 'config.PreviewConfig'
       SEARCH_API_URI: 'http://localhost:5013'
-  landcharges-names-search:
+  name-search:
     bind: '5013'
     source: 'https://github.com/LandRegistry/lc-alpha-names-search.git'
     app_type: 'wsgi'
@@ -218,7 +209,7 @@ applications:
       SEARCH_TYPE: 'phonetic'
       ELASTICSEARCH_URL: 'http://localhost:9200'
     require: Class[Profiles::Elasticsearch]
-  landcharges-document-api:
+  document-api:
     bind: '5014'
     source: 'https://github.com/LandRegistry/lc-alpha-document-api.git'
     app_type: 'wsgi'
@@ -232,7 +223,7 @@ applications:
       DATABASE_HOST: 'localhost'
       SETTINGS: 'config.PreviewConfig'
     require: 'Class[Postgresql::Server]'
-  landcharges-bankruptcy-process:
+  bankruptcy-process:
     bind: '5015'
     source: 'https://github.com/LandRegistry/lc-alpha-bankruptcy-process.git'
     app_type: 'wsgi'
