@@ -62,7 +62,7 @@ applications:
       HOMEADDR: 'localhost'
   public-api:
     bind: '5001'
-    source: 'https://github.com/LandRegistry/lc-alpha-b2b-api.git'
+    source: 'https://github.com/LandRegistry/lc-public-api.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: false
@@ -72,7 +72,7 @@ applications:
       B2B_PROCESSOR_URL: 'http://localhost:5002'
   automatic-process:
     bind: '5002'
-    source: 'https://github.com/LandRegistry/lc-alpha-b2b-processor.git'
+    source: 'https://github.com/LandRegistry/lc-automatic-process.git'
     app_type: 'wsgi'
     wsgi_entry: 'application:app'
     manage: false
@@ -82,24 +82,9 @@ applications:
       RULES_ENGINE_URL: 'http://localhost:5005'
       BANKRUPTCY_DATABASE_API: 'http://localhost:5004'
       CASEWORK_DATABASE_API: 'http://localhost:5006'
-  demo-utilities:
-    bind: '5003'
-    source: 'https://github.com/LandRegistry/lc-alpha-demo-utilities.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'application:app'
-    manage: false
-    revision: 'develop'
-    vars:
-      SETTINGS: 'config.PreviewConfig'
-      B2B_REGISTER_URL: 'http://localhost:5001'
-      B2B_SEARCH_REG_URL: 'http://localhost:5004'
-      B2B_SEARCH_WORK_URL: 'http://localhost:5006'
-      DB2_MIGRATOR_URL: 'http://localhost:5009'
-      DB2_LEGACY_URL: 'http://localhost:5007'
-    require: 'Class[Postgresql::Server]'
   land-charges:
     bind: '5004'
-    source: 'https://github.com/LandRegistry/lc-alpha-bankruptcy-registration.git'
+    source: 'https://github.com/LandRegistry/lc-land-charges.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: true
@@ -113,7 +98,7 @@ applications:
     require: 'Class[Postgresql::Server]'
   casework-api:
     bind: '5006'
-    source: 'https://github.com/LandRegistry/lc-alpha-casework-working.git'
+    source: 'https://github.com/LandRegistry/lc-casework-api.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: true
@@ -127,7 +112,7 @@ applications:
     require: 'Class[Postgresql::Server]'
   legacy-adapter:
     bind: '5007'
-    source: 'https://github.com/LandRegistry/lc-alpha-legacy-db.git'
+    source: 'https://github.com/LandRegistry/lc-legacy-adapter.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: true
@@ -141,7 +126,7 @@ applications:
     require: 'Class[Postgresql::Server]'
   synchroniser:
     bind: '5008'
-    source: 'https://github.com/LandRegistry/lc-alpha-synchroniser.git'
+    source: 'https://github.com/LandRegistry/lc-synchroniser.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: false
@@ -153,7 +138,7 @@ applications:
     require: 'Class[Postgresql::Server]'
   migrator:
     bind: '5009'
-    source: 'https://github.com/LandRegistry/lc-alpha-migrator.git'
+    source: 'https://github.com/LandRegistry/lc-migrator.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: false
@@ -165,7 +150,7 @@ applications:
     require: 'Class[Postgresql::Server]'
   casework-frontend:
     bind: '5010'
-    source: 'https://github.com/LandRegistry/lc-alpha-casework-frontend.git'
+    source: 'https://github.com/LandRegistry/lc-casework-frontend.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: false
@@ -178,7 +163,7 @@ applications:
       LEGACY_URL: 'http://localhost:5007'
   error-reporting:
     bind: '5011'
-    source: 'https://github.com/LandRegistry/lc-alpha-error-reporting.git'
+    source: 'https://github.com/LandRegistry/lc-error-reporting.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: false
@@ -189,7 +174,7 @@ applications:
     require: 'Class[Postgresql::Server]'
   name-indexing:
     bind: '5012'
-    source: 'https://github.com/LandRegistry/lc-alpha-name-index-generator.git'
+    source: 'https://github.com/LandRegistry/lc-name-indexing.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: false
@@ -199,7 +184,7 @@ applications:
       SEARCH_API_URI: 'http://localhost:5013'
   name-search:
     bind: '5013'
-    source: 'https://github.com/LandRegistry/lc-alpha-names-search.git'
+    source: 'https://github.com/LandRegistry/lc-name-search.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: false
@@ -211,7 +196,7 @@ applications:
     require: Class[Profiles::Elasticsearch]
   document-api:
     bind: '5014'
-    source: 'https://github.com/LandRegistry/lc-alpha-document-api.git'
+    source: 'https://github.com/LandRegistry/lc-document-api.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: true
@@ -225,7 +210,7 @@ applications:
     require: 'Class[Postgresql::Server]'
   bankruptcy-process:
     bind: '5015'
-    source: 'https://github.com/LandRegistry/lc-alpha-bankruptcy-process.git'
+    source: 'https://github.com/LandRegistry/lc-bankruptcy-process.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.routes:app'
     manage: false
