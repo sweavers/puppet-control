@@ -53,285 +53,294 @@ class profiles::postgresqlha_master(
     $dbs           = hiera_hash('postgres_dbs', false)
   ){
 
-  include ::stdlib
+  if $pg_ha_setup_done != 0 {
 
-  $master_hostname = 'nodea'
-  $pg_conf = "${dbroot}/${version}/data/postgresql.conf"
+    include ::stdlib
 
-  $pkglist = [
-    'keepalived',
-    'rsync',
-    "repmgr${shortversion}"
-  ]
-  ensure_packages($pkglist)
+    $master_hostname = 'nodea'
+    $pg_conf = "${dbroot}/${version}/data/postgresql.conf"
 
-  user { 'postgres' :
-    ensure     => present,
-    comment    => 'PostgreSQL Database Server',
-    system     => true,
-    home       => $dbroot,
-    managehome => true,
-    shell      => '/bin/bash',
-  }
+    $pkglist = [
+      'keepalived',
+      'rsync',
+      "repmgr${shortversion}"
+    ]
+    ensure_packages($pkglist)
 
-  file { $dbroot :
-    ensure  => 'directory',
-    owner   => 'postgres',
-    group   => 'postgres',
-    mode    => '0750',
-    require => User[postgres]
-  }
+    user { 'postgres' :
+      ensure     => present,
+      comment    => 'PostgreSQL Database Server',
+      system     => true,
+      home       => $dbroot,
+      managehome => true,
+      shell      => '/bin/bash',
+    }
 
-  class { 'postgresql::globals' :
-    manage_package_repo  => true,
-    version              => $version,
-    datadir              => "${dbroot}/${version}/data",
-    confdir              => "${dbroot}/${version}/data",
-    postgresql_conf_path => $pg_conf,
-    needs_initdb         => true,
-    service_name         => "postgresql-${version}", # confirm on ubuntu
-    require              => File[$dbroot],
-  }
+    file { $dbroot :
+      ensure  => 'directory',
+      owner   => 'postgres',
+      group   => 'postgres',
+      mode    => '0750',
+      require => User[postgres]
+    }
 
-  # Set bind address to 0.0.0.0 if remote is enabled, 127.0.0.1 if not
-  # Merge remote into an address array if it's anything other than a boolean
-  if $remote == true {
-    $bind = '*'
-  } elsif $remote == false {
-    $bind = '127.0.0.1'
-  } else {
-    $bind_array = delete(any2array($remote),'127.0.0.1')
-    $bind = join(concat(['127.0.0.1'],$bind_array),',')
-  }
+    class { 'postgresql::globals' :
+      manage_package_repo  => true,
+      version              => $version,
+      datadir              => "${dbroot}/${version}/data",
+      confdir              => "${dbroot}/${version}/data",
+      postgresql_conf_path => $pg_conf,
+      needs_initdb         => true,
+      service_name         => "postgresql-${version}", # confirm on ubuntu
+      require              => File[$dbroot],
+    }
 
-  class { 'postgresql::server' :
-    port                    => $port,
-    listen_addresses        => $bind,
-    ip_mask_allow_all_users => '0.0.0.0/0',
-    require                 => Class['postgresql::globals'],
-    before                  => Package['repmgr94'],
-  }
+    # Set bind address to 0.0.0.0 if remote is enabled, 127.0.0.1 if not
+    # Merge remote into an address array if it's anything other than a boolean
+    if $remote == true {
+      $bind = '*'
+    } elsif $remote == false {
+      $bind = '127.0.0.1'
+    } else {
+      $bind_array = delete(any2array($remote),'127.0.0.1')
+      $bind = join(concat(['127.0.0.1'],$bind_array),',')
+    }
 
-  postgresql_conf { 'archive_command' :
-    target  => $pg_conf,
-    value   => 'rsync -aq %p barman@bart:primary/incoming/%f',
-    require => Class['postgresql::server'],
-  }
+    class { 'postgresql::server' :
+      port                    => $port,
+      listen_addresses        => $bind,
+      ip_mask_allow_all_users => '0.0.0.0/0',
+      require                 => Class['postgresql::globals'],
+      before                  => Package['repmgr94'],
+    }
 
-  postgresql_conf { 'wal_level' :
-    target  => $pg_conf,
-    value   => 'hot_standby',
-    require => Class['postgresql::server'],
-  }
+    postgresql_conf { 'archive_command' :
+      target  => $pg_conf,
+      value   => 'rsync -aq %p barman@bart:primary/incoming/%f',
+      require => Class['postgresql::server'],
+    }
 
-  postgresql_conf { 'archive_mode' :
-    target  => $pg_conf,
-    value   => 'on',
-    require => Class['postgresql::server'],
-  }
+    postgresql_conf { 'wal_level' :
+      target  => $pg_conf,
+      value   => 'hot_standby',
+      require => Class['postgresql::server'],
+    }
 
-  postgresql_conf { 'max_wal_senders' :
-    target  => $pg_conf,
-    value   => '10',
-    require => Class['postgresql::server'],
-  }
+    postgresql_conf { 'archive_mode' :
+      target  => $pg_conf,
+      value   => 'on',
+      require => Class['postgresql::server'],
+    }
 
-  postgresql_conf { 'wal_keep_segments' :
-    target  => $pg_conf,
-    value   => '5000',   # 80 GB required on pg_xlog
-    require => Class['postgresql::server'],
-  }
+    postgresql_conf { 'max_wal_senders' :
+      target  => $pg_conf,
+      value   => '10',
+      require => Class['postgresql::server'],
+    }
 
-  postgresql_conf { 'hot_standby' :
-    target  => $pg_conf,
-    value   => 'on',
-    require => Class['postgresql::server'],
-  }
+    postgresql_conf { 'wal_keep_segments' :
+      target  => $pg_conf,
+      value   => '5000',   # 80 GB required on pg_xlog
+      require => Class['postgresql::server'],
+    }
 
-  postgresql_conf { 'shared_preload_libraries' :
-    target  => $pg_conf,
-    value   => 'repmgr_funcs',
-    require => Class['postgresql::server'],
-  }
+    postgresql_conf { 'hot_standby' :
+      target  => $pg_conf,
+      value   => 'on',
+      require => Class['postgresql::server'],
+    }
 
-  postgresql_conf { 'max_replication_slots' :
-    target  => $pg_conf,
-    value   => '10',
-    require => Class['postgresql::server'],
-  }
+    postgresql_conf { 'shared_preload_libraries' :
+      target  => $pg_conf,
+      value   => 'repmgr_funcs',
+      require => Class['postgresql::server'],
+    }
 
-  postgresql_conf { 'synchronous_commit' :
-    target  => $pg_conf,
-    value   => 'on',
-    require => Class['postgresql::server'],
-  }
+    postgresql_conf { 'max_replication_slots' :
+      target  => $pg_conf,
+      value   => '10',
+      require => Class['postgresql::server'],
+    }
 
-  if $::osfamily == 'RedHat' {
-    file { '/usr/lib/systemd/system/postgresql.service' :
-      ensure => link,
-      target => "/usr/lib/systemd/system/postgresql-${version}.service",
-      force  => true,
-      before => Class[Postgresql::Server]
+    postgresql_conf { 'synchronous_commit' :
+      target  => $pg_conf,
+      value   => 'on',
+      require => Class['postgresql::server'],
+    }
+
+    if $::osfamily == 'RedHat' {
+      file { '/usr/lib/systemd/system/postgresql.service' :
+        ensure => link,
+        target => "/usr/lib/systemd/system/postgresql-${version}.service",
+        force  => true,
+        before => Class[Postgresql::Server]
+      }
+    }
+
+    file { "/etc/repmgr/${version}/auto_failover.sh" :
+      ensure  => file,
+      owner   => 'postgres',
+      source  => 'puppet:///extra_files/postgres_auto_failover.sh',
+      require => Package['repmgr94'],
+      mode    => '0544'
+    }
+
+    case $version {
+      '9.3': { $postgis_version = 'postgis2_93' }
+      '9.4': { $postgis_version = 'postgis2_94' }
+      default: { $postgis_version = 'postgis2_93' }
+    }
+
+    file { 'PSQL History' :
+      ensure  => 'file',
+      path    => "${dbroot}/.psql_history",
+      owner   => 'postgres',
+      group   => 'postgres',
+      mode    => '0750',
+      require => File[$dbroot]
+    }
+
+    service {'sshd' :
+      ensure => running,
+      enable => true,
+    }
+
+    file { '/etc/ssh/ssh_config' :
+      ensure => file,
+      source => 'puppet:///extra_files/postgres_ssh_config',
+      owner  => 'root',
+      mode   => '0644',
+      notify => Service['sshd']
+    }
+
+    file { '/etc/puppetlabs/facter/facts.d/pg_ha_setup_done.bash' :
+      ensure => file,
+      source => 'puppet:///extra_files/pg_ha_setup_done.bash',
+      owner  => 'root',
+      mode   => '0755'
+    } ->
+
+    file { '/var/lib/pgsql/.ssh' :
+      ensure => directory,
+      owner  => 'postgres',
+      mode   => '0700',
+    } ->
+
+    file { '/var/lib/pgsql/.ssh/authorized_keys' :
+      ensure  => file,
+      content => template('profiles/postgres_authorized_keys.erb'),
+      owner   => 'postgres',
+      mode    => '0600',
+    } ->
+
+    file { '/var/lib/pgsql/.ssh/id_rsa' :
+      ensure  => file,
+      content => template('profiles/postgres_id_rsa.erb'),
+      owner   => 'postgres',
+      mode    => '0600',
+    } ->
+
+    file { '/var/lib/pgsql/.ssh/id_rsa.pub' :
+      ensure  => file,
+      content => template('profiles/postgres_id_rsa_public.erb'),
+      owner   => 'postgres',
+      mode    => '0644',
+    }
+
+    include postgresql::client
+    include postgresql::server::contrib
+    #include postgresql::server::postgis
+
+    # package { $postgis_version :
+    #   ensure => installed,
+    # }
+
+    include postgresql::lib::devel
+
+    if $users {
+      create_resources('postgresql::server::role', $users)
+    }
+
+    if $databases {
+      create_resources('postgresql::server::db', $databases)
+    }
+
+    if $pg_hba_rule {
+      create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
+    }
+
+    file { "/etc/repmgr/${version}/repmgr.conf" :
+      ensure  => file,
+      content => template('profiles/postgres_repmgr_config.erb'),
+      require => Package["repmgr${shortversion}"],
+      before  => Exec['master_register_repmgrd'],
+    }
+
+    file { '/etc/keepalived/keepalived.conf' :
+      ensure  => file,
+      content => template('profiles/postgres_keepalived_config.erb'),
+    }
+
+    service {'keepalived' :
+      ensure => running,
+      enable => true,
+    }
+
+    postgresql::server::role { 'repmgr':
+      login         => true,
+      superuser     => true,
+      replication   => true,
+      password_hash => postgresql_password('repmgr', hiera('repmgr_password') )
+    } ->
+
+    postgresql::server::role { 'barman':
+      login         => true,
+      superuser     => true,
+      password_hash => postgresql_password('barman', hiera('barman_password') )
+    } ->
+
+    postgresql::server::database { 'repmgr' :
+      owner  => 'repmgr'
+    } ->
+
+    file { '/usr/lib/systemd/system/repmgr.service' :
+      ensure  => file,
+      owner   => 'postgres',
+      group   => 'postgres',
+      mode    => '0664',
+      content => template('profiles/repmgrd.service.erb')
+    } ->
+
+    file { '/var/lib/pgsql/.pgpass' :
+      ensure  => file,
+      content => template('profiles/pgpass.erb'),
+      owner   => 'postgres',
+      group   => 'postgres',
+      mode    => '0600',
+    } ->
+
+    file { '/root/.pgpass' :
+      ensure  => file,
+      content => template('profiles/pgpass.erb'),
+      mode    => '0600',
+    } ->
+
+    exec { 'master_register_repmgrd' :
+      command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register",
+      user    => 'root',
+      require => File['/root/.pgpass'],
+      unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show",
+    } ->
+
+    service { 'repmgr' :
+      ensure  => running,
+      enable  => true,
+      require => File['/usr/lib/systemd/system/repmgr.service']
+    } ->
+
+    exec { 'restart_postgres' :
+      command => "/bin/systemctl restart postgresql-${version}",
+      user    => 'root',
     }
   }
-
-  file { "/etc/repmgr/${version}/auto_failover.sh" :
-    ensure  => file,
-    owner   => 'postgres',
-    source  => 'puppet:///extra_files/postgres_auto_failover.sh',
-    require => Package['repmgr94'],
-    mode    => '0544'
-  }
-
-  case $version {
-    '9.3': { $postgis_version = 'postgis2_93' }
-    '9.4': { $postgis_version = 'postgis2_94' }
-    default: { $postgis_version = 'postgis2_93' }
-  }
-
-  file { 'PSQL History' :
-    ensure  => 'file',
-    path    => "${dbroot}/.psql_history",
-    owner   => 'postgres',
-    group   => 'postgres',
-    mode    => '0750',
-    require => File[$dbroot]
-  }
-
-  service {'sshd' :
-    ensure => running,
-    enable => true,
-  }
-
-  file { '/etc/ssh/ssh_config' :
-    ensure => file,
-    source => 'puppet:///extra_files/postgres_ssh_config',
-    owner  => 'root',
-    mode   => '0644',
-    notify => Service['sshd']
-  }
-
-  file { '/var/lib/pgsql/.ssh' :
-    ensure => directory,
-    owner  => 'postgres',
-    mode   => '0700',
-  } ->
-
-  file { '/var/lib/pgsql/.ssh/authorized_keys' :
-    ensure  => file,
-    content => template('profiles/postgres_authorized_keys.erb'),
-    owner   => 'postgres',
-    mode    => '0600',
-  } ->
-
-  file { '/var/lib/pgsql/.ssh/id_rsa' :
-    ensure  => file,
-    content => template('profiles/postgres_id_rsa.erb'),
-    owner   => 'postgres',
-    mode    => '0600',
-  } ->
-
-  file { '/var/lib/pgsql/.ssh/id_rsa.pub' :
-    ensure  => file,
-    content => template('profiles/postgres_id_rsa_public.erb'),
-    owner   => 'postgres',
-    mode    => '0644',
-  }
-
-  include postgresql::client
-  include postgresql::server::contrib
-  #include postgresql::server::postgis
-
-  # package { $postgis_version :
-  #   ensure => installed,
-  # }
-
-  include postgresql::lib::devel
-
-  if $users {
-    create_resources('postgresql::server::role', $users)
-  }
-
-  if $databases {
-    create_resources('postgresql::server::db', $databases)
-  }
-
-  if $pg_hba_rule {
-    create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
-  }
-
-  file { "/etc/repmgr/${version}/repmgr.conf" :
-    ensure  => file,
-    content => template('profiles/postgres_repmgr_config.erb'),
-    require => Package["repmgr${shortversion}"],
-    before  => Exec['master_register_repmgrd'],
-  }
-
-  file { '/etc/keepalived/keepalived.conf' :
-    ensure  => file,
-    content => template('profiles/postgres_keepalived_config.erb'),
-  }
-
-  service {'keepalived' :
-    ensure => running,
-    enable => true,
-  }
-
-  postgresql::server::role { 'repmgr':
-    login         => true,
-    superuser     => true,
-    replication   => true,
-    password_hash => postgresql_password('repmgr', hiera('repmgr_password') )
-  } ->
-
-  postgresql::server::role { 'barman':
-    login         => true,
-    superuser     => true,
-    password_hash => postgresql_password('barman', hiera('barman_password') )
-  } ->
-
-  postgresql::server::database { 'repmgr' :
-    owner  => 'repmgr'
-  } ->
-
-  file { '/usr/lib/systemd/system/repmgr.service' :
-    ensure  => file,
-    owner   => 'postgres',
-    group   => 'postgres',
-    mode    => '0664',
-    content => template('profiles/repmgrd.service.erb')
-  } ->
-
-  file { '/var/lib/pgsql/.pgpass' :
-    ensure  => file,
-    content => template('profiles/pgpass.erb'),
-    owner   => 'postgres',
-    group   => 'postgres',
-    mode    => '0600',
-  } ->
-
-  file { '/root/.pgpass' :
-    ensure  => file,
-    content => template('profiles/pgpass.erb'),
-    mode    => '0600',
-  } ->
-
-  exec { 'master_register_repmgrd' :
-    command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register",
-    user    => 'root',
-    require => File['/root/.pgpass'],
-    unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show",
-  } ->
-
-  service { 'repmgr' :
-    ensure  => running,
-    enable  => true,
-    require => File['/usr/lib/systemd/system/repmgr.service']
-  } ->
-
-  exec { 'restart_postgres' :
-    command => "/bin/systemctl restart postgresql-${version}",
-    user    => 'root',
-  }
-
 }
