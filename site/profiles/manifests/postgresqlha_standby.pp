@@ -15,7 +15,6 @@ class profiles::postgresqlha_standby (
   if $pg_ha_setup_done != 0 {
 
     $this_hostname = $::hostname
-    $master_hostname = 'vip'
 
     $pg_conf = "${dbroot}/${version}/data/postgresql.conf"
 
@@ -33,8 +32,8 @@ class profiles::postgresqlha_standby (
       mode   => '0755'
     } ->
 
-    exec { 'get_postgres_94' :
-      command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-6-x86_64/pgdg-centos94-${version}-1.noarch.rpm -y",
+    exec { "get_postgres_${shortversion}" :
+      command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-6-x86_64/pgdg-centos${shortversion}-${version}-1.noarch.rpm -y",
       user    => 'root',
       before  => Package["postgresql${shortversion}-server"]
     } ->
@@ -70,7 +69,7 @@ class profiles::postgresqlha_standby (
       ensure  => file,
       owner   => 'postgres',
       source  => 'puppet:///extra_files/postgres_auto_failover.sh',
-      require => Package['repmgr94'],
+      require => Package["repmgr${shortversion}"],
       mode    => '0555'
     }
 
@@ -166,7 +165,7 @@ class profiles::postgresqlha_standby (
     } ->
 
     exec { 'clone_database_master' :
-      command => "/usr/pgsql-${version}/bin/repmgr -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr --verbose standby clone ${master_hostname}",
+      command => "/usr/pgsql-${version}/bin/repmgr -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr --verbose standby clone vip",
       user    => 'postgres',
       cwd     => "/etc/repmgr/${version}/",
       unless  => 'psql -c "select pg_is_in_recovery();" | grep "^ t$"',

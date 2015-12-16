@@ -111,7 +111,7 @@ class profiles::postgresqlha_master(
       listen_addresses        => $bind,
       ip_mask_allow_all_users => '0.0.0.0/0',
       require                 => Class['postgresql::globals'],
-      before                  => Package['repmgr94'],
+      before                  => Package["repmgr${shortversion}"],
     }
 
     postgresql_conf { 'archive_command' :
@@ -181,14 +181,8 @@ class profiles::postgresqlha_master(
       ensure  => file,
       owner   => 'postgres',
       source  => 'puppet:///extra_files/postgres_auto_failover.sh',
-      require => Package['repmgr94'],
+      require => Package["repmgr${shortversion}"],
       mode    => '0544'
-    }
-
-    case $version {
-      '9.3': { $postgis_version = 'postgis2_93' }
-      '9.4': { $postgis_version = 'postgis2_94' }
-      default: { $postgis_version = 'postgis2_93' }
     }
 
     file { 'PSQL History' :
@@ -249,12 +243,6 @@ class profiles::postgresqlha_master(
 
     include postgresql::client
     include postgresql::server::contrib
-    #include postgresql::server::postgis
-
-    # package { $postgis_version :
-    #   ensure => installed,
-    # }
-
     include postgresql::lib::devel
 
     if $users {
