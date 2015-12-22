@@ -42,7 +42,7 @@ applications:
     bind: '5006'
     source: 'https://github.com/LandRegistry/dm-borrower-frontend.git'
     app_type: 'wsgi'
-    wsgi_entry: 'application:app'
+    wsgi_entry: 'application:create_manager().app'
     manage: false
     revision: 'develop'
     vars:
