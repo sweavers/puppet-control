@@ -198,4 +198,9 @@ class profiles::jenkins (
       'libjpeg-turbo-devel', 'zlib-devel'])
 
   }
+
+  jenkins::job { 'sample-build-and-ut':
+  config => template('profiles/sample-build-and-ut.xml.erb')
+
+  }
 }
