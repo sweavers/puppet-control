@@ -200,6 +200,6 @@ class profiles::jenkins (
   }
 
   jenkins::job { 'sample-build-and-ut':
-  config => template('profiles/templates/sample-build-and-ut.xml.erb'),
+  config => template("${templates}/sample-build-and-ut.xml.erb"),
   }
 }
