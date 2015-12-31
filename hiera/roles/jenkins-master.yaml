@@ -60,6 +60,9 @@ profiles::jenkins::plugins:
     version: 1.6+build.142
   parameterized-trigger:
     version: 2.29
+  urltrigger:
+    version: 0.41
+
 
 profiles::jenkins::jenkins_ssl: true
 profiles::jenkins::ssl_crt: |

@@ -1,0 +1,47 @@
+---
+
+classes:
+  - profiles::digitalregister_app
+  - profiles::postgresql
+
+postgres_databases:
+  version-control:
+    user: version-control
+    owner: version-control
+    password: md54f282525c021de696bfbb7b53527e94d
+    before: Class[Profiles::Digitalregister_app]
+
+applications:
+  app-list:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry-Ops/app-list.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'application.server:app'
+    manage: false
+    revision: 'master'
+    vars:
+      SETTINGS: 'config.DevelopmentConfig'
+      APPTITLE: ''
+      SERVICE: 'App Test Service'
+      ENVIRONMENT: 'Integration'
+      DISPLAY_LOGS: 'True'
+      BASIC_AUTH_FORCE: 'False'
+      BASIC_AUTH_USERNAME: 'username'
+      BASIC_AUTH_PASSWORD: 'password'
+      HOMEADDR: 'localhost'
+  version-control:
+    bind: '5001'
+    source: 'https://github.com/mooreandrew/version-control.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'application.server:app'
+    manage: true
+    revision: 'master'
+    vars:
+      SECRET_KEY: '123456790'
+      SETTINGS: 'config.DevelopmentConfig'
+      SQLALCHEMY_DATABASE_URI: 'postgresql+pg8000://version-control:version-control@localhost/version-control'
+      SALT: 'passwordsalt'
+      MODE: 'master'
+
+
+profiles::postgresql::version: '9.4'
