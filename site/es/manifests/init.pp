@@ -18,6 +18,11 @@ class es (
   } else {
     $listen = $::ipaddress
   }
+  if ($::memorysize_mb >= 1024) {
+    $heap_size = $::memorysizeinbytes/2
+  } else {
+    $heap_size = 268435456
+  }
   $repo_version = '1.7'
   $version      = '1.7.3'
   $data_dir = "/var/lib/elasticsearch/${cluster_name}/data"
@@ -38,8 +43,11 @@ class es (
   }
 
   elasticsearch::instance { $cluster_name :
-    datadir => $data_dir,
-    config  => {
+    datadir       => $data_dir,
+    init_defaults => {
+      'ES_HEAP_SIZE' => $heap_size
+    },
+    config        => {
       'cluster.name'  => $cluster_name,
       'path.repo'     => "[${backup_dir}]",
       'path.logs'     => $log_dir,

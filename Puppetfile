@@ -33,7 +33,7 @@ mod 'thias/sysctl',                    '1.0.2'
 mod 'zack/r10k',                       '2.6.2'
 mod '3fs/phantomjs',                   '0.0.8'
 mod 'puppet-gradle_deploy',            :git => 'https://github.com/LandRegistry-Ops/puppet-gradle_deploy.git',
-                                       :ref => '18e5ead89798366fc6f097ef3d9626e2dfe89158'
+                                       :ref => 'a82bc688ecc6d7b6a6763afd4a47f160ef887987'
 mod 'camptocamp/archive',              '0.8.1'
 
 # Dependency modules

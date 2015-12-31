@@ -1,0 +1,51 @@
+---
+
+classes:
+  - profiles::postgresql
+  - profiles::digitalregister_app
+
+postgres_databases:
+  dm-deeds:
+    user: dm-deeds
+    owner: dm-deeds
+    password: md50b6171dccaa63335d4e4f00090c32245
+
+applications:
+  app-list:
+    bind: '5000'
+    source: 'https://github.com/LandRegistry-Ops/app-list.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'application.server:app'
+    manage: false
+    revision: 'master'
+    vars:
+      SETTINGS: 'config.DevelopmentConfig'
+      APPTITLE: ''
+      SERVICE: 'Digital Mortgage'
+      ENVIRONMENT: 'Integration'
+      DISPLAY_LOGS: 'True'
+      BASIC_AUTH_FORCE: 'False'
+      BASIC_AUTH_USERNAME: 'username'
+      BASIC_AUTH_PASSWORD: 'password'
+      HOMEADDR: 'localhost'
+  dm-deed-api:
+    bind: '5003'
+    source: 'https://github.com/LandRegistry/dm-deed-api.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'application:app'
+    manage: true
+    revision: 'develop'
+    vars:
+      DEED_DATABASE_URI: 'postgresql://dm-deeds:dm-deeds@localhost:5432/dm-deeds'
+    require: 'Class[Postgresql::Server]'
+  dm-borrower-frontend:
+    bind: '5006'
+    source: 'https://github.com/LandRegistry/dm-borrower-frontend.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'application:create_manager().app'
+    manage: false
+    revision: 'develop'
+    vars:
+      DEED_API_ADDRESS: 'http://localhost:5003'
+
+profiles::postgresql::version: '9.4'
