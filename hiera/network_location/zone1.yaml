@@ -1,3 +1,4 @@
 ---
 
-vc_app_host: http://e474ac0d2ec755d2c6212c5c69942292@192.16.42.61:5001
+vc_app_host: http://192.16.42.61:5001
+vc_app_token: 374ff1360f659802deae89487955e7e8
