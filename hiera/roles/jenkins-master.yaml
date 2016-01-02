@@ -62,7 +62,8 @@ profiles::jenkins::plugins:
     version: 2.29
   urltrigger:
     version: 0.41
-
+  Parameterized-Remote-Trigger:
+    version: 2.2.2
 
 profiles::jenkins::jenkins_ssl: true
 profiles::jenkins::ssl_crt: |
