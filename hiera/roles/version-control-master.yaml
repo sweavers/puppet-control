@@ -12,25 +12,8 @@ postgres_databases:
     before: Class[Profiles::Digitalregister_app]
 
 applications:
-  app-list:
-    bind: '5000'
-    source: 'https://github.com/LandRegistry-Ops/app-list.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'application.server:app'
-    manage: false
-    revision: 'master'
-    vars:
-      SETTINGS: 'config.DevelopmentConfig'
-      APPTITLE: ''
-      SERVICE: 'App Test Service'
-      ENVIRONMENT: 'Integration'
-      DISPLAY_LOGS: 'True'
-      BASIC_AUTH_FORCE: 'False'
-      BASIC_AUTH_USERNAME: 'username'
-      BASIC_AUTH_PASSWORD: 'password'
-      HOMEADDR: 'localhost'
   version-control:
-    bind: '5001'
+    bind: '5000'
     source: 'https://github.com/mooreandrew/version-control.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.server:app'
@@ -42,6 +25,63 @@ applications:
       SQLALCHEMY_DATABASE_URI: 'postgresql+pg8000://version-control:version-control@localhost/version-control'
       SALT: 'passwordsalt'
       MODE: 'master'
+      SLAVE_TOKEN_HASH: ''
 
+profiles::digitalregister_app::frontend_url: 192.16.42.82
 
-profiles::postgresql::version: '9.4'
+profiles::digitalregister_app::port: 80
+
+profiles::digitalregister_app::api_ssl: true
+
+profiles::digitalregister_app::ssl_crt: |
+  -----BEGIN CERTIFICATE-----
+  MIIDfzCCAmegAwIBAgIJAOHewZLH4GsjMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+  BAYTAkdCMRUwEwYDVQQHDAxEZWZhdWx0IENpdHkxHDAaBgNVBAoME0RlZmF1bHQg
+  Q29tcGFueSBMdGQxEjAQBgNVBAMMCWxvY2FsaG9zdDAeFw0xNTA3MTYxNjI4NTla
+  Fw0yNTA3MTMxNjI4NTlaMFYxCzAJBgNVBAYTAkdCMRUwEwYDVQQHDAxEZWZhdWx0
+  IENpdHkxHDAaBgNVBAoME0RlZmF1bHQgQ29tcGFueSBMdGQxEjAQBgNVBAMMCWxv
+  Y2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOjrI8HXLJid
+  15/JoPupid/WNz6DNjV3+Y+26vP4/KtIeEInWY5sJlQe3SVGJsI4bIZYrtZq+wIl
+  sORmkv6GpA5PVdZ6c9AA1j+oZusTBmvtpAEXpoYZ3BOsw3bKScv51sF2FAMrc4YB
+  hnQEM02RfNdXVSibDwDh3cNyiIMwQMX0uUr5HhGVFBJZJDRHPs3bE34PDI9baEJw
+  5K6L0dWXD9yhLj+7oAOgTv8TOi3q2UJMoNgU5dnx//kaufGLzw1atWyd5TjhxwES
+  7VvwNT0vV9JkPaFabIPkpjj6GgHE20OXRcCdTcViq+k7W4W82SCUjhhs9pIqDsxx
+  NEkeuAX1RiECAwEAAaNQME4wHQYDVR0OBBYEFKlJjaNawsWG+s/QPDYKKgahTcpv
+  MB8GA1UdIwQYMBaAFKlJjaNawsWG+s/QPDYKKgahTcpvMAwGA1UdEwQFMAMBAf8w
+  DQYJKoZIhvcNAQELBQADggEBAGk3Sw3aoki2DYIcSSKoR1h68TYFrY58oP9QA+sW
+  91q5Pao/Jdw8mCaGtxfRGhcXaWbDQWihCH9iFtgMMuGe+l/LWdDOdmes+ir/Dv3w
+  PhQMT6g89LIR3mQ8fSIH69res2tflbPtaQze4tRRfRirgqf4fcIdqPJ3grHq9cne
+  OKsrRtK32IHStq2urAKTjzrbinMFGVqbntt1metJTNsb/1PN0/Ambrkxa6LX02uu
+  mR5JKapqlWDV9uMfjTjDM1biT4SgrlrNX2B0WAPu810qMWp7dANO96Q6RJhm2PwB
+  NMc95xkmMe9ioG3hSBkqfSF8ZjCRIiQDQaFoRE96hnToyXA=
+  -----END CERTIFICATE-----
+
+profiles::digitalregister_app::ssl_key: |
+  -----BEGIN PRIVATE KEY-----
+  MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDo6yPB1yyYndef
+  yaD7qYnf1jc+gzY1d/mPturz+PyrSHhCJ1mObCZUHt0lRibCOGyGWK7WavsCJbDk
+  ZpL+hqQOT1XWenPQANY/qGbrEwZr7aQBF6aGGdwTrMN2yknL+dbBdhQDK3OGAYZ0
+  BDNNkXzXV1Uomw8A4d3DcoiDMEDF9LlK+R4RlRQSWSQ0Rz7N2xN+DwyPW2hCcOSu
+  i9HVlw/coS4/u6ADoE7/Ezot6tlCTKDYFOXZ8f/5Grnxi88NWrVsneU44ccBEu1b
+  8DU9L1fSZD2hWmyD5KY4+hoBxNtDl0XAnU3FYqvpO1uFvNkglI4YbPaSKg7McTRJ
+  HrgF9UYhAgMBAAECggEAbi5dmeLKC+APEl11M9d9i09wjrfPOvfoLF3hQ0wzams7
+  yD+JE+CBOSXogytuRk4euGbXPkMZPmjKByGmw5S5orNQ7ca7ZlgfAboOBYHYddHS
+  1Vl0wtcUzpHZXSZQRpeHSbkrulwhp/Csw9EA297I6a08cZr4O/icyUoy3axD1+AH
+  h6RstpVAAyynaJznodhgDblz4uGTFRnT5CRwVyxZQiJ6vj4gRaA6bEXYYIYh0T/1
+  lnFTcRM+vWwKV9JcfyzW/Hz1hO3D1YfMtTnX8lurQ8Af9aQRo9p/o1ERGl526WWD
+  azcKjPxRuwt155p5Q/QzFnXSToeNqDovgMGHZBA44QKBgQD1dqFR+muUUUms77Md
+  Gsq6PrwAq30xzg2z92zxX3OoxiePP7pJOM65TQx1m3ENLx5rYYHk3pNT3WYQZGm0
+  UWiX82qnJ3tsqN2iP80f7Yv1lVWjTS487sNQWpRxbsRuUD7+jPGJBCV4az5SIVBp
+  wfg+1SaCzzNLI0vVXANx6B2lNQKBgQDy6qe6Kc7TkIidlsFII+2ArzwLTy/2a4+X
+  UtrdIO5vcL+jQUP9VQuvMMb/cgDBZRBkaYUQ6mc2TP8p6FLWdvfDDxub/XSdmYc9
+  OpHbSsDAKhpQfewledifsU4e/ex7OIGkQhnxR3ubC/3axyn83fqrCBPkrBNAUXgD
+  sHAtNxjWvQKBgQCPw5tYWEMJ61IrZ3iQY1C5JGUYP1hkAzsjXJcCB9XF08j3rWt9
+  1ze8b9QMTa44+o/mdIWPdozzYYiVsTn30nZgCME+hXFUgtLMZHHPcWG3xG8T5fBe
+  37ilJ2gpx6Zktbsve307sqH/lVA66igeyOyMYGrd0l1IdLPFks6xuDEkwQKBgGN+
+  v2Jd22wGSB6b7+C3boEFxUcwkQmSdsbZVfG6mk6k1KlugwWRPu7rwKZCMJMF7Rfj
+  rHAIQmwYT27/zGYxZjvLxVg4EPq4No9anQE/9gD/fbW4Te/vn02RVtkU0jaKJ3d6
+  55tO1w7jc3+XkdgTp6dD8Ln5zQzMEacZLmkmpxLVAoGAAKczdsBxismnLZokNqWP
+  o01usaxPsTMJSQ2RoUWSeC15tyFMlllMlo0qtkjKveui574KRDlW2E40Ej6qwtgO
+  uWLEl7PF7nFGUM7Btv23iWH84nZZgUFDcayXV288Pzba1miTosRI6F3tAXdiI4o3
+  wU96va4MvaWpYSkYb5zQbng=
+  -----END PRIVATE KEY-----
