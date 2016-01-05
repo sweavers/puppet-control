@@ -65,7 +65,11 @@ class profiles::digitalregister_app(
   }
 
   if $applications {
-    create_resources('wsgi::application', $applications)
+    $defaults = {
+      'vc_app_host' => hiera('vc_app_host', 'http://localhost'),
+      'vc_app_token' =>  hiera('vc_app_token', ''),
+    }
+    create_resources('wsgi::application', $applications, $defaults)
   }
 
   if $::puppet_role == 'digital-register-frontend' {
