@@ -8,6 +8,7 @@
   - secrets/types/%{::server_type}
   - secrets/application_environment/%{::application_environment}
   - secrets/secrets
+  - secrets/network_location/%{::network_location}
   - application_environment/%{::application_environment}
   - hosts/%{::fqdn}
   - network_location/%{::network_location}
