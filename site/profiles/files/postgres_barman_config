@@ -96,5 +96,5 @@ log_file = /var/log/barman/barman.log
 ;; ; retention_policy = RECOVERY WINDOW OF 4 WEEKS
 [primary]
 description = "Primary PostgreSQL Server"
-conninfo = "host=vip user=barman dbname=postgres"
+conninfo = "host=vip user=barman   dbname=postgres"
 ssh_command = "ssh postgres@vip"

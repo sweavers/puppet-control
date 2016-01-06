@@ -53,7 +53,7 @@ class profiles::postgresqlha_master(
     $dbs           = hiera_hash('postgres_dbs', false)
   ){
 
-  if $pg_ha_setup_done != 0 {
+  if $postgres_ha_setup_done != 0 {
 
     include ::stdlib
 
@@ -168,15 +168,6 @@ class profiles::postgresqlha_master(
       require => Class['postgresql::server'],
     }
 
-    if $::osfamily == 'RedHat' {
-      file { '/usr/lib/systemd/system/postgresql.service' :
-        ensure => link,
-        target => "/usr/lib/systemd/system/postgresql-${version}.service",
-        force  => true,
-        before => Class[Postgresql::Server]
-      }
-    }
-
     file { "/etc/repmgr/${version}/auto_failover.sh" :
       ensure  => file,
       owner   => 'postgres',
@@ -207,9 +198,9 @@ class profiles::postgresqlha_master(
       notify => Service['sshd']
     }
 
-    file { '/etc/puppetlabs/facter/facts.d/pg_ha_setup_done.bash' :
+    file { '/etc/puppetlabs/facter/facts.d/postgres_ha_setup_done.sh' :
       ensure => file,
-      source => 'puppet:///extra_files/pg_ha_setup_done.bash',
+      source => 'puppet:///extra_files/postgres_ha_setup_done.sh',
       owner  => 'root',
       mode   => '0755'
     } ->
@@ -291,6 +282,21 @@ class profiles::postgresqlha_master(
       owner  => 'repmgr'
     } ->
 
+    exec { 'stop_postgres' :
+      command => "/bin/systemctl stop postgresql-${version}",
+      user    => 'root',
+    } ->
+
+    exec { 'disable_postgres' :
+      command => "/bin/systemctl disable postgresql-${version}",
+      user    => 'root',
+    } ->
+
+    exec { 'master_start_postgres' :
+      command => "/usr/pgsql-${version}/bin/pg_ctl -D ${postgresql::globals::datadir} start",
+      user    => 'postgres',
+    } ->
+
     file { '/usr/lib/systemd/system/repmgr.service' :
       ensure  => file,
       owner   => 'postgres',
@@ -326,9 +332,16 @@ class profiles::postgresqlha_master(
       require => File['/usr/lib/systemd/system/repmgr.service']
     } ->
 
-    exec { 'restart_postgres' :
-      command => "/bin/systemctl restart postgresql-${version}",
-      user    => 'root',
+    exec { 'reload_postgres' :
+      command => "/usr/pgsql-${version}/bin/pg_ctl -D ${postgresql::globals::datadir} reload -m immediate",
+      user    => 'postgres',
+    } ->
+
+    file { '/var/lib/pgsql/postgres_ha_setup_done' :
+      ensure  => file,
+      owner   => 'postgres',
+      group   => 'postgres',
+      require => Service['repmgr'],
     }
   }
 }

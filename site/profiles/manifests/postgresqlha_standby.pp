@@ -12,11 +12,10 @@ class profiles::postgresqlha_standby (
     $dbroot        = '/var/lib/pgsql/',
   ){
 
-  if $pg_ha_setup_done != 0 {
-
-    $this_hostname = $::hostname
+  if $postgres_ha_setup_done != 0 {
 
     $pg_conf = "${dbroot}/${version}/data/postgresql.conf"
+    $this_hostname = $::hostname
 
     include ::stdlib
 
@@ -25,9 +24,9 @@ class profiles::postgresqlha_standby (
       'rsync'
     ]
 
-    file { '/etc/puppetlabs/facter/facts.d/pg_ha_setup_done.bash' :
+    file { '/etc/puppetlabs/facter/facts.d/postgres_ha_setup_done.sh' :
       ensure => file,
-      source => 'puppet:///extra_files/pg_ha_setup_done.bash',
+      source => 'puppet:///extra_files/postgres_ha_setup_done.sh',
       owner  => 'root',
       mode   => '0755'
     } ->
@@ -171,13 +170,26 @@ class profiles::postgresqlha_standby (
       unless  => 'psql -c "select pg_is_in_recovery();" | grep "^ t$"',
     } ->
 
+    file_line { 'archive_command' :
+      ensure => present,
+      line   => 'archive_command = \'rsync -aq %p barman@bart:primary/incoming/%f\'',
+      match  => '^archive_command.*$',
+      path   => $pg_conf
+    } ->
+
     service { "postgresql-${version}" :
-      ensure => running,
-      enable => true
+      ensure => stopped,
+      enable => false
+    } ->
+
+    exec { 'standby_start_postgres' :
+      command => "/usr/pgsql-${version}/bin/pg_ctl -D /var/lib/pgsql/${version}/data/ start",
+      user    => 'postgres',
+      require => Package["postgresql${shortversion}-server"],
     } ->
 
     exec { 'standby_register_repmgrd' :
-      command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register",
+      command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register",
       user    => 'root',
       require => File['/root/.pgpass'],
       unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=${this_hostname}\"",
@@ -187,9 +199,15 @@ class profiles::postgresqlha_standby (
       ensure  => running,
       enable  => true,
       require => File['/usr/lib/systemd/system/repmgr.service']
-    }
+    } ->
 
-    file { '/var/lib/pgsql/pg_ha_setup_done' :
+    file { '/usr/lib/systemd/system/postgresql.service' :
+      ensure => link,
+      target => "/usr/lib/systemd/system/postgresql-${version}.service",
+      force  => true,
+    } ->
+
+    file { '/var/lib/pgsql/postgres_ha_setup_done' :
       ensure  => file,
       owner   => 'postgres',
       group   => 'postgres',
