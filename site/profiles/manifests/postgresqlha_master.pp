@@ -82,7 +82,17 @@ class profiles::postgresqlha_master(
       group   => 'postgres',
       mode    => '0750',
       require => User[postgres]
+    } ->
+
+    file { "$dbroot/.pgsql_profile" :
+      ensure  => 'file',
+      content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
+      owner   => 'postgres',
+      group   => 'postgres',
+      mode    => '0750',
+      require => File[$dbroot]
     }
+
 
     class { 'postgresql::globals' :
       manage_package_repo  => true,
@@ -281,7 +291,9 @@ class profiles::postgresqlha_master(
     postgresql::server::database { 'repmgr' :
       owner  => 'repmgr'
     } ->
-
+    # Running postgresql-9.4 as a systemd service causes issues when postgres
+    # clustering is being manged by repmgr, so we stop and disable it immediatly
+    # after installation by puppet. Postgres is managed by pg_ctl from then on.
     exec { 'stop_postgres' :
       command => "/bin/systemctl stop postgresql-${version}",
       user    => 'root',

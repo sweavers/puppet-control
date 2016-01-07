@@ -10,7 +10,7 @@ PIDFile=/var/run/repmgr
 User=postgres
 Group=postgres
 WorkingDirectory=<%= @dbroot %>
-ExecStart=/usr/pgsql-<%= @version %>/bin/repmgrd -f /etc/repmgr/<%= @version %>/repmgr.conf
+ExecStart=/usr/pgsql-<%= @version %>/bin/repmgrd -f /etc/repmgr/<%= @version %>/repmgr.conf -m
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 Restart=on-failure
