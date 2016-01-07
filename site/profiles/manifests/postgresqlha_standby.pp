@@ -64,7 +64,7 @@ class profiles::postgresqlha_standby (
       require => User[postgres]
     } ->
 
-    file { "$dbroot/.pgsql_profile" :
+    file { "${dbroot}/.pgsql_profile" :
       ensure  => 'file',
       content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
       owner   => 'postgres',
@@ -72,7 +72,7 @@ class profiles::postgresqlha_standby (
       mode    => '0750',
       require => File[$dbroot]
     }
-      
+
     file { "/etc/repmgr/${version}/auto_failover.sh" :
       ensure  => file,
       owner   => 'postgres',
