@@ -28,6 +28,15 @@ applications:
       BASIC_AUTH_USERNAME: 'username'
       BASIC_AUTH_PASSWORD: 'password'
       HOMEADDR: 'localhost'
+  dm-esec-client:
+    bind: '5009'
+    source: 'https://github.com/LandRegistry/dm-esec-client.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'application:app'
+    manage: false
+    revision: 'develop'
+    vars:
+      VARS_LOC: 'secretplace'
   dm-deed-api:
     bind: '5003'
     source: 'https://github.com/LandRegistry/dm-deed-api.git'
