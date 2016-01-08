@@ -179,13 +179,13 @@ class profiles::postgresqlha(
 
   file { "/etc/repmgr/${version}/auto_failover.sh":
     ensure  => file,
-    source  => 'puppet:///extra_files/postgres_auto_failover.sh',
+    source  => 'puppet:///modules/profiles/postgres_auto_failover.sh',
     require => Package['repmgr94']
   }
 
   file { '/etc/haproxy/haproxy.cfg':
     ensure  => file,
-    source  => 'puppet:///extra_files/postgres_haproxy.cfg',
+    source  => 'puppet:///modules/profiles/postgres_haproxy.cfg',
     require => Package['haproxy'],
     notify  => Service['haproxy']
   }
@@ -247,19 +247,19 @@ class profiles::postgresqlha(
 
   file { "/etc/repmgr/${version}/repmgr.conf":
     ensure  => file,
-    source  => 'puppet:///extra_files/postgres_repmgr_nodea.conf',
+    source  => 'puppet:///modules/profiles/postgres_repmgr_nodea.conf',
     require => Package['repmgr94'], ###
     before  => Exec['master_register_repmgrd'],
   }
 
   file { '/etc/keepalived/keepalived.conf':
     ensure => file,
-    source => 'puppet:///extra_files/postgres_keepalived_nodea.conf',
+    source => 'puppet:///modules/profiles/postgres_keepalived_nodea.conf',
   }
 
   # file { "/var/lib/pgsql/${version}/data/postgresql.conf":
   #   ensure => file,
-  #   source => 'puppet:///extra_files/postgres_postgresql.conf',
+  #   source => 'puppet:///modules/profiles/postgres_postgresql.conf',
   # }
 
 
@@ -267,7 +267,7 @@ class profiles::postgresqlha(
 
   # file { '/var/lib/pgsql/data/pg_hba.conf':
   #   ensure => file,
-  #   source => 'puppet:///extra_files/postgres_pg_hba.conf',
+  #   source => 'puppet:///modules/profiles/postgres_pg_hba.conf',
   # }
 
   service {'keepalived':
@@ -299,7 +299,7 @@ class profiles::postgresqlha(
 
   file { '/var/lib/pgsql/.pgpass':
     ensure => file,
-    source => 'puppet:///extra_files/.pgpass',
+    source => 'puppet:///modules/profiles/.pgpass',
     owner  => 'postgres',
     group  => 'postgres',
     mode   => '0600',
@@ -307,7 +307,7 @@ class profiles::postgresqlha(
 
   file { '/root/.pgpass':
     ensure => file,
-    source => 'puppet:///extra_files/.pgpass',
+    source => 'puppet:///modules/profiles/.pgpass',
     mode   => '0600',
   } ->
 

@@ -12,7 +12,7 @@ class profiles::postgresqlha_standby (
     $dbroot        = '/var/lib/pgsql/',
   ){
 
-  if $postgres_ha_setup_done != 0 {
+  if $::postgres_ha_setup_done != 0 {
 
     $pg_conf = "${dbroot}/${version}/data/postgresql.conf"
     $this_hostname = $::hostname
@@ -26,7 +26,7 @@ class profiles::postgresqlha_standby (
 
     file { '/etc/puppetlabs/facter/facts.d/postgres_ha_setup_done.sh' :
       ensure => file,
-      source => 'puppet:///extra_files/postgres_ha_setup_done.sh',
+      source => 'puppet:///modules/profiles/postgres_ha_setup_done.sh',
       owner  => 'root',
       mode   => '0755'
     } ->
@@ -76,7 +76,7 @@ class profiles::postgresqlha_standby (
     file { "/etc/repmgr/${version}/auto_failover.sh" :
       ensure  => file,
       owner   => 'postgres',
-      source  => 'puppet:///extra_files/postgres_auto_failover.sh',
+      source  => 'puppet:///modules/profiles/postgres_auto_failover.sh',
       require => Package["repmgr${shortversion}"],
       mode    => '0555'
     }
@@ -97,7 +97,7 @@ class profiles::postgresqlha_standby (
 
     file { '/etc/ssh/ssh_config' :
       ensure => file,
-      source => 'puppet:///extra_files/postgres_ssh_config',
+      source => 'puppet:///modules/profiles/postgres_ssh_config',
       owner  => 'root',
       mode   => '0644',
       notify => Service['sshd']

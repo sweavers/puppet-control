@@ -53,7 +53,7 @@ class profiles::postgresqlha_master(
     $dbs           = hiera_hash('postgres_dbs', false)
   ){
 
-  if $postgres_ha_setup_done != 0 {
+  if $::postgres_ha_setup_done != 0 {
 
     include ::stdlib
 
@@ -84,7 +84,7 @@ class profiles::postgresqlha_master(
       require => User[postgres]
     } ->
 
-    file { "$dbroot/.pgsql_profile" :
+    file { "${dbroot}/.pgsql_profile" :
       ensure  => 'file',
       content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
       owner   => 'postgres',
@@ -181,7 +181,7 @@ class profiles::postgresqlha_master(
     file { "/etc/repmgr/${version}/auto_failover.sh" :
       ensure  => file,
       owner   => 'postgres',
-      source  => 'puppet:///extra_files/postgres_auto_failover.sh',
+      source  => 'puppet:///modules/profiles/postgres_auto_failover.sh',
       require => Package["repmgr${shortversion}"],
       mode    => '0544'
     }
@@ -202,7 +202,7 @@ class profiles::postgresqlha_master(
 
     file { '/etc/ssh/ssh_config' :
       ensure => file,
-      source => 'puppet:///extra_files/postgres_ssh_config',
+      source => 'puppet:///modules/profiles/postgres_ssh_config',
       owner  => 'root',
       mode   => '0644',
       notify => Service['sshd']
@@ -210,7 +210,7 @@ class profiles::postgresqlha_master(
 
     file { '/etc/puppetlabs/facter/facts.d/postgres_ha_setup_done.sh' :
       ensure => file,
-      source => 'puppet:///extra_files/postgres_ha_setup_done.sh',
+      source => 'puppet:///modules/profiles/postgres_ha_setup_done.sh',
       owner  => 'root',
       mode   => '0755'
     } ->

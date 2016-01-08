@@ -63,7 +63,7 @@ class profiles::postgresqlha_barman(
 
   file { '/etc/ssh/ssh_config' :
     ensure => file,
-    source => 'puppet:///extra_files/postgres_ssh_config',
+    source => 'puppet:///modules/profiles/postgres_ssh_config',
     owner  => 'root',
     mode   => '0644',
     notify => Service['sshd']
@@ -73,7 +73,7 @@ class profiles::postgresqlha_barman(
     ensure  => file,
     owner   => 'barman',
     group   => 'barman',
-    source  => 'puppet:///extra_files/postgres_barman_config',
+    source  => 'puppet:///modules/profiles/postgres_barman_config',
     mode    => '0600',
     require => Package['barman'],
   } ->
