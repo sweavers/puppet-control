@@ -6,10 +6,12 @@
 :hierarchy:
   - secrets/nodes/%{::fqdn}
   - secrets/types/%{::server_type}
+  - secrets/network_location/%{::network_location}
   - secrets/application_environment/%{::application_environment}
   - secrets/secrets
   - application_environment/%{::application_environment}
   - hosts/%{::fqdn}
   - types/${::server_type}
+  - network_location/%{::network_location}
   - roles/%{::puppet_role}
   - common

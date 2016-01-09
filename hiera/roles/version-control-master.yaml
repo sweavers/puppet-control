@@ -1,72 +1,40 @@
 ---
 
 classes:
-  - 'profiles::jenkins'
-  - 'profiles::ansible'
+  - profiles::digitalregister_app
+  - profiles::postgresql
 
-profiles::jenkins::plugins:
-  git:
-    version: 2.4.0
-  credentials:
-    version: 1.23
-  git-client:
-    version: 1.19.0
-  scm-api:
-    version: 0.2
-  matrix-project:
-    version: 1.4.1
-  token-macro:
-    version: 1.10
-  ssh-credentials:
-    version: 1.11
-  mailer:
-    version: 1.15
-  scm-sync-configuration:
-    version: 0.0.8
-  subversion:
-    version: 1.54
-  analysis-core:
-    version: 1.72
-  tasks:
-    version: 4.45
-  mapdb-api:
-    version: 1.0.6.0
-  ruby-runtime:
-    version: 0.12
-    timeout: 240
-  rbenv:
-    version: 0.0.16
-  ansicolor:
-    version: 0.4.1
-  scm-sync-configuration:
-    version: 0.0.8
-  role-strategy:
-    version: 2.2.0
-  github-api:
-    version: 1.69
-  plain-credentials:
-    version: 1.1
-  github:
-    version: 1.13.3
-  xunit:
-    version: 1.97
-  cobertura:
-    version: 1.9.7
-  pyenv:
-    version: 0.0.7
-  github-oauth:
-    version: 0.22.2
-  build-monitor-plugin:
-    version: 1.6+build.142
-  parameterized-trigger:
-    version: 2.29
-  urltrigger:
-    version: 0.41
-  Parameterized-Remote-Trigger:
-    version: 2.2.2
+postgres_databases:
+  version-control:
+    user: version-control
+    owner: version-control
+    password: md54f282525c021de696bfbb7b53527e94d
+    before: Class[Profiles::Digitalregister_app]
 
-profiles::jenkins::jenkins_ssl: true
-profiles::jenkins::ssl_crt: |
+applications:
+  version-control:
+    bind: '5000'
+    source: 'https://github.com/mooreandrew/version-control.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'application.server:app'
+    manage: true
+    revision: 'master'
+    vars:
+      SECRET_KEY: '123456790'
+      SETTINGS: 'config.DevelopmentConfig'
+      SQLALCHEMY_DATABASE_URI: 'postgresql+pg8000://version-control:version-control@localhost/version-control'
+      SALT: 'passwordsalt'
+      MODE: 'master'
+      SLAVE_TOKEN_HASH: ''
+      CRYPT: '1234567812345678'
+
+profiles::digitalregister_app::frontend_url: 192.16.42.82
+
+profiles::digitalregister_app::port: 80
+
+profiles::digitalregister_app::api_ssl: true
+
+profiles::digitalregister_app::ssl_crt: |
   -----BEGIN CERTIFICATE-----
   MIIDfzCCAmegAwIBAgIJAOHewZLH4GsjMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
   BAYTAkdCMRUwEwYDVQQHDAxEZWZhdWx0IENpdHkxHDAaBgNVBAoME0RlZmF1bHQg
@@ -89,7 +57,7 @@ profiles::jenkins::ssl_crt: |
   NMc95xkmMe9ioG3hSBkqfSF8ZjCRIiQDQaFoRE96hnToyXA=
   -----END CERTIFICATE-----
 
-profiles::jenkins::ssl_key: |
+profiles::digitalregister_app::ssl_key: |
   -----BEGIN PRIVATE KEY-----
   MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDo6yPB1yyYndef
   yaD7qYnf1jc+gzY1d/mPturz+PyrSHhCJ1mObCZUHt0lRibCOGyGWK7WavsCJbDk
@@ -118,5 +86,3 @@ profiles::jenkins::ssl_key: |
   uWLEl7PF7nFGUM7Btv23iWH84nZZgUFDcayXV288Pzba1miTosRI6F3tAXdiI4o3
   wU96va4MvaWpYSkYb5zQbng=
   -----END PRIVATE KEY-----
-
-profiles::jenkins::ci_test_tools: true
