@@ -4,8 +4,8 @@ classes:
   - profiles::digitalregister_app
 
 applications:
-  public-api:
-    bind: '5001'
+  inf-dashboard-old:
+    bind: '5111'
     source: 'https://github.com/sweavers/infrastructure-dashboard-python.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.server:app'
