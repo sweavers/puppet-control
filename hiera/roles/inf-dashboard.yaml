@@ -5,7 +5,7 @@ classes:
 
 applications:
   inf-dashboard-old:
-    bind: '5111'
+    bind: '5001'
     source: 'https://github.com/sweavers/infrastructure-dashboard-python.git'
     app_type: 'wsgi'
     wsgi_entry: 'application.server:app'
