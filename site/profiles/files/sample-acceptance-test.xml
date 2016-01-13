@@ -31,7 +31,6 @@
   <builders>
     <hudson.tasks.Shell>
       <command># Install specific gems as detailed in the Gemfile for your application.
-# There isn&apos;t one for the sample application but you get the idea...
 bundle install</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
