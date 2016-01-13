@@ -30,9 +30,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command># Uninstall the cucumber ruby gem that is currently in the environment
-gem uninstall cucumber -aIx
-# Install specific gems as detailed in the Gemfile for your application.
+      <command># Install specific gems as detailed in the Gemfile for your application.
 # There isn&apos;t one for the sample application but you get the idea...
 bundle install</command>
     </hudson.tasks.Shell>
@@ -47,13 +45,12 @@ export APPLICATION_ENVIRONMENT_VARIABLE = &apos;Value&apos;
 cd acceptance-tests
 
 # Start testing - this example shows a number of commonly used options.
-# If you tag your test scenarios you can tell cucumber to ignore specific tags.
 # The &apos;format&apos; option is used to specify the output format, in this case, in JUnit XML format
 # for interpretation by the reporting step, executed in the Post Build Action step below,
 # and a &apos;pretty&apos; format that can be seen in the job console output.
 # The &apos;out&apos; option specifies where the output files are to go.
 
-cucumber ~@ignore  --tags ~@w3cvalidation --format junit --out $WORKSPACE/results/ --format pretty</command>
+cucumber --format junit --out $WORKSPACE/results/ --format pretty</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -92,8 +89,8 @@ cucumber ~@ignore  --tags ~@w3cvalidation --format junit --out $WORKSPACE/result
       <ruby-object ruby-class="Jenkins::Tasks::BuildWrapperProxy" pluginid="rbenv">
         <pluginid pluginid="rbenv" ruby-class="String">rbenv</pluginid>
         <object ruby-class="RbenvWrapper" pluginid="rbenv">
-          <rbenv__root pluginid="rbenv" ruby-class="String">$HOME/.rbenv</rbenv__root>
           <ruby__build__repository pluginid="rbenv" ruby-class="String">https://github.com/sstephenson/ruby-build.git</ruby__build__repository>
+          <rbenv__root pluginid="rbenv" ruby-class="String">$HOME/.rbenv</rbenv__root>
           <rbenv__repository pluginid="rbenv" ruby-class="String">https://github.com/sstephenson/rbenv.git</rbenv__repository>
           <rbenv__revision pluginid="rbenv" ruby-class="String">master</rbenv__revision>
           <ruby__build__revision pluginid="rbenv" ruby-class="String">master</ruby__build__revision>
