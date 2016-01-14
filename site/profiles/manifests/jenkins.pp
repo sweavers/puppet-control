@@ -20,6 +20,7 @@
 class profiles::jenkins (
 
   $plugins                 = undef,
+  $jobs                    = undef,
   $deploy_from_jenkins_rsa = undef,
 
   $jenkins_url             = [ $::hostname ],
@@ -103,6 +104,7 @@ class profiles::jenkins (
     plugin_hash        => $plugins,
     port               => 8080,
     configure_firewall => false,
+    job_hash           => $jobs,
   }
 
   file { '/var/lib/jenkins/.ssh':
@@ -198,4 +200,5 @@ class profiles::jenkins (
       'libjpeg-turbo-devel', 'zlib-devel'])
 
   }
+
 }

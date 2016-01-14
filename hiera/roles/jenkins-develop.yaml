@@ -63,6 +63,13 @@ profiles::jenkins::plugins:
   parameterized-trigger:
     version: 2.29
 
+profiles::jenkins::jobs:
+  sample-build-and-ut:
+    source: profiles/sample-build-and-ut.xml
+    config: true
+  sample-acceptance-test:
+    source: profiles/sample-acceptance-test.xml
+    config: true
 
 profiles::jenkins::jenkins_ssl: true
 profiles::jenkins::ssl_crt: |
