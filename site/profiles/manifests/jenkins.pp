@@ -22,6 +22,7 @@ class profiles::jenkins (
   $plugins                 = undef,
   $jobs                    = undef,
   $deploy_from_jenkins_rsa = undef,
+  $version                 = '1.626'
 
   $jenkins_url             = [ $::hostname ],
   $jenkins_ssl             = false,
@@ -105,6 +106,7 @@ class profiles::jenkins (
     port               => 8080,
     configure_firewall => false,
     job_hash           => $jobs,
+    version            => $version,
   }
 
   file { '/var/lib/jenkins/.ssh':
