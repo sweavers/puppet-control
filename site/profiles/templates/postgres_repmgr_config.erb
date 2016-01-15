@@ -1,14 +1,15 @@
-<% case @hostname
-   when "nodea"
-     node_number = 1
-   when "nodeb"
-     node_number = 2
-   when "nodec"
-     node_number = 3
+<% @nodecount = 0
+scope.function_hiera(['pg_drv_cluster_member_hostnames']).each do |host_name,config|
+  if host_name == @hostname
+    @node_number = config['repmgr_node_number']
+  end
+  if config['initial_role'] == 'master' or config['initial_role'] == 'standby'
+    @nodecount += 1
+  end
 end %>
 cluster=test
-node=<%= node_number %>
-node_name=node<%= node_number %>
+node=<%= @node_number %>
+node_name=node<%= @node_number %>
 conninfo='host=<%= @hostname %> user=repmgr dbname=repmgr'
 pg_bindir=/usr/pgsql-9.4/bin
 master_response_timeout=60
@@ -17,5 +18,5 @@ reconnect_interval=10
 failover=automatic
 promote_command='/etc/repmgr/9.4/auto_failover.sh'
 follow_command='/usr/pgsql-9.4/bin/repmgr standby follow -f /etc/repmgr/9.4/repmgr.conf -W'
-priority=<%= 4 - node_number %>
+priority=<%= @nodecount - @node_number %>
 use_replication_slots=1

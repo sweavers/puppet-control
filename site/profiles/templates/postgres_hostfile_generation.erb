@@ -1,0 +1,5 @@
+127.0.0.1   <%= @hostname %> localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6<%
+scope.function_hiera(['pg_drv_cluster_member_hostnames']).each do |host_name,config| %>
+<%= config['ip_address'] + ' ' + host_name -%>
+<% end %>

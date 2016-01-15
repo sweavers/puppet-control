@@ -154,163 +154,64 @@ repmgr_password: repmgr
 barman_password: barman
 
 postgresqlha_keys:
-  bart:
-    barman:
-      public: |
-        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1sA+d8lW2BtvKbUsEtFwaLiQo3cWJgM65W2cSSzr9h/qj0w7v8qdLKG2cYk+1dn0O5uzFWgUkq1QuqK2hhw2OKBZGVrQNdovqK81RPM3Xj7f0XDw+N94qkPXJ0Aw0MTvgNPF+xZ2arnHvr/icZQmKHgTxsV4f4uMchvVj/D9yFNjt3dnJa46sUNJisLaZIRcaMVd6t/OAl5oy1y6OjyZ/TT5ksIyp2jlAPCwQzmV9axC7dIZvzMfMOPQnyksZiBWL9sbvQ/gZZPvj6DwzKB/bhysTs4ytzJe8FxWj/KU3i15Nkcs86tOdsjmXfuHkwts11MHXK0yMSvkj2ZFGl6p1 barman@bart
-      private: |
-        -----BEGIN RSA PRIVATE KEY-----
-        MIIEowIBAAKCAQEAtbAPnfJVtgbbym1LBLRcGi4kKN3FiYDOuVtnEks6/Yf6o9MO
-        7/KnSyhtnGJPtXZ9DubsxVoFJKtULqitoYcNjigWRla0DXaL6ivNUTzN14+39Fw8
-        PjfeKpD1ydAMNDE74DTxfsWdmq5x76/4nGUJih4E8bFeH+LjHIb1Y/w/chTY7d3Z
-        yWuOrFDSYrC2mSEXGjFXerfzgJeaMtcujo8mf00+ZLCMqdo5QDwsEM5lfWsQu3SG
-        b8zHzDj0J8pLGYgVi/bG70P4GWT74+g8Mygf24crE7OMrcyXvBcVo/ylN4teTZHL
-        POrTnbI5l37h5MLbNdTB1ytMjEr5I9mRRpeqdQIDAQABAoIBAEiZzePDjlRqcTF2
-        ct+yYotjnLdnxyOnAPQ4fftlbHEbASCtme5v/EGgKgyvjEJq0pY92KcTzbJVdBIg
-        /SDqopQHmL8KrnAiys4MKsMnlOlqWIugv8Hs+S3xNwYpyHaipdZ10Xpi5ROGWaj5
-        nFKCXUl/rWIXChGbzDz+ANivV3ryBPjMkN00G/VW7eDpDHY5E9iYe25DRqeIuRVK
-        JXFhXsnaxXn9pgcG9Dmyv+CUyL7Xb1Ji0atjFHk8AjTUotivzoWN33D0GLp1TYx8
-        P4RRpxkngpRV6xWpPKPW4ExnHJQGixSEyJUu17xVLRmozvkH9TE37NLvKZjCI/Sp
-        VdN3pQECgYEA5cBV7FyxCcg9h5BJdJiMCasmcyE0V5IYnb6ua0xO2qEeapTnLFW4
-        gjpW3HbA21pUz3z5/SEP6Ri7h+euhpxCTmazfY13lrZuuLK57nQwgFYWUbhdx9ha
-        UUbQzLTkDy1/2ACESyFrR4Nl/SGkuAoJLTvP8jqXBJcp8SO9HrkoO3ECgYEAynH7
-        ux9WIhr8OtSuhvItfY/EgiNU35bp9n2XHuEONIgavE3SDoVZ82PUFzkw6fC40b8u
-        XYfvvipQ2ihYiPaebfrfXyJXLPcPXaWHztDTTZ1OeylvqPVPr8m9RUPz8CNuQ/5N
-        id0Y5Vdds2FsH+ePqZXyN7ZE8CyyA5f4XwhldUUCgYBUO/xEuIdAKuZEOaZ01Ski
-        sllahKYIJUxZKXwRYtzWU5QvR4CqRJNtS65lDjUPN0M4/304TVLkB2laHptiRxAY
-        ZpcQRTm/TAu0M/LvdjICG437UDkx+CTE/821/+xNlET3ENlwIkSO56IQ+LDHuQY8
-        S12mVczgpft+qbfA9+nEQQKBgQDKaH5sz975iIuJcp3w1HBBKx4pk5PHXYcc6OLQ
-        f+oJAc/hV9lepVuTKsuiUI8kR4cyRvjfkQtV0c8238HtZs5uXbc50gbhMT+OvPL1
-        B/tMjawrHfnDL0n2EzmG6HMcNQCJQNhbr9C1dM19jTljCM2tm/sqUrXIgJeXWjl9
-        ItL2FQKBgCFEv4NRAkIJ3hYgs7/YSTiJb0dkstYIdOYLbU36sMO4xdLvgd4TBOdT
-        Tf7stwwsdm4GXeOJTzs+YhRH4lDBbLW1YYq/mBQtvcJW2UuFxz8mYw8cvzXCLPEP
-        6ADZlpUVmoWzWe+yrWe0MUpQZ5FH0VMpuhFmRWyutfCZ+Lu20jLM
-        -----END RSA PRIVATE KEY-----
+  public: |
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMzfsdYHHcHDq3Br1zh7F1GtjlTHX5eLRgbx4L/KPdRoR8zFsUe+EfVBLqUJnirFs9f7oAQ7gsmssYZ67Zi32/Guzs1jXFtrIbqnftJZNl1cVt8KxQtPC0V1VwvCOOROIy+TYBHNsi4MMIP7tVyneD4tDMZxjQnaQ1TKi2KAaDq5DHfvbP/1IA9Ef83IDu3m04tTVV+AI4YuFWUT4PsXOlscZXBa7rljZcJnXn/jH3TRAAMgs5zgWMM6W4OIm/NRWO9SvR13eqYkmO+hPx9DBCoCL+M9e2XjjTvm5K6gokeaowZo1ZVcmxTXxysf7wlb30jEKx2fQj4gKx13o/1eHj
+  private: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpAIBAAKCAQEAzM37HWBx3Bw6twa9c4exdRrY5Ux1+Xi0YG8eC/yj3UaEfMxb
+    FHvhH1QS6lCZ4qxbPX+6AEO4LJrLGGeu2Yt9vxrs7NY1xbayG6p37SWTZdXFbfCs
+    ULTwtFdVcLwjjkTiMvk2ARzbIuDDCD+7Vcp3g+LQzGcY0J2kNUyotigGg6uQx372
+    z/9SAPRH/NyA7t5tOLU1VfgCOGLhVlE+D7FzpbHGVwWu65Y2XCZ15/4x900QADIL
+    Oc4FjDOluDiJvzUVjvUr0dd3qmJJjvoT8fQwQqAi/jPXtl44075uSuoKJHmqMGaN
+    WVXJsU18crH+8JW99IxCsdn0I+ICsdd6P9Xh4wIDAQABAoIBAHO1A+Rq8qjqgfmZ
+    ozs8NHP2wQd7FUPmf/HjlVQsXd/L0Vo4klSWUG/ErhMXinlX6wxptwojOFBq+8dD
+    /LMHbfmkGqsLssGLIEElJDAlBIuKJMqiKJhIQZ2BodHZWTUtkaY+ydYDGYMw/L8S
+    UqJ7it5GLLTuokRqa7V5I/AV2OhV6JWKOP86ubJk5qbYUWhlWeoDGU68L2aMXic+
+    58VPs/L6gObppLsb/M8W1B86CXM8PyPLFMsyQcW9DUfcrL4v/JyS5gXuDHNTYMWk
+    /2HXCYv6DIZpJkFL6FNG/IKLwU3OSxMRk1eGWK6tGmCSW0QdnbAS/jUs0Hu3BHVu
+    4TqNM/ECgYEA8VVX1VLhjb6aKkDXrzU1fvZ5XQn8nmgHdnRjpXIh3WUNlLC5Gyu5
+    WX3Q9lOemUYxghjrSsjYboWQP74+vYGvh1Zcis7Hehb1nMYkDWvtZFsE52g47yv9
+    ABnXM3mlSI2xBt8urEzHziQ+MsfDmS4rhbw0z2dIVusYkffZl9r8oncCgYEA2UBT
+    FjHoNDQzo5syr3RHaaM7JPYHp42DeQR9uDmdaAU4BHMTdKUSnP0sVmYoo4nBQQvk
+    RxHlxxeuwg02A91pRYJKJnYgMcgHImZBx+r4C8+vwA5bLNWlJd7JoA5ts8qkWM1L
+    I4p2OXddaMwLZWyegU3IyJ+azGLJTQTqxPGoSvUCgYA0PB2jvam2TV/+70P/10t5
+    7I0+NxAnlSqwV+bNg5OS4PF8kneuStt2ZEYbWuQEFu5WU2ByMmCuI1iig2H/EJfW
+    ejnTjYgdg+SrhzN8eDTMuOqpz6QrGGFNaUpsCNNejdSYQSxP/NpuYufXg+dxO04O
+    RztC/P7qWT5bMcM2HB78ZwKBgQDUim2+5Qx7JibvBMLNjEDhRGR0gI50ian6Fz63
+    oQYx4gkvsTVzhJt1IurhjAhuFjMO5Ads0EGwSacbCbmyhkabTiAlCKPuj/cK3Ge2
+    olYRmBolFuZ0Mn/jUNaI1BTXNIUcq5u7JZcMGY81G4p6q41WizbHr/3Nv0eZJhpY
+    muM+kQKBgQDIDj6cFDoCkYyem8A+SeLboy9k/JkecTEa+xN/eGHucC6Nmb7ua/3M
+    Y39lBPL+Q3RCb0iSrGsrLJGqvXtI8BHGBAqhnzxSeKSSdykjIJZFnl44IKpKM5sI
+    sQRz3Dp06A5Sr56Oo4g0hj478F7NK+vzPhCpgyvOugCbjfjEdoBj5g==
+    -----END RSA PRIVATE KEY-----
+
+pg_drv_cluster_member_hostnames:
+  puppet puppetmaster puppet-master-91.control.net:
+    ip_address:          192.168.33.5
+    initial_role:        puppetmaster
+  vip:
+    ip_address:          192.168.33.100
+    initial_role:        vip
   nodea:
-    postgres:
-      public: |
-        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMzfsdYHHcHDq3Br1zh7F1GtjlTHX5eLRgbx4L/KPdRoR8zFsUe+EfVBLqUJnirFs9f7oAQ7gsmssYZ67Zi32/Guzs1jXFtrIbqnftJZNl1cVt8KxQtPC0V1VwvCOOROIy+TYBHNsi4MMIP7tVyneD4tDMZxjQnaQ1TKi2KAaDq5DHfvbP/1IA9Ef83IDu3m04tTVV+AI4YuFWUT4PsXOlscZXBa7rljZcJnXn/jH3TRAAMgs5zgWMM6W4OIm/NRWO9SvR13eqYkmO+hPx9DBCoCL+M9e2XjjTvm5K6gokeaowZo1ZVcmxTXxysf7wlb30jEKx2fQj4gKx13o/1eHj postgres@nodea
-      private: |
-        -----BEGIN RSA PRIVATE KEY-----
-        MIIEpAIBAAKCAQEAzM37HWBx3Bw6twa9c4exdRrY5Ux1+Xi0YG8eC/yj3UaEfMxb
-        FHvhH1QS6lCZ4qxbPX+6AEO4LJrLGGeu2Yt9vxrs7NY1xbayG6p37SWTZdXFbfCs
-        ULTwtFdVcLwjjkTiMvk2ARzbIuDDCD+7Vcp3g+LQzGcY0J2kNUyotigGg6uQx372
-        z/9SAPRH/NyA7t5tOLU1VfgCOGLhVlE+D7FzpbHGVwWu65Y2XCZ15/4x900QADIL
-        Oc4FjDOluDiJvzUVjvUr0dd3qmJJjvoT8fQwQqAi/jPXtl44075uSuoKJHmqMGaN
-        WVXJsU18crH+8JW99IxCsdn0I+ICsdd6P9Xh4wIDAQABAoIBAHO1A+Rq8qjqgfmZ
-        ozs8NHP2wQd7FUPmf/HjlVQsXd/L0Vo4klSWUG/ErhMXinlX6wxptwojOFBq+8dD
-        /LMHbfmkGqsLssGLIEElJDAlBIuKJMqiKJhIQZ2BodHZWTUtkaY+ydYDGYMw/L8S
-        UqJ7it5GLLTuokRqa7V5I/AV2OhV6JWKOP86ubJk5qbYUWhlWeoDGU68L2aMXic+
-        58VPs/L6gObppLsb/M8W1B86CXM8PyPLFMsyQcW9DUfcrL4v/JyS5gXuDHNTYMWk
-        /2HXCYv6DIZpJkFL6FNG/IKLwU3OSxMRk1eGWK6tGmCSW0QdnbAS/jUs0Hu3BHVu
-        4TqNM/ECgYEA8VVX1VLhjb6aKkDXrzU1fvZ5XQn8nmgHdnRjpXIh3WUNlLC5Gyu5
-        WX3Q9lOemUYxghjrSsjYboWQP74+vYGvh1Zcis7Hehb1nMYkDWvtZFsE52g47yv9
-        ABnXM3mlSI2xBt8urEzHziQ+MsfDmS4rhbw0z2dIVusYkffZl9r8oncCgYEA2UBT
-        FjHoNDQzo5syr3RHaaM7JPYHp42DeQR9uDmdaAU4BHMTdKUSnP0sVmYoo4nBQQvk
-        RxHlxxeuwg02A91pRYJKJnYgMcgHImZBx+r4C8+vwA5bLNWlJd7JoA5ts8qkWM1L
-        I4p2OXddaMwLZWyegU3IyJ+azGLJTQTqxPGoSvUCgYA0PB2jvam2TV/+70P/10t5
-        7I0+NxAnlSqwV+bNg5OS4PF8kneuStt2ZEYbWuQEFu5WU2ByMmCuI1iig2H/EJfW
-        ejnTjYgdg+SrhzN8eDTMuOqpz6QrGGFNaUpsCNNejdSYQSxP/NpuYufXg+dxO04O
-        RztC/P7qWT5bMcM2HB78ZwKBgQDUim2+5Qx7JibvBMLNjEDhRGR0gI50ian6Fz63
-        oQYx4gkvsTVzhJt1IurhjAhuFjMO5Ads0EGwSacbCbmyhkabTiAlCKPuj/cK3Ge2
-        olYRmBolFuZ0Mn/jUNaI1BTXNIUcq5u7JZcMGY81G4p6q41WizbHr/3Nv0eZJhpY
-        muM+kQKBgQDIDj6cFDoCkYyem8A+SeLboy9k/JkecTEa+xN/eGHucC6Nmb7ua/3M
-        Y39lBPL+Q3RCb0iSrGsrLJGqvXtI8BHGBAqhnzxSeKSSdykjIJZFnl44IKpKM5sI
-        sQRz3Dp06A5Sr56Oo4g0hj478F7NK+vzPhCpgyvOugCbjfjEdoBj5g==
-        -----END RSA PRIVATE KEY-----
+    ip_address:          192.168.33.10
+    initial_role:        master
+    keepalived_priority: 100
+    repmgr_node_number:  1
   nodeb:
-    postgres:
-      public: |
-        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIhUd4XT0oXVFcUtjyIsCE+xRIKYRH+/S0YfKWtYIOlkPd3LHGrdqwDVRkhdbgrnc5bcWM4XpTbi7kYq/APyYfxRJwS8//Jm3Re1/MICFLUHGh236vu+Scapq8HCmk9ng5TyfdxQOmTmSCMUOmqi0nlRROLBmYIk9BsrDWUsczjkXcWXRqziXJEztTa+iOqC6Ori9qY95CEPzScbyY0ONanmPrZJSPdBelWZKEHA3FRvymemxJ7uyPk5u7GnoLUm7BZdXe3rAPkc+7M79dWpqNS329y0I4vh+qvYpH2Qx/CzjuSSZ30160eqyRWB7szUj11mcs8LlsLI5QjizkGfI7 postgres@nodeb
-      private: |
-        -----BEGIN RSA PRIVATE KEY-----
-        MIIEpAIBAAKCAQEAyIVHeF09KF1RXFLY8iLAhPsUSCmER/v0tGHylrWCDpZD3dyx
-        xq3asA1UZIXW4K53OW3FjOF6U24u5GKvwD8mH8UScEvP/yZt0XtfzCAhS1Bxodt+
-        r7vknGqavBwppPZ4OU8n3cUDpk5kgjFDpqotJ5UUTiwZmCJPQbKw1lLHM45F3Fl0
-        as4lyRM7U2vojqgujq4vamPeQhD80nG8mNDjWp5j62SUj3QXpVmShBwNxUb8pnps
-        Se7sj5Obuxp6C1JuwWXV3t6wD5HPuzO/XVqajUt9vctCOL4fqr2KR9kMfws47kkm
-        d9NetHqskVge7M1I9dZnLPC5bCyOUI4s5BnyOwIDAQABAoIBAQCQV6CC/Fsx2zre
-        AqU4Z9u93h9Tcs9OIgiccIV4B2B/r5ta8arnIe7yHCZL1iw/wFcCeApkx0qPFBmd
-        PYzWDp8a73m+bFRljvwud2kWP2q4FEg4AxDG37JJBlQsZPl1ThZs6pYABfoClRu0
-        vFG+f3HRtHbRbt1drhTvbfntzdinOtSX9tqYDmQ5IglFb8Tprnj8q3hBE8Dpi8N5
-        X0vk2vKRVTXADihjco1N6g4CHpLmkNSYl4gPjD10yZBOFWz/j63X9p9NtxD1QDd8
-        t0z/JdFzbnhKpbQ5LTDdX5YbJFMSrVRpOuoKsPUsYvQFTtKobIGpkWIUeGveCv7Y
-        So7ipeSBAoGBAOro6Gb/ErMQY1z1t4izPOzPqpLC4tt5xU8lEDCauNU9Bl03hTMS
-        3ozDm0xz/nyqLL9aRfwaUWSAE/L1GK61iPq6I803eDwmTbQbRuWF7BKXSP8z4Xxs
-        CgBpVJG/2kPeAnWWpxjEucspR75ASS9G6+P2IeVXr4EFqYG2omgoSgKjAoGBANqF
-        +0MVd6ivXOU6XJUz1KV9WeNY/lSKqzNmxzt7/qmM5zbnmS5s8J3ZrBAUTTSyi9/p
-        NAtCIP+92KBEQtoci26EWMkeZq1SXCHkhcgjTO1SLHQSBTcRPkqF9HpRac3BzttF
-        JKmEluhBOXDEmvutWhF8G2q/4e3p+CXkfrjluOOJAoGBANwJxoeTriRk2W4eDAjU
-        O+FmtFQ8kNscuSFlikC87R1wyCFQ/EfXCPe50iJPFLYZgUjMenmm/U6yWf1eb/xW
-        tzSEXzy/FLTi/C4Uztf4FiVj6FCEfFZbrRKtlzXfC8g+kPcsYuDkhVQ0Gquu896B
-        BDzINP/qns6wSxLhzEbcVlcZAoGANQXZh9eHp1iVs9FLcbCX4mfeDbokTCMxk1FW
-        +moFyuIzoDDmDEvGvqZ4h5ZFfYntQrF1PV4YX7WTAKBPkFjoxDI80OAdjeS0Ek0+
-        4Ocf3V3ZB3jv5wK6GJ8USTHD+HcUWEQYt0FC1Kwu4dvytyrC9gclJ+vTSEVDPv6I
-        eRjUmfECgYAPVqF9wMHu6KNjrwgvfuckzCxxx5sE5YF/y7ngWjcsczQ64UILZg9K
-        IWfduY1yEiwV4Jb6fJnYSrwvwmbqm57mVimXll1kI45a8NSnq4r4BMrOVpthzUex
-        VJ3AS3lIMUI/Xk83oLBTCARgodUaEYCTVD/L4CXR5q1zLkkY31m37g==
-        -----END RSA PRIVATE KEY-----
+    ip_address:          192.168.33.20
+    initial_role:        standby
+    keepalived_priority: 99
+    repmgr_node_number:  2
   nodec:
-    postgres:
-      public: |
-        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZZw0zo1ZoJW9lomlM8WImkmM6lnmUJoVUlHQ80eSnPPtYG7YA80w5hpPqk9Ga5JyaeETzmgvWczl3stBlkhbfmVhiyt0u87I9GLdE08w2oAHIQks/8muokasl6NwNPKV+rTvIGAQBHcwaQGDeU/cxefEtl/FAlszt95cIRY8MK6ouDtjih0NB27XppPfIXa+YmYstA/wAyrrDFyiV3Dr81MBzGMGufCKgONnKMnGc4Um5gCgY/Jgx9FUbcUtCkl1uz04Rc0BAAmrDgZz9jR7SgV9ggu7p1nOX22pZ4QbkOq07JxulAvcoDrjej8QTcfn4XNomJyy84XMKOIX8FkkT postgres@nodec
-      private: |
-        -----BEGIN RSA PRIVATE KEY-----
-        MIIEpQIBAAKCAQEA2WcNM6NWaCVvZaJpTPFiJpJjOpZ5lCaFVJR0PNHkpzz7WBu2
-        APNMOYaT6pPRmuScmnhE85oL1nM5d7LQZZIW35lYYsrdLvOyPRi3RNPMNqAByEJL
-        P/JrqJGrJejcDTylfq07yBgEAR3MGkBg3lP3MXnxLZfxQJbM7feXCEWPDCuqLg7Y
-        4odDQdu16aT3yF2vmJmLLQP8AMq6wxcoldw6/NTAcxjBrnwioDjZyjJxnOFJuYAo
-        GPyYMfRVG3FLQpJdbs9OEXNAQAJqw4Gc/Y0e0oFfYILu6dZzl9tqWeEG5DqtOycb
-        pQL3KA643o/EE3H5+FzaJicsvOFzCjiF/BZJEwIDAQABAoIBAQCMMmeSEFhNiy6e
-        VTEg3F0WULrK8nTu9DRxSdb3zcdtjebsd9pUHJHgWwgSc0btY1YWS07z5TiTD/VU
-        Wq0Hg0Fa6pHUC8y9VYxw1/p/2THNXDwp/451a4i/yUichuE5bA2xdleh/tK+QY/4
-        seGGHpG/h0rfwydiJp17LHpqbCkGiAVlImJrq1eMySJIxVBUkr9r4zBO00tXees7
-        CxMvRkD8G24XrpggaCnQAOiYqMHaS5KxGBni6nmIqo2aavmBCsoqNTWAzW4vgYOC
-        K59lj3Pos6kEFmc2dN/upQnKTl1D+S7Kxek8j/o/7OStsmCs4+606mNns3yjsMA0
-        Y+j3nCyRAoGBAPh9ErKSiIls2D2rEOLAPQrIwxADupPx4h+HP/yyQ7R2XLsot8uI
-        qiZCbrEAoA2Nx14iMZKDhfkrtnjipAwql5kB4R5ye6rIQn2csdamaLYiMzfiLN26
-        3nr4r+TWwxZrGsB6LK822aNX1zXjL7jB5I/6nQrK0aUxWqx/Rb1ANiiZAoGBAN/5
-        a2m5U7VnRnUBHgyA9U3FQ51LS306296gqZzwxhrryv+exvGJwg3DDrTMcmlGJcGf
-        OaHX/qEWzUJidd083eWbgkPEev29GHjVxSWVmyjcpbuHkjCtH6gDlpZ+qfTklzsh
-        LRY51MAWm6KiRAn9ijfcoiU5gTNaemOVa7dScO6LAoGBAMQmTt0haKA6iFPdtn2X
-        zFe39Kqulth0JtBGfk8mFOXeTQL8eGE1J0L+S8xzNuScF1WKXmFOazIuvGKeXWqx
-        MGv6nM7hBhfg7wOi7osHXz7urkmdw1bgTQD7UDWvBd6rezmW97Dz9kbHbz29cY1B
-        mP/Cj7bWNTlWRUJHUTC8AER5AoGBAJisqv28qUUlCzBC/LrFRXIoH/kfFGxfLPXL
-        SxOCRWighxZMo4yOvUsoReQU4YDFooMkCOM8G4SvyGeSOon/LbuQj/GmA7jnp8Dm
-        56bBHq1yCz+UIKExwjyDhak82pnnIPfbm6Jk9ZOjVaA9QGgW/pspuRXq5xmceYVc
-        m7qxZe4VAoGAH0mBTMi/syYAuHY/hNxEgXbRPSjjtN346r5QymgJTUspzILmhPZf
-        WtAsAKcoAbTu3TlNTbGxUChHtFuNrYmC+CSnpDBryZnZFANuph6PFdcgiuuBeg+f
-        bVcLxDdVFGeOPxO2AKkgjLK6zXwafELJZLnmNwH3Ema7Ym1Jabr4xv4=
-        -----END RSA PRIVATE KEY-----
-  bart:
-    barman:
-      public: |
-        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDi/fkAKGwvyesYy01U/UqaG8fQqxpOmk5du/R1I5WCyM7g5silq4TNn1Vz2kZbrY6Hk7ukxDz66rgyAwTq9A0LgXVRenV7ll6hpJ2Kv4f23drpRGn7HIpEwV8WxQApHmlfG7nez5Lv8+tLQoUVedcd0F+Pxul7JOeuSwYb72+YNQkWOqhKGJFnkhWM96rgeQ1ExE0Fcsxe8lugv3EIvBga3mj9OlBhpX5yv1XKYkosQDlVbliPEoW5XEkUipoCfEL9gwem/2u+0wOS2IhOXF6X8pyFl5t5bfxujdWPgzz/JF+wXKRwAR6W7Fs7N2f1Nekh+d5oHYU+IjBXkCV/HkwF barman@bart
-      private: |
-        -----BEGIN RSA PRIVATE KEY-----
-        MIIEpAIBAAKCAQEA4v35AChsL8nrGMtNVP1KmhvH0KsaTppOXbv0dSOVgsjO4ObI
-        pauEzZ9Vc9pGW62Oh5O7pMQ8+uq4MgME6vQNC4F1UXp1e5ZeoaSdir+H9t3a6URp
-        +xyKRMFfFsUAKR5pXxu53s+S7/PrS0KFFXnXHdBfj8bpeyTnrksGG+9vmDUJFjqo
-        ShiRZ5IVjPeq4HkNRMRNBXLMXvJboL9xCLwYGt5o/TpQYaV+cr9VymJKLEA5VW5Y
-        jxKFuVxJFIqaAnxC/YMHpv9rvtMDktiITlxel/KchZebeW38bo3Vj4M8/yRfsFyk
-        cAEeluxbOzdn9TXpIfneaB2FPiIwV5Alfx5MBQIDAQABAoIBAQDCAixmVCZTmhMU
-        N/86mtq+aOwZj4SGliBQwSqpS+anx5X6Z4YrAzQYwww4XuEvzmE5w6znoMo185PH
-        Owli/4B+ywFIyI/NN7JeGeKFCjrdZrWKFm02sSgEp/nr7ii6/EE3hu0QYP3HlQUQ
-        aCRzPJX953El4+7+z4YtU/Y+viD1RxKiNnfHBQqpXUZNERDr7tZYIdX9a5UgBHSS
-        /+yUSaYX6tx7NOnZYmkpXeqGWYdVytNw6/9GJyN4gOPxZIrEAyWYX8GJO91Z1YeN
-        pjbvsYeIpvojl3RG8y+wkIYoPINzlnsL0uR08VzFg4oQyhGjOR9SJNmzfqe6kD3x
-        Iff4RujpAoGBAPxdTwASRVmKVgHHLtmG5r9om3OyMxEGy6NPxLZL8705hjot5cBZ
-        +gXR+zK7J1er/0yTPLrrMSrudZ8L8jFdj0ciBCtunzaKilZNG1oxkoY4DFlU5Zuo
-        /Md4XJH6Yr5HsQUEG6lG7djhyNb7ytu7CjlFUdO5S9qgCzPZhLfbMCKTAoGBAOZD
-        F/F2vGLzdKiuGqdDGuZK+qI2AEaFQLQ0n4IqW9h0lehFk1XSSaV0UdytBhIMV15S
-        evV2S1wOPOv2lhFsIGkUjdCLDhYU+4iA7zQsTpjm0jRVjUzsGEsqT53VQ2UmY9lQ
-        aN6IbjjoIe/sFGTmCZAOXLAEFvukpMpzWb+xs34HAoGBAIjGDW3teRaJSgnWqQaN
-        /XtZt36h4tlkhHNzZRqj2WsBxUS84Vs5qK8E2g7pre3vMwOOfQiVNWWeLbNQZyfo
-        HCIiRn4/ixylQ0p4qc1dNpt1vwOfZn3RvYZiLlGTkXatJjyguFkrLvcvj4ksmAo0
-        udrGPg3wzDKmMMweJLb8nX7vAoGAJ/ycytT40CJBLw3VGRjhMf7xWXwRPi3j16eP
-        z7X1bziH0+dJN80l9vKlSLJPbJDyFzIxojDh02GxmLSgyPPDCRyFqCKN1q3cJI9n
-        euL63ziuZmI5AJO7gEofu2QOqSEqk9GP9J0yrvU494ZC4GbGYFruI68CIr8r0vCH
-        NG/yoL8CgYBhkZ0vXdK6yKUGcUeXOrUYCtQxKuKLyXjUvTK/9ZhNfMe7TUwfXGtf
-        pCr0S38PUW3f2sWNtOo6IgEYXv6G4fDZTRMCBIMiLPXbT6B16LWO+Veoh7JJ0f+I
-        r6ewAsuNNf2RFhC9xDFoMyVTRDPu/VA4zsU/mA6LK5h2vcETjubbkA==
-        -----END RSA PRIVATE KEY-----
+    ip_address:          192.168.33.30
+    initial_role:        standby
+    keepalived_priority: 98
+    repmgr_node_number:  3
+  noded:
+    ip_address:          192.168.33.90
+    initial_role:        standby
+    keepalived_priority: 97
+    repmgr_node_number:  4
+  barman:
+    ip_address:          192.168.33.40
+    initial_role:        backup

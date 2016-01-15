@@ -44,6 +44,15 @@ class profiles::postgresqlha_barman(
   $version      = '9.4'
   ){
 
+  $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
+
+  file { '/etc/hosts' :
+    ensure  => file,
+    content => $custom_hosts,
+    owner   => 'root',
+    mode    => '0644',
+  }
+
   $pkglist = [
     'rsync',
     'barman'

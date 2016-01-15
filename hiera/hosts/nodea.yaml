@@ -67,6 +67,20 @@ pg_hba_rule:
     user: all
     address: 192.168.33.30/32
     auth_method: trust
+  repmgr_noded_rule:
+    description: repmgr noded access
+    type: host
+    database: repmgr
+    user: repmgr
+    address: 192.168.33.40/32
+    auth_method: md5
+  replication_noded_rule:
+    description: replication noded access
+    type: host
+    database: replication
+    user: all
+    address: 192.168.33.40/32
+    auth_method: trust
   barman_rule:
     description: barman access
     type: local

@@ -41,23 +41,33 @@
 #
 
 class profiles::postgresqlha_master(
-
-    $port          = 5432,
-    $version       = '9.4',
-    $shortversion  = '94',
-    $remote        = true,
-    $dbroot        = '/var/lib/pgsql',
-    $databases     = hiera_hash('postgres_databases',false),
-    $users         = hiera_hash('postgres_users', false),
-    $pg_hba_rule   = hiera_hash('pg_hba_rule', false),
-    $dbs           = hiera_hash('postgres_dbs', false)
+    $port           = 5432,
+    $version        = '9.4',
+    $shortversion   = '94',
+    $remote         = true,
+    $dbroot         = '/var/lib/pgsql',
+    $databases      = hiera_hash('postgres_databases',false),
+    $users          = hiera_hash('postgres_users', false),
+    $pg_hba_rule    = hiera_hash('pg_hba_rule', false),
+    $dbs            = hiera_hash('postgres_dbs', false),
+    $ssh_keys       = hiera_hash('postgresqlha_keys',false)
   ){
+
+  $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
+
+  file { '/etc/hosts' :
+    ensure  => file,
+    content => $custom_hosts,
+    owner   => 'root',
+    mode    => '0644',
+  }
 
   if $::postgres_ha_setup_done != 0 {
 
     include ::stdlib
 
-    $master_hostname = 'nodea'
+    $master_hostname = template('profiles/postgres_master_hostname.erb')
+
     $pg_conf = "${dbroot}/${version}/data/postgresql.conf"
 
     $pkglist = [
@@ -126,7 +136,7 @@ class profiles::postgresqlha_master(
 
     postgresql_conf { 'archive_command' :
       target  => $pg_conf,
-      value   => 'rsync -aq %p barman@bart:primary/incoming/%f',
+      value   => 'rsync -aq %p barman@barman:primary/incoming/%f',
       require => Class['postgresql::server'],
     }
 
@@ -223,21 +233,24 @@ class profiles::postgresqlha_master(
 
     file { '/var/lib/pgsql/.ssh/authorized_keys' :
       ensure  => file,
-      content => template('profiles/postgres_authorized_keys.erb'),
+      content => $ssh_keys['public'],
+      #content => template('profiles/postgres_authorized_keys.erb'),
       owner   => 'postgres',
       mode    => '0600',
     } ->
 
     file { '/var/lib/pgsql/.ssh/id_rsa' :
       ensure  => file,
-      content => template('profiles/postgres_id_rsa.erb'),
+      content => $ssh_keys['private'],
+      #content => template('profiles/postgres_id_rsa.erb'),
       owner   => 'postgres',
       mode    => '0600',
     } ->
 
     file { '/var/lib/pgsql/.ssh/id_rsa.pub' :
       ensure  => file,
-      content => template('profiles/postgres_id_rsa_public.erb'),
+      content => $ssh_keys['public'],
+      #content => template('profiles/postgres_id_rsa_public.erb'),
       owner   => 'postgres',
       mode    => '0644',
     }
