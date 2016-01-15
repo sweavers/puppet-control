@@ -8,7 +8,7 @@ profiles::jenkins::plugins:
   git:
     version: 2.4.0
   credentials:
-    version: 1.23
+    version: 1.18
   git-client:
     version: 1.19.0
   scm-api:
@@ -18,9 +18,9 @@ profiles::jenkins::plugins:
   token-macro:
     version: 1.10
   ssh-credentials:
-    version: 1.11
+    version: 1.10
   mailer:
-    version: 1.15
+    version: 1.11
   active-directory:
     version: 1.41
   scm-sync-configuration:
