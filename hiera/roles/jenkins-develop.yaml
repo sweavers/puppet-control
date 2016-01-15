@@ -67,9 +67,11 @@ profiles::jenkins::jobs:
   sample-build-and-ut:
     source: profiles/sample-build-and-ut.xml
     config: true
+    ensure: present
   sample-acceptance-test:
     source: profiles/sample-acceptance-test.xml
     config: true
+    ensure: present
 
 profiles::jenkins::jenkins_ssl: true
 profiles::jenkins::ssl_crt: |
