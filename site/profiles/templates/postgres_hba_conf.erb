@@ -20,9 +20,9 @@ replication_<%= server %>_rule:
   description: replication <%= server %> access
   type: host
   database: replication
-  user: all
+  user: repmgr
   address: <%= ip_address %>/32
-  auth_method: trust<%
+  auth_method: md5<%
 end
 end %>
 barman_rule:
