@@ -11,7 +11,7 @@
   - secrets/secrets
   - application_environment/%{::application_environment}
   - hosts/%{::fqdn}
-  - types/${::server_type}
   - network_location/%{::network_location}
+  - types/%{::server_type}
   - roles/%{::puppet_role}
   - common

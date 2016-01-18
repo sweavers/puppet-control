@@ -21,6 +21,8 @@ profiles::jenkins::plugins:
     version: 1.11
   mailer:
     version: 1.15
+  active-directory:
+    version: 1.41
   scm-sync-configuration:
     version: 0.0.8
   subversion:
@@ -64,6 +66,7 @@ profiles::jenkins::plugins:
     version: 0.41
   Parameterized-Remote-Trigger:
     version: 2.2.2
+
 
 profiles::jenkins::jenkins_ssl: true
 profiles::jenkins::ssl_crt: |
