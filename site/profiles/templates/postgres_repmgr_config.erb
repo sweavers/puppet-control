@@ -1,4 +1,4 @@
-<% @nodecount = 0
+<% @nodecount = 1
 scope.function_hiera(['pg_drv_cluster_member_hostnames']).each do |host_name,config|
   if host_name == @hostname
     @node_number = config['repmgr_node_number']

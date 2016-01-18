@@ -213,13 +213,6 @@ class profiles::postgresqlha_standby (
       unless  => 'psql -c "select pg_is_in_recovery();" | grep "^ t$"',
     } ->
 
-    file_line { 'archive_command' :
-      ensure => present,
-      line   => 'archive_command = \'rsync -aq %p barman@barman:primary/incoming/%f\'',
-      match  => '^archive_command.*$',
-      path   => $pg_conf
-    } ->
-
     service { "postgresql-${version}" :
       ensure => stopped,
       enable => false
