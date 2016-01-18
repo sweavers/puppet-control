@@ -43,16 +43,15 @@
 class profiles::postgresqlha_master(
     $port           = 5432,
     $version        = '9.4',
-    $shortversion   = '94',
     $remote         = true,
     $dbroot         = '/var/lib/pgsql',
     $databases      = hiera_hash('postgres_databases',false),
     $users          = hiera_hash('postgres_users', false),
-    $pg_hba_rule    = hiera_hash('pg_hba_rule', false),
     $dbs            = hiera_hash('postgres_dbs', false),
     $ssh_keys       = hiera_hash('postgresqlha_keys',false)
   ){
 
+  $shortversion = regsubst($version, '\.', '')
   $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
 
   file { '/etc/hosts' :
@@ -62,47 +61,47 @@ class profiles::postgresqlha_master(
     mode    => '0644',
   }
 
+  $pkglist = [
+    'keepalived',
+    'rsync',
+    "repmgr${shortversion}"
+  ]
+  ensure_packages($pkglist)
+
+  user { 'postgres' :
+    ensure     => present,
+    comment    => 'PostgreSQL Database Server',
+    system     => true,
+    home       => $dbroot,
+    managehome => true,
+    shell      => '/bin/bash',
+  }
+
+  file { $dbroot :
+    ensure  => 'directory',
+    owner   => 'postgres',
+    group   => 'postgres',
+    mode    => '0750',
+    require => User[postgres]
+  } ->
+
+  file { "${dbroot}/.pgsql_profile" :
+    ensure  => 'file',
+    content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
+    owner   => 'postgres',
+    group   => 'postgres',
+    mode    => '0750',
+    require => File[$dbroot]
+  }
+
   if $::postgres_ha_setup_done != 0 {
 
     include ::stdlib
 
     $master_hostname = template('profiles/postgres_master_hostname.erb')
-
-    $pg_conf = "${dbroot}/${version}/data/postgresql.conf"
-
-    $pkglist = [
-      'keepalived',
-      'rsync',
-      "repmgr${shortversion}"
-    ]
-    ensure_packages($pkglist)
-
-    user { 'postgres' :
-      ensure     => present,
-      comment    => 'PostgreSQL Database Server',
-      system     => true,
-      home       => $dbroot,
-      managehome => true,
-      shell      => '/bin/bash',
-    }
-
-    file { $dbroot :
-      ensure  => 'directory',
-      owner   => 'postgres',
-      group   => 'postgres',
-      mode    => '0750',
-      require => User[postgres]
-    } ->
-
-    file { "${dbroot}/.pgsql_profile" :
-      ensure  => 'file',
-      content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
-      owner   => 'postgres',
-      group   => 'postgres',
-      mode    => '0750',
-      require => File[$dbroot]
-    }
-
+    $vip_hostname    = template('profiles/postgres_vip_hostname.erb')
+    $barman_hostname = template('profiles/postgres_barman_hostname.erb')
+    $pg_conf         = "${dbroot}/${version}/data/postgresql.conf"
 
     class { 'postgresql::globals' :
       manage_package_repo  => true,
@@ -136,7 +135,7 @@ class profiles::postgresqlha_master(
 
     postgresql_conf { 'archive_command' :
       target  => $pg_conf,
-      value   => 'rsync -aq %p barman@barman:primary/incoming/%f',
+      value   => "rsync -aq %p barman@${barman_hostname}:primary/incoming/%f",
       require => Class['postgresql::server'],
     }
 
@@ -234,7 +233,6 @@ class profiles::postgresqlha_master(
     file { '/var/lib/pgsql/.ssh/authorized_keys' :
       ensure  => file,
       content => $ssh_keys['public'],
-      #content => template('profiles/postgres_authorized_keys.erb'),
       owner   => 'postgres',
       mode    => '0600',
     } ->
@@ -242,7 +240,6 @@ class profiles::postgresqlha_master(
     file { '/var/lib/pgsql/.ssh/id_rsa' :
       ensure  => file,
       content => $ssh_keys['private'],
-      #content => template('profiles/postgres_id_rsa.erb'),
       owner   => 'postgres',
       mode    => '0600',
     } ->
@@ -250,8 +247,35 @@ class profiles::postgresqlha_master(
     file { '/var/lib/pgsql/.ssh/id_rsa.pub' :
       ensure  => file,
       content => $ssh_keys['public'],
-      #content => template('profiles/postgres_id_rsa_public.erb'),
       owner   => 'postgres',
+      mode    => '0644',
+    } ->
+
+    file { '/home/repmgr/.ssh' :
+      ensure  => directory,
+      owner   => 'repmgr',
+      mode    => '0700',
+      require => Package["repmgr${shortversion}"],
+    } ->
+
+    file { '/home/repmgr/.ssh/authorized_keys' :
+      ensure  => file,
+      content => $ssh_keys['public'],
+      owner   => 'repmgr',
+      mode    => '0600',
+    } ->
+
+    file { '/home/repmgr/.ssh/id_rsa' :
+      ensure  => file,
+      content => $ssh_keys['private'],
+      owner   => 'repmgr',
+      mode    => '0600',
+    } ->
+
+    file { '/home/repmgr/.ssh/id_rsa.pub' :
+      ensure  => file,
+      content => $ssh_keys['public'],
+      owner   => 'repmgr',
       mode    => '0644',
     }
 
@@ -267,9 +291,8 @@ class profiles::postgresqlha_master(
       create_resources('postgresql::server::db', $databases)
     }
 
-    if $pg_hba_rule {
-      create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
-    }
+    $pg_hba_rules = parseyaml(template('profiles/postgres_hba_conf.erb'))
+    create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules)
 
     file { "/etc/repmgr/${version}/repmgr.conf" :
       ensure  => file,
@@ -304,9 +327,11 @@ class profiles::postgresqlha_master(
     postgresql::server::database { 'repmgr' :
       owner  => 'repmgr'
     } ->
+
     # Running postgresql-9.4 as a systemd service causes issues when postgres
     # clustering is being manged by repmgr, so we stop and disable it immediatly
     # after installation by puppet. Postgres is managed by pg_ctl from then on.
+
     exec { 'stop_postgres' :
       command => "/bin/systemctl stop postgresql-${version}",
       user    => 'root',

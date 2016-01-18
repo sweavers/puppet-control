@@ -41,7 +41,8 @@
 #
 
 class profiles::postgresqlha_barman(
-  $version      = '9.4'
+  $version      = '9.4',
+  $ssh_keys     = hiera_hash('postgresqlha_keys',false)
   ){
 
   $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
@@ -96,7 +97,7 @@ class profiles::postgresqlha_barman(
 
   file { '/var/lib/barman/.ssh/authorized_keys' :
     ensure  => file,
-    content => template('profiles/postgres_authorized_keys.erb'),
+    content => $ssh_keys['public'],
     owner   => 'barman',
     group   => 'barman',
     mode    => '0600',
@@ -104,7 +105,7 @@ class profiles::postgresqlha_barman(
 
   file { '/var/lib/barman/.ssh/id_rsa' :
     ensure  => file,
-    content => template('profiles/postgres_id_rsa.erb'),
+    content => $ssh_keys['private'],
     owner   => 'barman',
     group   => 'barman',
     mode    => '0600',
@@ -112,7 +113,7 @@ class profiles::postgresqlha_barman(
 
   file { '/var/lib/barman/.ssh/id_rsa.pub' :
     ensure  => file,
-    content => template('profiles/postgres_id_rsa_public.erb'),
+    content => $ssh_keys['public'],
     owner   => 'barman',
     group   => 'barman',
     mode    => '0644',

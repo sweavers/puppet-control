@@ -8,11 +8,11 @@
 
 class profiles::postgresqlha_standby (
     $version       = '9.4',
-    $shortversion  = '94',
     $dbroot        = '/var/lib/pgsql/',
     $ssh_keys      = hiera_hash('postgresqlha_keys',false)
   ){
 
+  $shortversion = regsubst($version, '\.', '')
   $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
 
   file { '/etc/hosts' :
@@ -22,8 +22,34 @@ class profiles::postgresqlha_standby (
     mode    => '0644',
   }
 
-  if $::postgres_ha_setup_done != 0 {
+  user { 'postgres' :
+    ensure     => present,
+    comment    => 'PostgreSQL Database Server',
+    system     => true,
+    home       => $dbroot,
+    managehome => true,
+    shell      => '/bin/bash',
+  }
 
+  file { $dbroot :
+    ensure  => 'directory',
+    owner   => 'postgres',
+    group   => 'postgres',
+    mode    => '0750',
+    require => User[postgres]
+  } ->
+
+  file { "${dbroot}/.pgsql_profile" :
+    ensure  => 'file',
+    content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
+    owner   => 'postgres',
+    group   => 'postgres',
+    mode    => '0750',
+    require => File[$dbroot]
+  }
+
+  if $::postgres_ha_setup_done != 0 {
+    $vip_hostname = template('profiles/postgres_vip_hostname.erb')
     $pg_conf = "${dbroot}/${version}/data/postgresql.conf"
     $this_hostname = $::hostname
 
@@ -56,32 +82,6 @@ class profiles::postgresqlha_standby (
     }
 
     ensure_packages($pkglist)
-
-    user { 'postgres' :
-      ensure     => present,
-      comment    => 'PostgreSQL Database Server',
-      system     => true,
-      home       => $dbroot,
-      managehome => true,
-      shell      => '/bin/bash',
-    }
-
-    file { $dbroot :
-      ensure  => 'directory',
-      owner   => 'postgres',
-      group   => 'postgres',
-      mode    => '0750',
-      require => User[postgres]
-    } ->
-
-    file { "${dbroot}/.pgsql_profile" :
-      ensure  => 'file',
-      content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
-      owner   => 'postgres',
-      group   => 'postgres',
-      mode    => '0750',
-      require => File[$dbroot]
-    }
 
     file { "/etc/repmgr/${version}/auto_failover.sh" :
       ensure  => file,
@@ -122,7 +122,6 @@ class profiles::postgresqlha_standby (
     file { '/var/lib/pgsql/.ssh/authorized_keys' :
       ensure  => file,
       content => $ssh_keys['public'],
-      #content => template('profiles/postgres_authorized_keys.erb'),
       owner   => 'postgres',
       mode    => '0600',
     } ->
@@ -130,7 +129,6 @@ class profiles::postgresqlha_standby (
     file { '/var/lib/pgsql/.ssh/id_rsa' :
       ensure  => file,
       content => $ssh_keys['private'],
-      #content => template('profiles/postgres_id_rsa.erb'),
       owner   => 'postgres',
       mode    => '0600',
     } ->
@@ -138,19 +136,42 @@ class profiles::postgresqlha_standby (
     file { '/var/lib/pgsql/.ssh/id_rsa.pub' :
       ensure  => file,
       content => $ssh_keys['public'],
-      #content => template('profiles/postgres_id_rsa_public.erb'),
       owner   => 'postgres',
       mode    => '0644',
-    }
+    } ->
 
-    # include postgresql::client
-    # include postgresql::lib::devel
+    file { '/home/repmgr/.ssh' :
+      ensure  => directory,
+      owner   => 'repmgr',
+      mode    => '0700',
+      require => Package["repmgr${shortversion}"],
+    } ->
+
+    file { '/home/repmgr/.ssh/authorized_keys' :
+      ensure  => file,
+      content => $ssh_keys['public'],
+      owner   => 'repmgr',
+      mode    => '0600',
+    } ->
+
+    file { '/home/repmgr/.ssh/id_rsa' :
+      ensure  => file,
+      content => $ssh_keys['private'],
+      owner   => 'repmgr',
+      mode    => '0600',
+    } ->
+
+    file { '/home/repmgr/.ssh/id_rsa.pub' :
+      ensure  => file,
+      content => $ssh_keys['public'],
+      owner   => 'repmgr',
+      mode    => '0644',
+    }
 
     file { "/etc/repmgr/${version}/repmgr.conf" :
       ensure  => file,
       content => template('profiles/postgres_repmgr_config.erb'),
       require => Package["repmgr${shortversion}"],
-      #before  => Exec['standby_register_repmgrd'],
     }
 
     file { '/etc/keepalived/keepalived.conf' :
@@ -186,7 +207,7 @@ class profiles::postgresqlha_standby (
     } ->
 
     exec { 'clone_database_master' :
-      command => "/usr/pgsql-${version}/bin/repmgr -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr --verbose standby clone vip",
+      command => "/usr/pgsql-${version}/bin/repmgr -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr --verbose standby clone ${vip_hostname}",
       user    => 'postgres',
       cwd     => "/etc/repmgr/${version}/",
       unless  => 'psql -c "select pg_is_in_recovery();" | grep "^ t$"',

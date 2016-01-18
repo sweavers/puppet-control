@@ -189,29 +189,29 @@ pg_drv_cluster_member_hostnames:
   puppet puppetmaster puppet-master-91.control.net:
     ip_address:          192.168.33.5
     initial_role:        puppetmaster
-  vip:
-    ip_address:          192.168.33.100
+  vip1:
+    ip_address:          192.168.33.200
     initial_role:        vip
-  nodea:
-    ip_address:          192.168.33.10
+  nodea1:
+    ip_address:          192.168.33.15
     initial_role:        master
     keepalived_priority: 100
     repmgr_node_number:  1
-  nodeb:
-    ip_address:          192.168.33.20
+  nodeb1:
+    ip_address:          192.168.33.25
     initial_role:        standby
     keepalived_priority: 99
     repmgr_node_number:  2
-  nodec:
-    ip_address:          192.168.33.30
+  nodec1:
+    ip_address:          192.168.33.35
     initial_role:        standby
     keepalived_priority: 98
     repmgr_node_number:  3
-  noded:
-    ip_address:          192.168.33.90
+  noded1:
+    ip_address:          192.168.33.45
     initial_role:        standby
     keepalived_priority: 97
     repmgr_node_number:  4
-  barman:
-    ip_address:          192.168.33.40
+  barman1:
+    ip_address:          192.168.33.95
     initial_role:        backup

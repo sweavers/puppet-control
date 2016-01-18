@@ -1,5 +1,0 @@
-<%- scope.function_hiera(['postgresqlha_keys']).each do |server,config|
-  config.each do |user,keys| -%>
-<%= keys['public'] %> <%-
-  end
-end -%>
