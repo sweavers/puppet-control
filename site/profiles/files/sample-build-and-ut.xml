@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<project>
+<?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
   <description>Sample Jenkins job that will build a sample python application from Github and run unit tests and produce code coverage reports.</description>
   <displayName>Sample Build and Unit Test Job</displayName>
@@ -115,16 +114,16 @@
       </types>
       <thresholds>
         <org.jenkinsci.plugins.xunit.threshold.FailedThreshold>
-          <unstableThreshold></unstableThreshold>
-          <unstableNewThreshold></unstableNewThreshold>
-          <failureThreshold></failureThreshold>
-          <failureNewThreshold></failureNewThreshold>
+          <unstableThreshold/>
+          <unstableNewThreshold/>
+          <failureThreshold/>
+          <failureNewThreshold/>
         </org.jenkinsci.plugins.xunit.threshold.FailedThreshold>
         <org.jenkinsci.plugins.xunit.threshold.SkippedThreshold>
-          <unstableThreshold></unstableThreshold>
-          <unstableNewThreshold></unstableNewThreshold>
-          <failureThreshold></failureThreshold>
-          <failureNewThreshold></failureNewThreshold>
+          <unstableThreshold/>
+          <unstableNewThreshold/>
+          <failureThreshold/>
+          <failureNewThreshold/>
         </org.jenkinsci.plugins.xunit.threshold.SkippedThreshold>
       </thresholds>
       <thresholdMode>1</thresholdMode>
