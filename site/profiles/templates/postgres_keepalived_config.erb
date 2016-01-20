@@ -1,4 +1,4 @@
-<% scope.function_hiera(['pg_drv_cluster_member_hostnames']).each do |host_name,config|
+<% scope.function_hiera(['pg_cluster_member_hostnames']).each do |host_name,config|
   if host_name == @hostname
     @kd_priority = config['keepalived_priority']
   end

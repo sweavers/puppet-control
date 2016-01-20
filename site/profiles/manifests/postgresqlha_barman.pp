@@ -83,7 +83,7 @@ class profiles::postgresqlha_barman(
     ensure  => file,
     owner   => 'barman',
     group   => 'barman',
-    source  => 'puppet:///modules/profiles/postgres_barman_config',
+    content => template('profiles/postgres_barman_config.erb'),
     mode    => '0600',
     require => Package['barman'],
   } ->

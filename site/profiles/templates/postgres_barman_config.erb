@@ -1,3 +1,6 @@
+<% scope.function_hiera(['pg_cluster_member_hostnames']).each do |host_name,config|
+  if config['initial_role'] == 'vip' then @vip_hostname = host_name end
+end -%>
 ; Barman, Backup and Recovery Manager for PostgreSQL
 ; http://www.pgbarman.org/ - http://www.2ndQuadrant.com/
 ;
@@ -96,5 +99,5 @@ log_file = /var/log/barman/barman.log
 ;; ; retention_policy = RECOVERY WINDOW OF 4 WEEKS
 [primary]
 description = "Primary PostgreSQL Server"
-conninfo = "host=vip user=barman   dbname=postgres"
-ssh_command = "ssh postgres@vip"
+conninfo = "host=<%= @vip_hostname %> user=barman   dbname=postgres"
+ssh_command = "ssh postgres@<%= @vip_hostname %>"

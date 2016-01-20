@@ -185,7 +185,7 @@ postgresqlha_keys:
     sQRz3Dp06A5Sr56Oo4g0hj478F7NK+vzPhCpgyvOugCbjfjEdoBj5g==
     -----END RSA PRIVATE KEY-----
 
-pg_drv_cluster_member_hostnames:
+pg_cluster_member_hostnames:
   puppet puppetmaster puppet-master-91.control.net:
     ip_address:          192.168.33.5
     initial_role:        puppetmaster
@@ -215,3 +215,20 @@ pg_drv_cluster_member_hostnames:
   barman1:
     ip_address:          192.168.33.95
     initial_role:        backup
+
+postgres_databases:
+  register_data:
+    user: register_data
+    password: md5085815e3463853f3a1e9731b61ddb3a7
+    owner: register_data
+  user_data:
+    user: user_data
+    password: md5f5e1477d2e90a5760642db71ea5307d1
+    owner: user_data
+
+postgres_users:
+  deployment:
+    password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
+
+repmgr_password: repmgr
+barman_password: barman

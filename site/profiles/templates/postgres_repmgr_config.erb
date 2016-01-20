@@ -1,5 +1,5 @@
 <% @nodecount = 1
-scope.function_hiera(['pg_drv_cluster_member_hostnames']).each do |host_name,config|
+scope.function_hiera(['pg_cluster_member_hostnames']).each do |host_name,config|
   if host_name == @hostname
     @node_number = config['repmgr_node_number']
   end
@@ -7,7 +7,7 @@ scope.function_hiera(['pg_drv_cluster_member_hostnames']).each do |host_name,con
     @nodecount += 1
   end
 end %>
-cluster=test
+cluster=<%= @application_environment %>
 node=<%= @node_number %>
 node_name=node<%= @node_number %>
 conninfo='host=<%= @hostname %> user=repmgr dbname=repmgr'
