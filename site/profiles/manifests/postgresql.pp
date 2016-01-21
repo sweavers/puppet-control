@@ -29,7 +29,7 @@
 #   deployment:
 #     password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
 #
-##
+#
 # pg_hba_rule:
 #   test:
 #     description: test
@@ -39,6 +39,11 @@
 #     address: 0.0.0.0/0
 #     auth_method: md5
 #
+# pg_db_grant:
+#   deployment_select_sor:
+#     privilege: SELECT
+#     db: systemofrecord
+#     role: deployment
 
 class profiles::postgresql(
 
@@ -48,7 +53,8 @@ class profiles::postgresql(
   $dbroot        = '/postgres',
   $databases     = hiera_hash('postgres_databases',false),
   $users         = hiera_hash('postgres_users', false),
-  $pg_hba_rule   = hiera_hash('pg_hba_rule', false)
+  $pg_hba_rule   = hiera_hash('pg_hba_rule', false),
+  $pg_db_grant   = hiera_hash('pg_db_grant', false)
 
 ){
 
@@ -142,6 +148,9 @@ class profiles::postgresql(
   #Will allow hba rules to be set for specific users/dbs via hiera
   if $pg_hba_rule {
     create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
+  }
+  if $pg_db_grant {
+    create_resources('postgresql::server::database_grant', $pg_db_grant)
   }
 
 }
