@@ -1,7 +1,6 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<project>
+<?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
-  <description>An example of how to construct a Jenkins job to run and report on your acceptance tests. You&apos;ll need to have deployed to your integration server and started the application prior to running this job. How you would deploy depends on how you have implemented your solution.&#xd;
+  <description>An example of how to construct a Jenkins job to run and report on your acceptance tests. You'll need to have deployed to your integration server and started the application prior to running this job. How you would deploy depends on how you have implemented your solution.&#13;
 </description>
   <displayName>Sample Acceptance Test job</displayName>
   <keepDependencies>false</keepDependencies>
@@ -37,17 +36,17 @@ bundle install</command>
       <command># Set up any application/environment variables you need to enable the tests to run.
 # For example, URL to access the running application.
 
-export APPLICATION_ENVIRONMENT_VARIABLE = &apos;Value&apos;
+export APPLICATION_ENVIRONMENT_VARIABLE = 'Value'
 
 # Change to the top level directory that holds your tests, if you need to.
 
 cd acceptance-tests
 
 # Start testing - this example shows a number of commonly used options.
-# The &apos;format&apos; option is used to specify the output format, in this case, in JUnit XML format
+# The 'format' option is used to specify the output format, in this case, in JUnit XML format
 # for interpretation by the reporting step, executed in the Post Build Action step below,
-# and a &apos;pretty&apos; format that can be seen in the job console output.
-# The &apos;out&apos; option specifies where the output files are to go.
+# and a 'pretty' format that can be seen in the job console output.
+# The 'out' option specifies where the output files are to go.
 
 cucumber --format junit --out $WORKSPACE/results/ --format pretty</command>
     </hudson.tasks.Shell>
@@ -65,16 +64,16 @@ cucumber --format junit --out $WORKSPACE/results/ --format pretty</command>
       </types>
       <thresholds>
         <org.jenkinsci.plugins.xunit.threshold.FailedThreshold>
-          <unstableThreshold></unstableThreshold>
-          <unstableNewThreshold></unstableNewThreshold>
-          <failureThreshold></failureThreshold>
-          <failureNewThreshold></failureNewThreshold>
+          <unstableThreshold/>
+          <unstableNewThreshold/>
+          <failureThreshold/>
+          <failureNewThreshold/>
         </org.jenkinsci.plugins.xunit.threshold.FailedThreshold>
         <org.jenkinsci.plugins.xunit.threshold.SkippedThreshold>
-          <unstableThreshold></unstableThreshold>
-          <unstableNewThreshold></unstableNewThreshold>
-          <failureThreshold></failureThreshold>
-          <failureNewThreshold></failureNewThreshold>
+          <unstableThreshold/>
+          <unstableNewThreshold/>
+          <failureThreshold/>
+          <failureNewThreshold/>
         </org.jenkinsci.plugins.xunit.threshold.SkippedThreshold>
       </thresholds>
       <thresholdMode>1</thresholdMode>

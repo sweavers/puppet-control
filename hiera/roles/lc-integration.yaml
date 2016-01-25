@@ -79,24 +79,8 @@ applications:
     revision: 'develop'
     vars:
       SETTINGS: 'config.PreviewConfig'
-      RULES_ENGINE_URL: 'http://localhost:5005'
       BANKRUPTCY_DATABASE_API: 'http://localhost:5004'
       CASEWORK_DATABASE_API: 'http://localhost:5006'
-  demo-utilities:
-    bind: '5003'
-    source: 'https://github.com/LandRegistry/lc-alpha-demo-utilities.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'application:app'
-    manage: false
-    revision: 'develop'
-    vars:
-      SETTINGS: 'config.PreviewConfig'
-      B2B_REGISTER_URL: 'http://localhost:5001'
-      B2B_SEARCH_REG_URL: 'http://localhost:5004'
-      B2B_SEARCH_WORK_URL: 'http://localhost:5006'
-      DB2_MIGRATOR_URL: 'http://localhost:5009'
-      DB2_LEGACY_URL: 'http://localhost:5007'
-    require: 'Class[Postgresql::Server]'      
   land-charges:
     bind: '5004'
     source: 'https://github.com/LandRegistry/lc-land-charges.git'
@@ -174,7 +158,6 @@ applications:
       SETTINGS: 'config.PreviewConfig'
       CASEWORK_DB_URL: 'http://localhost:5006'
       BANKRUPTCY_DATABASE_URL: 'http://localhost:5004'
-      DOCUMENT_URL: 'http://localhost:5014'
       LEGACY_URL: 'http://localhost:5007'
   error-reporting:
     bind: '5011'
@@ -187,42 +170,6 @@ applications:
       SETTINGS: 'config.PreviewConfig'
       LEGACY_DB_URI: 'http://localhost:5007'
     require: 'Class[Postgresql::Server]'
-  name-indexing:
-    bind: '5012'
-    source: 'https://github.com/LandRegistry/lc-name-indexing.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'application.routes:app'
-    manage: false
-    revision: 'develop'
-    vars:
-      SETTINGS: 'config.PreviewConfig'
-      SEARCH_API_URI: 'http://localhost:5013'
-  name-search:
-    bind: '5013'
-    source: 'https://github.com/LandRegistry/lc-name-search.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'application.routes:app'
-    manage: false
-    revision: 'develop'
-    vars:
-      SETTINGS: 'config.PreviewConfig'
-      SEARCH_TYPE: 'phonetic'
-      ELASTICSEARCH_URL: 'http://localhost:9200'
-    require: Class[Profiles::Elasticsearch]
-  document-api:
-    bind: '5014'
-    source: 'https://github.com/LandRegistry/lc-document-api.git'
-    app_type: 'wsgi'
-    wsgi_entry: 'application.routes:app'
-    manage: true
-    revision: 'develop'
-    vars:
-      DATABASE_NAME: 'docstore'
-      DATABASE_USER: 'docstore'
-      DATABASE_PASSWORD: 'docstore'
-      DATABASE_HOST: 'localhost'
-      SETTINGS: 'config.PreviewConfig'
-    require: 'Class[Postgresql::Server]'
   bankruptcy-process:
     bind: '5015'
     source: 'https://github.com/LandRegistry/lc-bankruptcy-process.git'
@@ -234,7 +181,6 @@ applications:
       SETTINGS: 'config.PreviewConfig'
       REGISTER_URI: 'http://localhost:5004'
       LEGACY_DB_URI: 'http://localhost:5007'
-      NAMES_SEARCH_URI: 'http://localhost:5013'
     require: 'Class[Postgresql::Server]'
 
 elasticsearch_plugins:

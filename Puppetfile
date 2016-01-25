@@ -12,8 +12,10 @@ mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
 mod 'jfryman/nginx',                   '0.2.2'
 mod 'jfryman/selinux',                 '0.2.3'
+mod 'puppet-gradle',                   :git => 'https://github.com/LandRegistry-Ops/puppet-gradle.git',
+                                       :ref => 'ddca379e88c07d37bc1c902f5a380412ffc5ec38'
 mod 'puppet-wsgi',                     :git => 'https://github.com/LandRegistry-Ops/puppet-wsgi.git',
-                                       :ref => '8c3a127b48fc9c13e1d67308e3076302043a3315'
+                                       :ref => 'd1d79c143a784c32f6a726a2ed9c27e2243c5618'
 mod 'leinaddm/htpasswd',               '0.0.3'
 mod 'maestrodev/wget',                 '1.5.7'
 mod 'openstackci/pip',                 :git => 'https://github.com/openstack-infra/puppet-pip.git',
@@ -32,8 +34,6 @@ mod 'stephenrjohnson/puppet',          '1.3.1'
 mod 'thias/sysctl',                    '1.0.2'
 mod 'zack/r10k',                       '2.6.2'
 mod '3fs/phantomjs',                   '0.0.8'
-mod 'puppet-gradle_deploy',            :git => 'https://github.com/LandRegistry-Ops/puppet-gradle_deploy.git',
-                                       :ref => 'a82bc688ecc6d7b6a6763afd4a47f160ef887987'
 mod 'camptocamp/archive',              '0.8.1'
 
 # Dependency modules

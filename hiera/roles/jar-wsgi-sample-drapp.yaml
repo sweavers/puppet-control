@@ -1,0 +1,23 @@
+---
+
+classes:
+  - profiles::digitalregister_app
+
+applications:
+  test-app:
+    bind: '5000'
+    wsgi_entry: 'application.server:app'
+    source: 'https://github.com/mooreandrew/test-app.git'
+    environment: 'Integration'
+    app_type: 'wsgi'
+    vars:
+      'TESTVALUE': 'test'
+      'SETTINGS': 'config.DevelopmentConfig'
+  spark-app:
+    bind: '5001'
+    source: 'https://github.com/mooreandrew/gradle-test-jar.git'
+    environment: 'Integration'
+    app_type: 'jar'
+    jar_name: 'gradle_test-1.0.jar'
+    vars:
+      'TESTVALUE': 'test'
