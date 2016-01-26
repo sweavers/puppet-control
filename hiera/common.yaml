@@ -10,6 +10,7 @@ classes:
   - 'selinux'
   - 'sudo'
   - 'profiles::nagios_client'
+  - 'resolvconf'
 
 # Prevent sudo from purging unmanaged sudo configs (for vagrant)
 sudo::purge: false
@@ -260,3 +261,8 @@ log_broker_logstash_config: |
       codec => json
     }
   }
+
+resolvconf::nameserver:
+  - 'localhost'
+resolvconf::search:
+  - 'example.com'

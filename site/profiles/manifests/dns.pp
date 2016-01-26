@@ -1,9 +1,9 @@
-# Class profiles::python3
+# Class profiles::dns
 #
-# Will install python 3 on a node.
+# Will install named on a node.
 #
 # Sample Usage:
-#   class { 'profiles::python3': }
+#   class { 'profiles::dns': }
 #
 class profiles::dns (
   $dns_zone = hiera_hash('dns_zone',false),

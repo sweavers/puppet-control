@@ -37,6 +37,7 @@ mod '3fs/phantomjs',                   '0.0.8'
 mod 'camptocamp/archive',              '0.8.1'
 mod 'ajjahn/dns',                      :git => 'https://github.com/mooreandrew/puppet-dns.git',
                                        :ref => '460647d8a0806c30ca145160a58f48c735e7c16f'
+mod 'thias/resolvconf',                '0.0.3'
 
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.6'
