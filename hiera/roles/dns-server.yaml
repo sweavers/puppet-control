@@ -1,0 +1,22 @@
+---
+
+classes:
+  - profiles::dns
+
+dns_zone:
+  example.com:
+    soa: ns1.example.com
+    soa_email: admin.example.com
+    nameservers: [ns1]
+  1.168.192.IN-ADDR.ARPA:
+    soa: ns1.example.com
+    soa_email: admin.example.com
+    nameservers: [ns1]
+
+dns_a_record:
+  huey:
+    zone: example.com
+    data: 98.76.54.32
+  duey:
+    zone: 'example.com'
+    data: 12.23.34.45
