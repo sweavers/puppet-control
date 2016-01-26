@@ -20,3 +20,28 @@ postgres_databases:
 postgres_users:
   deployment:
     password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
+  read_only_user:
+    password_hash: md59232c1755a638c620ee5985db99d8395
+
+# Grant SELECT to all tables in transaction_data for read_only_user
+pg_db_grant:
+   test_connect_transaction_data:
+     privilege: CONNECT
+     db: transaction_data
+     role: read_only_user
+
+pg_grant:
+  read_only_user_usage_transaction_data:
+    db: transaction_data
+    role: read_only_user
+    privilege: USAGE
+    object_type: SCHEMA
+    object_name: public
+
+pg_grant:
+  read_only_user_select_transaction_data:
+    db: transaction_data
+    role: read_only_user
+    privilege: SELECT
+    object_type: ALL TABLES IN SCHEMA
+    object_name: public

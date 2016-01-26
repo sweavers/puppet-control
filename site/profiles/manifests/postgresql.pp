@@ -47,14 +47,16 @@
 
 class profiles::postgresql(
 
-  $port          = 5432,
-  $version       = '9.3',
-  $remote        = true,
-  $dbroot        = '/postgres',
-  $databases     = hiera_hash('postgres_databases',false),
-  $users         = hiera_hash('postgres_users', false),
-  $pg_hba_rule   = hiera_hash('pg_hba_rule', false),
-  $pg_db_grant   = hiera_hash('pg_db_grant', false)
+  $port           = 5432,
+  $version        = '9.3',
+  $remote         = true,
+  $dbroot         = '/postgres',
+  $databases      = hiera_hash('postgres_databases',false),
+  $users          = hiera_hash('postgres_users', false),
+  $pg_hba_rule    = hiera_hash('pg_hba_rule', false),
+  $pg_db_grant    = hiera_hash('pg_db_grant', false),
+  $pg_table_grant = hiera_hash('pg_table_grant', false),
+  $pg_grant       = hiera_hash('pg_grant', false)
 
 ){
 
@@ -151,6 +153,12 @@ class profiles::postgresql(
   }
   if $pg_db_grant {
     create_resources('postgresql::server::database_grant', $pg_db_grant)
+  }
+  if $pg_table_grant {
+    create_resources('postgresql::server::table_grant', $pg_table_grant)
+  }
+  if $pg_grant {
+    create_resources('postgresql::server::grant', $pg_grant)
   }
 
 }
