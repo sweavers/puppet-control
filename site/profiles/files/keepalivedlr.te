@@ -1,0 +1,21 @@
+
+module keepalivedlr 1.0;
+
+require {
+	type postgresql_port_t;
+	type admin_home_t;
+	type kernel_t;
+	type hostname_exec_t;
+	type keepalived_t;
+	class tcp_socket name_connect;
+	class system module_request;
+	class file { execute read execute_no_trans getattr open };
+}
+
+#============= keepalived_t ==============
+allow keepalived_t admin_home_t:file { read getattr open };
+allow keepalived_t hostname_exec_t:file { read getattr open execute execute_no_trans };
+
+#!!!! This avc can be allowed using the boolean 'domain_kernel_load_modules'
+allow keepalived_t kernel_t:system module_request;
+allow keepalived_t postgresql_port_t:tcp_socket name_connect;

@@ -77,6 +77,11 @@ class profiles::postgresqlha_master(
     shell      => '/bin/bash',
   }
 
+  selinux::module { 'keepalivedlr':
+    ensure => 'present',
+    source => 'puppet:///modules/profiles/keepalivedlr.te'
+  }
+
   file { $dbroot :
     ensure  => 'directory',
     owner   => 'postgres',

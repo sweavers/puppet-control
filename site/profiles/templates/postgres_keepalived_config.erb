@@ -1,5 +1,7 @@
 <% scope.function_hiera(['pg_cluster_member_hostnames']).each do |host_name,config|
-  if host_name == @hostname
+  trimmed_host_name = @hostname.gsub(/\..*$/, '')
+  trimmed_hiera_host_name = host_name.gsub(/\..*$/, '')
+  if trimmed_hiera_host_name == trimmed_host_name
     @kd_priority = config['keepalived_priority']
   end
   if config['initial_role'] == 'vip'
@@ -7,7 +9,7 @@
   end
 end %>
 vrrp_script postgresql-9.4 {
-  script "/usr/pgsql-9.4/bin/repmgr -f /etc/repmgr/9.4/repmgr.conf cluster show 2> /dev/null | grep 'master.*'`hostname`"
+  script "/usr/pgsql-9.4/bin/repmgr -f /etc/repmgr/9.4/repmgr.conf cluster show 2> /dev/null | grep 'master.*'`hostname | sed 's/\..*$//'`"
   interval 2
   wait 2
 }

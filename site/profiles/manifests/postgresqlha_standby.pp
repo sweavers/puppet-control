@@ -15,6 +15,11 @@ class profiles::postgresqlha_standby (
   $shortversion = regsubst($version, '\.', '')
   $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
 
+  selinux::module { 'keepalivedlr':
+    ensure => 'present',
+    source => 'puppet:///modules/profiles/keepalivedlr.te'
+  }
+  
   file { '/etc/hosts' :
     ensure  => file,
     content => $custom_hosts,
@@ -228,7 +233,7 @@ class profiles::postgresqlha_standby (
       command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register",
       user    => 'root',
       require => File['/root/.pgpass'],
-      unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=${this_hostname}\"",
+      unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=${::hostname}\"",
     } ->
 
     service { 'repmgr' :
