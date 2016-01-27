@@ -1,9 +1,9 @@
 ---
 
 classes:
-  - profiles::dns
+  - dnsserver
 
-dns_zone:
+dnsserver::dns_zone:
   example.com:
     soa: ns1.example.com
     soa_email: admin.example.com
@@ -13,7 +13,7 @@ dns_zone:
     soa_email: admin.example.com
     nameservers: [ns1]
 
-dns_a_record:
+dnsserver::dns_a_record:
   huey:
     zone: example.com
     data: 98.76.54.32
