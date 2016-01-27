@@ -20,7 +20,9 @@
 class profiles::jenkins (
 
   $plugins                 = undef,
+  $jobs                    = undef,
   $deploy_from_jenkins_rsa = undef,
+  $version                 = '1.644-1.1',
 
   $jenkins_url             = [ $::hostname ],
   $jenkins_ssl             = false,
@@ -103,6 +105,8 @@ class profiles::jenkins (
     plugin_hash        => $plugins,
     port               => 8080,
     configure_firewall => false,
+    job_hash           => $jobs,
+    version            => $version,
   }
 
   file { '/var/lib/jenkins/.ssh':
@@ -186,7 +190,7 @@ class profiles::jenkins (
 
     class { '::phantomjs':
       package_version => '1.9.8',
-      package_update  => true,
+      package_update  => false,
       install_dir     => '/usr/local/bin',
       source_dir      => '/opt',
       timeout         => 300
@@ -194,7 +198,9 @@ class profiles::jenkins (
 
     ensure_packages(['libcurl-devel', 'patch', 'libxml2-devel',
       'libxslt-devel', 'gcc', 'ruby-devel', 'zlib-devel', 'postgresql-devel',
-      'openssl-devel', 'readline-devel', 'libffi-devel', 'gcc-c++'])
+      'openssl-devel', 'readline-devel', 'libffi-devel', 'gcc-c++',
+      'libjpeg-turbo-devel', 'zlib-devel'])
 
   }
+
 }

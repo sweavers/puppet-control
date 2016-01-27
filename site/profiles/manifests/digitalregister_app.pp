@@ -37,8 +37,8 @@ class profiles::digitalregister_app(
 
   #  Install required packages for Python
 
-  $PKGLIST=['python','python-devel','python-pip']
-
+  $PKGLIST=['python','python-devel','python-pip', 'libxml2-devel', 'libxslt-devel',
+    'libjpeg-turbo-devel', 'zlib-devel']
 
   package{ $PKGLIST :
     ensure  => installed,
@@ -65,7 +65,11 @@ class profiles::digitalregister_app(
   }
 
   if $applications {
-    create_resources('wsgi::application', $applications)
+    $defaults = {
+      'vs_app_host' => hiera('vs_app_host', 'http://localhost'),
+      'vs_app_token' =>  hiera('vs_app_token', ''),
+    }
+    create_resources('wsgi::application', $applications, $defaults)
   }
 
   if $::puppet_role == 'digital-register-frontend' {
@@ -78,7 +82,7 @@ class profiles::digitalregister_app(
       before   => File['/etc/ssl/keys/']
     }
   }
-  
+
   if ($api_ssl == true) or ($frontend_ssl == true) {
 
     # Set up Nginx proxy
@@ -126,8 +130,7 @@ class profiles::digitalregister_app(
   if $::puppet_role == 'digital-register-frontend' {
 
     # install pkgs requires for PDF geeneration
-    $FRNTEND_PKGS = ['cairo','pango','gdk-pixbuf2','libffi-devel',
-                    'libxslt-devel','libxml2-devel']
+    $FRNTEND_PKGS = ['cairo','pango','gdk-pixbuf2','libffi-devel']
 
     package{ $FRNTEND_PKGS :
       ensure  => installed,

@@ -29,13 +29,15 @@ and stored in __/etc/puppetlabs/facter/facts.d/__.
 
 * __network_location__: The location on the network the server will reside (e.g. zone1, zone2)
 * __puppet_role__: The hiera profile name that the machine will apply (e.g. migration-app)
+* __server_type__: Similar to 'puppet_role' but specific to an environment.
 * __application_environment__: The environment name of the application (e.g. production, pre-production)
 * __hosting_platform__: The platform the code will be hosted on (e.g. aws, internal, vagrant)
 
 _/etc/puppetlabs/facter/facts.d/host.yaml_
 ```
 network_location: zone1
-puppet_role: migration-app
+puppet_role: digital-register-frontend
+server_type: drf-production
 application_environment: production
 hosting_platform: aws
 ```
