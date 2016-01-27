@@ -3,6 +3,10 @@
 classes:
   - dnsserver
 
+dnsserver::dns_forwarders:
+  - 8.8.8.8
+  - 8.8.4.4
+
 dnsserver::dns_zone:
   example.com:
     soa: ns1.example.com
