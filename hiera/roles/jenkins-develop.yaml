@@ -7,8 +7,6 @@ classes:
 profiles::jenkins::plugins:
   git:
     version: 2.4.0
-  credentials:
-    version: 1.23
   git-client:
     version: 1.19.0
   scm-api:
@@ -17,10 +15,6 @@ profiles::jenkins::plugins:
     version: 1.4.1
   token-macro:
     version: 1.10
-  ssh-credentials:
-    version: 1.11
-  mailer:
-    version: 1.15
   active-directory:
     version: 1.41
   scm-sync-configuration:
@@ -62,11 +56,16 @@ profiles::jenkins::plugins:
     version: 1.6+build.142
   parameterized-trigger:
     version: 2.29
-  urltrigger:
-    version: 0.41
-  Parameterized-Remote-Trigger:
-    version: 2.2.2
 
+profiles::jenkins::jobs:
+  sample-build-and-ut:
+    source: profiles/sample-build-and-ut.xml
+    config: true
+    ensure: present
+  sample-acceptance-test:
+    source: profiles/sample-acceptance-test.xml
+    config: true
+    ensure: present
 
 profiles::jenkins::jenkins_ssl: true
 profiles::jenkins::ssl_crt: |
