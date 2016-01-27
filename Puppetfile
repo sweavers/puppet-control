@@ -35,7 +35,9 @@ mod 'thias/sysctl',                    '1.0.2'
 mod 'zack/r10k',                       '2.6.2'
 mod '3fs/phantomjs',                   '0.0.8'
 mod 'camptocamp/archive',              '0.8.1'
-
+mod 'thias/resolvconf',                '0.0.3'
+mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-Ops/puppet-dnsserver.git',
+                                       :ref => 'be63ddf09bcc0abfd15814ce2e2f1e49a0f1e7ef'
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.6'
 mod 'croddy/make',                     '0.0.5'
@@ -55,3 +57,5 @@ mod 'puppetlabs/ruby',                 '0.4.0'
 mod 'puppetlabs/stdlib',               '4.9.0'
 mod 'puppetlabs/vcsrepo',              '1.3.0'
 mod 'stahnma/epel',                    '1.0.2'
+mod 'ajjahn/dns',                      :git => 'https://github.com/mooreandrew/puppet-dns.git',
+                                       :ref => '460647d8a0806c30ca145160a58f48c735e7c16f'
