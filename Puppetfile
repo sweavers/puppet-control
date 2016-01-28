@@ -57,5 +57,5 @@ mod 'puppetlabs/ruby',                 '0.4.0'
 mod 'puppetlabs/stdlib',               '4.9.0'
 mod 'puppetlabs/vcsrepo',              '1.3.0'
 mod 'stahnma/epel',                    '1.0.2'
-mod 'ajjahn/dns',                      :git => 'https://github.com/mooreandrew/puppet-dns.git',
-                                       :ref => '460647d8a0806c30ca145160a58f48c735e7c16f'
+mod 'ajjahn/dns',                      :git => 'https://github.com/ajjahn/puppet-dns.git',
+                                       :ref => 'c545493603f1a1352db73f49346f9e253d7599aa'
