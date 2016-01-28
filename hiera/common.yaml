@@ -5,11 +5,11 @@ classes:
   - 'profiles::deployment'
   - 'profiles::ntp'
   - 'profiles::git'
-  - 'profiles::log_forwarder'
   - 'profiles::firewall'
   - 'selinux'
   - 'sudo'
   - 'profiles::nagios_client'
+  - 'resolvconf'
 
 # Prevent sudo from purging unmanaged sudo configs (for vagrant)
 sudo::purge: false
@@ -260,3 +260,9 @@ log_broker_logstash_config: |
       codec => json
     }
   }
+
+# Add once there is a dns server
+# resolvconf::nameserver:
+#   - 'localhost'
+# resolvconf::search:
+#   - 'example.com'

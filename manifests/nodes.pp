@@ -9,32 +9,23 @@ notify{"Application Environment: ${::application_environment}": loglevel => debu
 # Default nodes
 node default {
 
-  if $virtual == 'xenhvm' {
-
-
-    user {
-        'webapp':
-            ensure     => present,
-            home       => '/var/webapp',
-            shell      => '/bin/bash',
-            uid        => '1003',
-            managehome => true,
-    }
-
-    file {
-        '/etc/sudoers.d/webapp':
-            ensure  => file,
-            source  => 'puppet:///modules/profiles/webapp',
-            owner   => 'root',
-            group   => 'root',
-            mode    => '0644';
-    }
-      # enter puppet code
+  user {
+      'webapp':
+          ensure     => absent,
+          home       => '/var/webapp',
+          shell      => '/bin/bash',
+          uid        => '1003',
+          managehome => true,
   }
 
-  else {
-    # enter puppet code
-
+  file {
+      '/etc/sudoers.d/webapp':
+          ensure  => absent,
+          source  => 'puppet:///modules/profiles/webapp',
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644';
+  }
 
   # Create 'lr-admin' group on all hosts
   group { 'lr-admin' :
@@ -57,5 +48,4 @@ node default {
     password => '!'
   }
 
-}
 }
