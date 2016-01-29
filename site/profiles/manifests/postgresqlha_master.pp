@@ -214,14 +214,6 @@ class profiles::postgresqlha_master(
       enable => true,
     }
 
-    file { '/etc/ssh/ssh_config' :
-      ensure => file,
-      source => 'puppet:///modules/profiles/postgres_ssh_config',
-      owner  => 'root',
-      mode   => '0644',
-      notify => Service['sshd']
-    }
-
     file { '/etc/puppetlabs/facter/facts.d/postgres_ha_setup_done.sh' :
       ensure => file,
       source => 'puppet:///modules/profiles/postgres_ha_setup_done.sh',
@@ -233,6 +225,13 @@ class profiles::postgresqlha_master(
       ensure => directory,
       owner  => 'postgres',
       mode   => '0700',
+    } ->
+
+    file { '/var/lib/pgsql/.ssh/config' :
+      ensure  => file,
+      content => 'StrictHostKeyChecking no',
+      owner   => 'postgres',
+      mode    => '0600',
     } ->
 
     file { '/var/lib/pgsql/.ssh/authorized_keys' :
@@ -261,6 +260,13 @@ class profiles::postgresqlha_master(
       owner   => 'repmgr',
       mode    => '0700',
       require => Package["repmgr${shortversion}"],
+    } ->
+
+    file { '//home/repmgr/.ssh/config' :
+      ensure  => file,
+      content => 'StrictHostKeyChecking no',
+      owner   => 'repmgr',
+      mode    => '0600',
     } ->
 
     file { '/home/repmgr/.ssh/authorized_keys' :

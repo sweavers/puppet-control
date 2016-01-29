@@ -19,7 +19,7 @@ class profiles::postgresqlha_standby (
     ensure => 'present',
     source => 'puppet:///modules/profiles/keepalivedlr.te'
   }
-  
+
   file { '/etc/hosts' :
     ensure  => file,
     content => $custom_hosts,
@@ -110,18 +110,17 @@ class profiles::postgresqlha_standby (
       enable => true,
     }
 
-    file { '/etc/ssh/ssh_config' :
-      ensure => file,
-      source => 'puppet:///modules/profiles/postgres_ssh_config',
-      owner  => 'root',
-      mode   => '0644',
-      notify => Service['sshd']
-    }
-
     file { '/var/lib/pgsql/.ssh' :
       ensure => directory,
       owner  => 'postgres',
       mode   => '0700',
+    } ->
+
+    file { '/var/lib/pgsql/.ssh/config' :
+      ensure  => file,
+      content => 'StrictHostKeyChecking no',
+      owner   => 'postgres',
+      mode    => '0600',
     } ->
 
     file { '/var/lib/pgsql/.ssh/authorized_keys' :
@@ -150,6 +149,13 @@ class profiles::postgresqlha_standby (
       owner   => 'repmgr',
       mode    => '0700',
       require => Package["repmgr${shortversion}"],
+    } ->
+
+    file { '//home/repmgr/.ssh/config' :
+      ensure  => file,
+      content => 'StrictHostKeyChecking no',
+      owner   => 'repmgr',
+      mode    => '0600',
     } ->
 
     file { '/home/repmgr/.ssh/authorized_keys' :

@@ -71,14 +71,6 @@ class profiles::postgresqlha_barman(
     enable => true,
   }
 
-  file { '/etc/ssh/ssh_config' :
-    ensure => file,
-    source => 'puppet:///modules/profiles/postgres_ssh_config',
-    owner  => 'root',
-    mode   => '0644',
-    notify => Service['sshd']
-  }
-
   file { '/etc/barman.conf' :
     ensure  => file,
     owner   => 'barman',
@@ -93,6 +85,14 @@ class profiles::postgresqlha_barman(
     owner  => 'barman',
     group  => 'barman',
     mode   => '0700',
+  } ->
+
+  file { '/var/lib/barman/.ssh/config' :
+    ensure  => file,
+    content => 'StrictHostKeyChecking no',
+    owner   => 'barman',
+    group   => 'barman',
+    mode    => '0600',
   } ->
 
   file { '/var/lib/barman/.ssh/authorized_keys' :

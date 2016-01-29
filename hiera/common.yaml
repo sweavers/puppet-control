@@ -262,7 +262,7 @@ log_broker_logstash_config: |
     }
   }
 
-# Add once there is a dns server 
+# Add once there is a dns server
 # resolvconf::nameserver:
 #   - 'localhost'
 # resolvconf::search:
