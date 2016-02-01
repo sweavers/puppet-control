@@ -37,6 +37,7 @@ applications:
     revision: 'develop'
     vars:
       DEED_DATABASE_URI: 'postgresql://dm-deeds:dm-deeds@localhost:5432/dm-deeds'
+      WEBSEAL_AUTHENTICATION: true
     require: 'Class[Postgresql::Server]'
   dm-borrower-frontend:
     bind: '5006'
@@ -47,5 +48,6 @@ applications:
     revision: 'develop'
     vars:
       DEED_API_ADDRESS: 'http://localhost:5003'
+      WEBSEAL_AUTHENTICATION: true
 
 profiles::postgresql::version: '9.4'
