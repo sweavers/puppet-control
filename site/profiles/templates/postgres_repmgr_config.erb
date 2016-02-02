@@ -8,7 +8,7 @@ scope.function_hiera(['pg_cluster_member_hostnames']).each do |host_name,config|
     @nodecount += 1
   end
 end %>
-cluster=<%= @application_environment %>
+cluster=<%= @application_environment.gsub(/-/, '_') %>
 node=<%= @node_number %>
 node_name=node<%= @node_number %>
 conninfo='host=<%= @hostname %> user=repmgr dbname=repmgr'
