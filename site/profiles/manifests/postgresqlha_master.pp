@@ -379,7 +379,7 @@ class profiles::postgresqlha_master(
       content => template('profiles/pgpass.erb'),
       mode    => '0600',
     } ->
-    # added sleep before next command as on ESX repmanager tries to start before the pogress database is up
+    # added sleep before next command as on ESX repmanager tries to start before the postgres database is up.
     exec { 'master_register_repmgrd' :
       command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register --force",
       user    => 'root',
@@ -391,11 +391,6 @@ class profiles::postgresqlha_master(
       ensure  => running,
       enable  => true,
       require => File['/usr/lib/systemd/system/repmgr.service']
-    } ->
-
-    exec { 'reload_postgres' :
-      command => "/usr/pgsql-${version}/bin/pg_ctl -D ${postgresql::globals::datadir} reload -m immediate",
-      user    => 'postgres',
     } ->
 
     file { '/var/lib/pgsql/postgres_ha_setup_done' :
