@@ -379,9 +379,9 @@ class profiles::postgresqlha_master(
       content => template('profiles/pgpass.erb'),
       mode    => '0600',
     } ->
-
+    # added sleep before next command as on ESX repmanager tries to start before the pogress database is up
     exec { 'master_register_repmgrd' :
-      command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register",
+      command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register --force",
       user    => 'root',
       require => File['/root/.pgpass'],
       unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show",
