@@ -234,9 +234,9 @@ class profiles::postgresqlha_standby (
       user    => 'postgres',
       require => Package["postgresql${shortversion}-server"],
     } ->
-
+    # added sleep before next command as on ESX repmanager tries to start before the postgres database is up.
     exec { 'standby_register_repmgrd' :
-      command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register",
+      command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register --force",
       user    => 'root',
       require => File['/root/.pgpass'],
       unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=${::hostname}\"",
