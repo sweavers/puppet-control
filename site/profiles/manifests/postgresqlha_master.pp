@@ -253,41 +253,6 @@ class profiles::postgresqlha_master(
       content => $ssh_keys['public'],
       owner   => 'postgres',
       mode    => '0644',
-    } ->
-
-    file { '/home/repmgr/.ssh' :
-      ensure  => directory,
-      owner   => 'repmgr',
-      mode    => '0700',
-      require => Package["repmgr${shortversion}"],
-    } ->
-
-    file { '//home/repmgr/.ssh/config' :
-      ensure  => file,
-      content => 'StrictHostKeyChecking no',
-      owner   => 'repmgr',
-      mode    => '0600',
-    } ->
-
-    file { '/home/repmgr/.ssh/authorized_keys' :
-      ensure  => file,
-      content => $ssh_keys['public'],
-      owner   => 'repmgr',
-      mode    => '0600',
-    } ->
-
-    file { '/home/repmgr/.ssh/id_rsa' :
-      ensure  => file,
-      content => $ssh_keys['private'],
-      owner   => 'repmgr',
-      mode    => '0600',
-    } ->
-
-    file { '/home/repmgr/.ssh/id_rsa.pub' :
-      ensure  => file,
-      content => $ssh_keys['public'],
-      owner   => 'repmgr',
-      mode    => '0644',
     }
 
     include postgresql::client
