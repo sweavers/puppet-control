@@ -183,7 +183,7 @@ class profiles::postgresqlha_standby (
     } ->
 
     exec { 'clone_database_master' :
-      command => "/usr/pgsql-${version}/bin/repmgr -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr --verbose standby clone ${vip_hostname}",
+      command => "/usr/pgsql-${version}/bin/repmgr -r -F -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr --verbose standby clone ${vip_hostname}",
       user    => 'postgres',
       cwd     => "/etc/repmgr/${version}/",
       unless  => 'psql -c "select pg_is_in_recovery();" | grep "^ t$"',

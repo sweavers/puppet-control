@@ -16,7 +16,7 @@ vrrp_script postgresql-9.4 {
 vrrp_instance <%= @application_environment.upcase %>-PG-CLUSTER {
     state MASTER
     interface eth1
-    virtual_router_id 100
+    virtual_router_id <%= @vip_ip.split('.').last %>
     priority <%= @kd_priority %>
     advert_int 1
     virtual_ipaddress {
