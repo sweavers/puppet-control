@@ -232,3 +232,4 @@ postgres_users:
 
 repmgr_password: repmgr
 barman_password: barman
+barman_retention_policy: RECOVERY WINDOW OF 2 WEEKS
