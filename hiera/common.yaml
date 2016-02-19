@@ -57,6 +57,7 @@ logbroker_extranet_logstash_config: |
       codec => json
     }
   }
+
 profiles::jenkins::deploy_from_jenkins_rsa: |
  -----BEGIN RSA PRIVATE KEY-----
  MIIEogIBAAKCAQEA5MuW1LN55Te/PtHfp87ds9mXmeJVLIg0ldhT5dznNB2drZMD
@@ -85,6 +86,8 @@ profiles::jenkins::deploy_from_jenkins_rsa: |
  U8Vh0MBxlX2AYVtUFDA6VqekSDO3lBFZowELaZuSNNvp1uo5nOhOzozEjDhNAgBZ
  9/pUlnwbF15fqp/fJYgKCK2+NC5GXCPda2AZNnGSElpQ3m49ESI=
  -----END RSA PRIVATE KEY-----
+
+
 profiles::deployment::public_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDky5bUs3nlN78+0d+nzt2z2ZeZ4lUsiDSV2FPl3Oc0HZ2tkwM+FF++QJp8VycEoQ+fRIB9ZMksYDghJBymNG0paNH1YwjXtRz3/bfc/qtXm1BBG1s+L+9LKnncjiYHCh+9uQ65IZQ+r/eandUnGnOzVZQAgX69Qd+PlafLH/W1W6pfrRTq8sI/yyINWhXfDlSX5WuZ3hp783dt6WptyEaQdptTz74A5MG9Szp31eLL+mJl8UYWelDH/S8jzNOiLuh9sQzv9hKqHeRXZzZjk+MVAcb1UoJjNUvLA0+N26fWhqa8mSrtXHo/4wjCt1Yo2J+fU967oV3KJNbyY84kFysB
 
 log_repository_ip_address: 192.16.42.49
@@ -118,6 +121,7 @@ log_repository_logstash_forwarder_key: |
   a4OuzP04V835dOa+LOAX5z/hYqlsLS6pHGHNI+M3Di6LJhlYL+16mH4lARy4//Lg
   BHg9862OJl19vEmjkIZaWVY5
   -----END PRIVATE KEY-----
+
 log_repository_logstash_forwarder_cert: |
   -----BEGIN CERTIFICATE-----
   MIIDaDCCAlCgAwIBAgIJAOlqiWEqMVESMA0GCSqGSIb3DQEBCwUAMEIxCzAJBgNV
@@ -140,6 +144,7 @@ log_repository_logstash_forwarder_cert: |
   whWxKWn2mdzdSksp+UFewiNfY0YRFk7z7s40vjBptq7Av37YDfaYZVpubEX0m5gY
   znmb4esLhXJOejeA
   -----END CERTIFICATE-----
+
 log_repository_logstash_config: |
   input {
     lumberjack {
@@ -168,17 +173,21 @@ log_repository_logstash_config: |
       }
     }
   }
+
   filter {
   if [type] == "application" {
+
       grok {
   	match => { "message" => "%{TIMESTAMP_ISO8601:time} %{DATA:level} %{DATA:logger} %{DATA:thread} %{GREEDYDATA:detail} %{DATA:exception}"}
       	 }
        }
   }
+
   output {
   	elasticsearch { host => localhost
   	cluster => "development" }
   }
+
 log_broker_ip_address: 192.16.42.48
 
 log_broker_logstash_forwarder_key: |
@@ -210,6 +219,7 @@ log_broker_logstash_forwarder_key: |
   LAjOu729+JOHIMGw47lQUbSIVvGxTpTwRYfgxe5h8LNNQX/2JuYEZfftjvVOC8C6
   RXATlL0V4UsrlDzBhDak5Tk=
   -----END PRIVATE KEY-----
+
 log_broker_logstash_forwarder_cert: |
   -----BEGIN CERTIFICATE-----
   MIIDaDCCAlCgAwIBAgIJAOl/7TkHTq5/MA0GCSqGSIb3DQEBCwUAMEIxCzAJBgNV
@@ -232,6 +242,7 @@ log_broker_logstash_forwarder_cert: |
   iYVf75Yv+FFlqM+dZO3jjfm2kKAlKx4mFFLyh7yan1nLsbau4oJZ52jafjP20mYP
   8Cd10QQNvFo4jr9u
   -----END CERTIFICATE-----
+
 log_broker_logstash_config: |
   input {
     lumberjack {
@@ -249,6 +260,7 @@ log_broker_logstash_config: |
       codec => json
     }
   }
+
 # Add once there is a dns server
 # resolvconf::nameserver:
 #   - 'localhost'
