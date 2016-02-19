@@ -101,3 +101,4 @@ log_file = /var/log/barman/barman.log
 description = "Primary PostgreSQL Server"
 conninfo = "host=<%= @vip_hostname %> user=barman   dbname=postgres"
 ssh_command = "ssh postgres@<%= @vip_hostname %>"
+retention_policy = <%= scope.function_hiera(['barman_retention_policy']) %>
