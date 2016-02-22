@@ -37,6 +37,15 @@ applications:
     revision: 'develop'
     vars:
       VARS_LOC: 'secretplace'
+  dm-webseal-proxy:
+    bind: '5012'
+    source: 'https://github.com/LandRegistry/dm-webseal-proxy.git'
+    app_type: 'wsgi'
+    wsgi_entry: 'application:app'
+    manage: false
+    revision: 'master'
+    vars:
+      DEED_API_URL_WEBSEAL='webseal_address'
   dm-deed-api:
     bind: '5003'
     source: 'https://github.com/LandRegistry/dm-deed-api.git'
