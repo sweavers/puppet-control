@@ -43,7 +43,7 @@ applications:
     app_type: 'wsgi'
     wsgi_entry: 'application:app'
     manage: false
-    revision: 'develop'
+    revision: 'master'
     vars:
       DEED_API_URL_WEBSEAL='webseal_address'
   dm-deed-api:
