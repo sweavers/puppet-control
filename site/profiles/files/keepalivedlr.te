@@ -2,20 +2,63 @@
 module keepalivedlr 1.0;
 
 require {
-	type postgresql_port_t;
 	type admin_home_t;
-	type kernel_t;
+	type faillog_t;
 	type hostname_exec_t;
 	type keepalived_t;
-	class tcp_socket name_connect;
+	type kernel_t;
+	type lastlog_t;
+	type postgresql_db_t;
+	type postgresql_port_t;
+	type security_t;
+	type su_exec_t;
+	type system_dbusd_t;
+	type system_dbusd_var_run_t;
+	type systemd_logind_t;
+	type systemd_logind_sessions_t;
+	class capability { setuid setgid audit_write };
+	class dbus send_msg;
+	class dir { read search getattr };
+	class fifo_file write;
+	class file { execute read execute_no_trans write getattr open };
+	class netlink_selinux_socket { bind create };
+	class netlink_audit_socket { nlmsg_relay create read write };
+	class passwd passwd;
+	class process setsched;
+	class security compute_av;
+	class sock_file write;
 	class system module_request;
-	class file { execute read execute_no_trans getattr open };
+	class tcp_socket name_connect;
+	class unix_stream_socket connectto;
 }
 
-#============= keepalived_t ==============
-allow keepalived_t admin_home_t:file { read getattr open };
-allow keepalived_t hostname_exec_t:file { read getattr open execute execute_no_trans };
 
-#!!!! This avc can be allowed using the boolean 'domain_kernel_load_modules'
+#============= keepalived_t ==============
+
+allow keepalived_t admin_home_t:file { read getattr open };
+allow keepalived_t faillog_t:file { read open };
+allow keepalived_t hostname_exec_t:file { read getattr open execute execute_no_trans };
 allow keepalived_t kernel_t:system module_request;
+allow keepalived_t lastlog_t:file { read write open };
+allow keepalived_t postgresql_db_t:dir { search getattr };
+allow keepalived_t postgresql_db_t:file { read getattr open };
 allow keepalived_t postgresql_port_t:tcp_socket name_connect;
+allow keepalived_t security_t:dir read;
+allow keepalived_t security_t:file { read write getattr open };
+allow keepalived_t security_t:security compute_av;
+allow keepalived_t self:capability { setuid audit_write setgid };
+allow keepalived_t self:netlink_audit_socket { nlmsg_relay create write read };
+allow keepalived_t self:netlink_selinux_socket { bind create };
+allow keepalived_t self:passwd passwd;
+allow keepalived_t self:process setsched;
+allow keepalived_t su_exec_t:file { read getattr open execute execute_no_trans };
+allow keepalived_t system_dbusd_t:dbus send_msg;
+allow keepalived_t system_dbusd_t:unix_stream_socket connectto;
+allow keepalived_t system_dbusd_var_run_t:dir search;
+allow keepalived_t system_dbusd_var_run_t:sock_file write;
+allow keepalived_t systemd_logind_t:dbus send_msg;
+allow keepalived_t systemd_logind_sessions_t:fifo_file write;
+
+
+#============= systemd_logind_t ==============
+allow systemd_logind_t keepalived_t:dbus send_msg;

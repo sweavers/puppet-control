@@ -11,7 +11,7 @@ end %>
 cluster=<%= @application_environment.gsub(/-/, '_') %>
 node=<%= @node_number %>
 node_name=node<%= @node_number %>
-conninfo='host=<%= @hostname %> user=repmgr dbname=repmgr'
+conninfo='host=<%= @hostname %> user=repmgr dbname=repmgr connect_timeout=2'
 pg_bindir=/usr/pgsql-9.4/bin
 master_response_timeout=60
 reconnect_attempts=6
