@@ -41,15 +41,15 @@
 #
 
 class profiles::postgresqlha_master(
-    $port              = 5432,
-    $version           = '9.4',
-    $remote            = true,
-    $dbroot            = '/var/lib/pgsql',
-    $databases         = hiera_hash('postgres_databases',false),
-    $users             = hiera_hash('postgres_users', false),
-    $dbs               = hiera_hash('postgres_dbs', false),
-    $ssh_keys          = hiera_hash('postgresqlha_keys',false),
-    $postgres_conf     = hiera_hash('postgres_conf',undef)
+    $port          = 5432,
+    $version       = '9.4',
+    $remote        = true,
+    $dbroot        = '/var/lib/pgsql',
+    $databases     = hiera_hash('postgres_databases',false),
+    $users         = hiera_hash('postgres_users', false),
+    $dbs           = hiera_hash('postgres_dbs', false),
+    $ssh_keys      = hiera_hash('postgresqlha_keys',false),
+    $postgres_conf = hiera_hash('postgres_conf',undef)
   ){
 
   $shortversion = regsubst($version, '\.', '')
