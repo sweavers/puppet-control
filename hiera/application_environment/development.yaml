@@ -221,10 +221,10 @@ postgres_databases:
     user: register_data
     password: md5085815e3463853f3a1e9731b61ddb3a7
     owner: register_data
-  user_data:
-    user: user_data
-    password: md5f5e1477d2e90a5760642db71ea5307d1
-    owner: user_data
+  deeds:
+    user: deeds
+    password: md588b4ef42ed4df46d35bd60018ab6b63a
+    owner: deeds
 
 postgres_users:
   deployment:
@@ -233,3 +233,6 @@ postgres_users:
 repmgr_password: repmgr
 barman_password: barman
 barman_retention_policy: RECOVERY WINDOW OF 2 WEEKS
+
+postgres_conf:
+  wal_keep_segments: 500
