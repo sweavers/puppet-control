@@ -5,7 +5,6 @@ Vagrantfile
 modules/*
 !modules/.PLACEHOLDER
 
-hiera/application_environment/drv-pre-prod.yaml
 hiera/vagrant-repository.yaml
 hiera/vagrant-broker.yaml
 hiera/vagrant.yaml
