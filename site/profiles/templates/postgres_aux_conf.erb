@@ -1,0 +1,5 @@
+<%- if @hash
+  @hash.sort.map do |key,value| -%>
+<%= key %> = <%= value %>
+  <%- end -%>
+<%- end -%>

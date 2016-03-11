@@ -1,43 +1,6 @@
-# Class profiles::postgresqlHA
+# Class profiles::postgresqlha_barman
 #
-# This class will manage PostgreSQL installations
-#
-# Parameters:
-#  ['port']     - Port which PostgreSQL should listen on. Defaults = 5432
-#  ['version']  - Version of PostgreSQL to install. Default = 9.3
-#  ['remote']   - Should PostgreSQL listen for remote connections. Defaults true
-#  ['dbroot']   - Location installation should be placed. Defaults = /postgres
-#
-# Requires:
-# - puppetlabs/postgresql
-# - puppetlabs/stdlib
-#
-# Sample Usage:
-#   class { 'profiles::postgresql':
-#     remote => ['192.168.1.2']
-#   }
-#
-# Hiera Lookups:
-#
-# postgres_databases:
-#   systemofrecord:
-#    user: systemofrecord
-#    password: md511c5a6395e27555ef43eb7b05c76d7c1
-#    owner: systemofrecord
-
-# postgres_users:
-#   deployment:
-#     password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
-#
-##
-# pg_hba_rule:
-#   test:
-#     description: test
-#     type: host
-#     database: all
-#     user: all
-#     address: 0.0.0.0/0
-#     auth_method: md5
+# This class will manage Postgres Barman installations
 #
 
 class profiles::postgresqlha_barman(

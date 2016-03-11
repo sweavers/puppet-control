@@ -9,11 +9,20 @@
 class profiles::postgresqlha_standby (
     $version       = '9.4',
     $dbroot        = '/var/lib/pgsql/',
-    $ssh_keys      = hiera_hash('postgresqlha_keys',false)
+    $ssh_keys      = hiera_hash('postgresqlha_keys',false),
+    $postgres_conf = hiera_hash('postgres_conf',undef)
   ){
+
+  include ::stdlib
 
   $shortversion = regsubst($version, '\.', '')
   $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
+
+  if has_key($postgres_conf, 'wal_keep_segments') {
+    $wal_keep_segments = "-w ${postgres_conf[wal_keep_segments]}"
+  } else {
+    $wal_keep_segments = ''
+  }
 
   selinux::module { 'keepalivedlr':
     ensure => 'present',
@@ -142,41 +151,6 @@ class profiles::postgresqlha_standby (
       content => $ssh_keys['public'],
       owner   => 'postgres',
       mode    => '0644',
-    } ->
-
-    file { '/home/repmgr/.ssh' :
-      ensure  => directory,
-      owner   => 'repmgr',
-      mode    => '0700',
-      require => Package["repmgr${shortversion}"],
-    } ->
-
-    file { '//home/repmgr/.ssh/config' :
-      ensure  => file,
-      content => 'StrictHostKeyChecking no',
-      owner   => 'repmgr',
-      mode    => '0600',
-    } ->
-
-    file { '/home/repmgr/.ssh/authorized_keys' :
-      ensure  => file,
-      content => $ssh_keys['public'],
-      owner   => 'repmgr',
-      mode    => '0600',
-    } ->
-
-    file { '/home/repmgr/.ssh/id_rsa' :
-      ensure  => file,
-      content => $ssh_keys['private'],
-      owner   => 'repmgr',
-      mode    => '0600',
-    } ->
-
-    file { '/home/repmgr/.ssh/id_rsa.pub' :
-      ensure  => file,
-      content => $ssh_keys['public'],
-      owner   => 'repmgr',
-      mode    => '0644',
     }
 
     file { "/etc/repmgr/${version}/repmgr.conf" :
@@ -188,6 +162,13 @@ class profiles::postgresqlha_standby (
     file { '/etc/keepalived/keepalived.conf' :
       ensure  => file,
       content => template('profiles/postgres_keepalived_config.erb'),
+    } ->
+
+    file { '/etc/keepalived/health_check.sh' :
+      ensure => file,
+      source => 'puppet:///modules/profiles/keepalived_health_check.sh',
+      owner  => 'postgres',
+      mode   => '0544',
     }
 
     service {'keepalived' :
@@ -218,7 +199,7 @@ class profiles::postgresqlha_standby (
     } ->
 
     exec { 'clone_database_master' :
-      command => "/usr/pgsql-${version}/bin/repmgr -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr --verbose standby clone ${vip_hostname}",
+      command => "/usr/pgsql-${version}/bin/repmgr -r -F -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr ${wal_keep_segments} --verbose standby clone ${vip_hostname}",
       user    => 'postgres',
       cwd     => "/etc/repmgr/${version}/",
       unless  => 'psql -c "select pg_is_in_recovery();" | grep "^ t$"',
@@ -234,18 +215,18 @@ class profiles::postgresqlha_standby (
       user    => 'postgres',
       require => Package["postgresql${shortversion}-server"],
     } ->
-
+    # added sleep before next command as on ESX repmanager tries to start before the postgres database is up.
     exec { 'standby_register_repmgrd' :
-      command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register",
-      user    => 'root',
-      require => File['/root/.pgpass'],
+      command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register --force",
+      user    => 'postgres',
+      require => File['/var/lib/pgsql/.pgpass'],
       unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=${::hostname}\"",
     } ->
 
     service { 'repmgr' :
       ensure  => running,
       enable  => true,
-      require => File['/usr/lib/systemd/system/repmgr.service']
+      require => File['/usr/lib/systemd/system/repmgr.service'],
     } ->
 
     file { '/usr/lib/systemd/system/postgresql.service' :

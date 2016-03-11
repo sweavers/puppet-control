@@ -41,14 +41,15 @@
 #
 
 class profiles::postgresqlha_master(
-    $port           = 5432,
-    $version        = '9.4',
-    $remote         = true,
-    $dbroot         = '/var/lib/pgsql',
-    $databases      = hiera_hash('postgres_databases',false),
-    $users          = hiera_hash('postgres_users', false),
-    $dbs            = hiera_hash('postgres_dbs', false),
-    $ssh_keys       = hiera_hash('postgresqlha_keys',false)
+    $port          = 5432,
+    $version       = '9.4',
+    $remote        = true,
+    $dbroot        = '/var/lib/pgsql',
+    $databases     = hiera_hash('postgres_databases',false),
+    $users         = hiera_hash('postgres_users', false),
+    $dbs           = hiera_hash('postgres_dbs', false),
+    $ssh_keys      = hiera_hash('postgresqlha_keys',false),
+    $postgres_conf = hiera_hash('postgres_conf',undef)
   ){
 
   $shortversion = regsubst($version, '\.', '')
@@ -106,14 +107,15 @@ class profiles::postgresqlha_master(
     $master_hostname = template('profiles/postgres_master_hostname.erb')
     $vip_hostname    = template('profiles/postgres_vip_hostname.erb')
     $barman_hostname = template('profiles/postgres_barman_hostname.erb')
-    $pg_conf         = "${dbroot}/${version}/data/postgresql.conf"
+    $pg_conf         = 'postgresql.conf'
+    $pg_aux_conf     = 'postgresql.aux.conf'
 
     class { 'postgresql::globals' :
       manage_package_repo  => true,
       version              => $version,
-      datadir              => "${dbroot}/${version}/data",
-      confdir              => "${dbroot}/${version}/data",
-      postgresql_conf_path => $pg_conf,
+      datadir              => "${dbroot}/${version}/data/",
+      confdir              => "${dbroot}/${version}/data/",
+      postgresql_conf_path => "${dbroot}/${version}/data/${pg_conf}",
       needs_initdb         => true,
       service_name         => "postgresql-${version}", # confirm on ubuntu
       require              => File[$dbroot],
@@ -138,57 +140,31 @@ class profiles::postgresqlha_master(
       before                  => Package["repmgr${shortversion}"],
     }
 
-    postgresql_conf { 'archive_command' :
-      target  => $pg_conf,
-      value   => "rsync -aq %p barman@${barman_hostname}:primary/incoming/%f",
+    postgresql_conf { 'include' :
+      target  => $postgresql::globals::postgresql_conf_path,
+      value   => "${postgresql::globals::confdir}${pg_aux_conf}",
       require => Class['postgresql::server'],
     }
 
-    postgresql_conf { 'wal_level' :
-      target  => $pg_conf,
-      value   => 'hot_standby',
-      require => Class['postgresql::server'],
+    $default_postgres_conf = {
+      archive_command          => "\'rsync -aq %p barman@${barman_hostname}:primary/incoming/%f\'",
+      archive_mode             => 'on',
+      hot_standby              => 'on',
+      max_replication_slots    => '10',
+      max_wal_senders          => '10',
+      shared_preload_libraries => 'repmgr_funcs',
+      synchronous_commit       => 'on',
+      wal_keep_segments        => '5000',
+      wal_level                => 'hot_standby',
     }
 
-    postgresql_conf { 'archive_mode' :
-      target  => $pg_conf,
-      value   => 'on',
-      require => Class['postgresql::server'],
+    if $postgres_conf { $hash = merge($default_postgres_conf, $postgres_conf)
+    } else {
+      $hash = $default_postgres_conf
     }
 
-    postgresql_conf { 'max_wal_senders' :
-      target  => $pg_conf,
-      value   => '10',
-      require => Class['postgresql::server'],
-    }
-
-    postgresql_conf { 'wal_keep_segments' :
-      target  => $pg_conf,
-      value   => '5000',   # 80 GB required on pg_xlog
-      require => Class['postgresql::server'],
-    }
-
-    postgresql_conf { 'hot_standby' :
-      target  => $pg_conf,
-      value   => 'on',
-      require => Class['postgresql::server'],
-    }
-
-    postgresql_conf { 'shared_preload_libraries' :
-      target  => $pg_conf,
-      value   => 'repmgr_funcs',
-      require => Class['postgresql::server'],
-    }
-
-    postgresql_conf { 'max_replication_slots' :
-      target  => $pg_conf,
-      value   => '10',
-      require => Class['postgresql::server'],
-    }
-
-    postgresql_conf { 'synchronous_commit' :
-      target  => $pg_conf,
-      value   => 'on',
+    file { "${postgresql::globals::confdir}/${pg_aux_conf}" :
+      content => template('profiles/postgres_aux_conf.erb'),
       require => Class['postgresql::server'],
     }
 
@@ -253,41 +229,6 @@ class profiles::postgresqlha_master(
       content => $ssh_keys['public'],
       owner   => 'postgres',
       mode    => '0644',
-    } ->
-
-    file { '/home/repmgr/.ssh' :
-      ensure  => directory,
-      owner   => 'repmgr',
-      mode    => '0700',
-      require => Package["repmgr${shortversion}"],
-    } ->
-
-    file { '//home/repmgr/.ssh/config' :
-      ensure  => file,
-      content => 'StrictHostKeyChecking no',
-      owner   => 'repmgr',
-      mode    => '0600',
-    } ->
-
-    file { '/home/repmgr/.ssh/authorized_keys' :
-      ensure  => file,
-      content => $ssh_keys['public'],
-      owner   => 'repmgr',
-      mode    => '0600',
-    } ->
-
-    file { '/home/repmgr/.ssh/id_rsa' :
-      ensure  => file,
-      content => $ssh_keys['private'],
-      owner   => 'repmgr',
-      mode    => '0600',
-    } ->
-
-    file { '/home/repmgr/.ssh/id_rsa.pub' :
-      ensure  => file,
-      content => $ssh_keys['public'],
-      owner   => 'repmgr',
-      mode    => '0644',
     }
 
     include postgresql::client
@@ -315,6 +256,13 @@ class profiles::postgresqlha_master(
     file { '/etc/keepalived/keepalived.conf' :
       ensure  => file,
       content => template('profiles/postgres_keepalived_config.erb'),
+    } ->
+
+    file { '/etc/keepalived/health_check.sh' :
+      ensure => file,
+      source => 'puppet:///modules/profiles/keepalived_health_check.sh',
+      owner  => 'postgres',
+      mode   => '0544',
     }
 
     service {'keepalived' :
@@ -379,11 +327,11 @@ class profiles::postgresqlha_master(
       content => template('profiles/pgpass.erb'),
       mode    => '0600',
     } ->
-
+    # added sleep before next command as on ESX repmanager tries to start before the postgres database is up.
     exec { 'master_register_repmgrd' :
-      command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register",
-      user    => 'root',
-      require => File['/root/.pgpass'],
+      command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register",
+      user    => 'postgres',
+      require => File['/var/lib/pgsql/.pgpass'],
       unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show",
     } ->
 
@@ -391,11 +339,6 @@ class profiles::postgresqlha_master(
       ensure  => running,
       enable  => true,
       require => File['/usr/lib/systemd/system/repmgr.service']
-    } ->
-
-    exec { 'reload_postgres' :
-      command => "/usr/pgsql-${version}/bin/pg_ctl -D ${postgresql::globals::datadir} reload -m immediate",
-      user    => 'postgres',
     } ->
 
     file { '/var/lib/pgsql/postgres_ha_setup_done' :

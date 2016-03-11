@@ -37,7 +37,7 @@ mod '3fs/phantomjs',                   '0.0.8'
 mod 'camptocamp/archive',              '0.8.1'
 mod 'thias/resolvconf',                '0.0.3'
 mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-Ops/puppet-dnsserver.git',
-                                       :ref => 'be63ddf09bcc0abfd15814ce2e2f1e49a0f1e7ef'
+                                       :ref => '8e4f08779649c5ddcf8225103009824485992ea2'
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.6'
 mod 'croddy/make',                     '0.0.5'
