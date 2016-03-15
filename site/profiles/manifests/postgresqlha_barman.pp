@@ -100,6 +100,22 @@ class profiles::postgresqlha_barman(
     ensure => directory,
     owner  => 'barman',
     group  => 'barman',
+  } ->
+
+  cron { 'barman_backup_primary' :
+    ensure  => present,
+    user    => 'barman',
+    command => 'barman backup primary',
+    hour    => '17',
+    minute  => '0',
+    weekday => '5',
+  } ->
+
+  cron { 'barman_cron' :
+    ensure  => present,
+    user    => 'barman',
+    command => 'barman cron',
+    minute  => '0',
   }
 
 }

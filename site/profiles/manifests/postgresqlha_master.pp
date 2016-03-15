@@ -113,8 +113,8 @@ class profiles::postgresqlha_master(
     class { 'postgresql::globals' :
       manage_package_repo  => true,
       version              => $version,
-      datadir              => "${dbroot}/${version}/data/",
-      confdir              => "${dbroot}/${version}/data/",
+      datadir              => "${dbroot}/${version}/data",
+      confdir              => "${dbroot}/${version}/data",
       postgresql_conf_path => "${dbroot}/${version}/data/${pg_conf}",
       needs_initdb         => true,
       service_name         => "postgresql-${version}", # confirm on ubuntu
@@ -142,7 +142,7 @@ class profiles::postgresqlha_master(
 
     postgresql_conf { 'include' :
       target  => $postgresql::globals::postgresql_conf_path,
-      value   => "${postgresql::globals::confdir}${pg_aux_conf}",
+      value   => "${postgresql::globals::confdir}/${pg_aux_conf}",
       require => Class['postgresql::server'],
     }
 
@@ -304,6 +304,7 @@ class profiles::postgresqlha_master(
     exec { 'master_start_postgres' :
       command => "/usr/pgsql-${version}/bin/pg_ctl -D ${postgresql::globals::datadir} start",
       user    => 'postgres',
+      require => File["${postgresql::globals::confdir}/${pg_aux_conf}"]
     } ->
 
     file { '/usr/lib/systemd/system/repmgr.service' :
