@@ -1,8 +1,5 @@
 forge 'https://forge.puppetlabs.com'
 
-mod 'benfairless/security',            :git => 'https://github.com/benfairless/puppet-security.git',
-                                       :ref => '0.2.0'
-
 # Third-party modules
 mod 'ajcrowe/supervisord',             '0.5.2'
 mod 'alphagov/account',                :git => 'https://github.com/alphagov/puppet-account.git',
