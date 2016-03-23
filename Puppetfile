@@ -1,5 +1,8 @@
 forge 'https://forge.puppetlabs.com'
 
+mod 'benfairless/security',            :git => 'https://github.com/benfairless/puppet-security.git',
+                                       :ref => '0.2.0'
+
 # Third-party modules
 mod 'ajcrowe/supervisord',             '0.5.2'
 mod 'alphagov/account',                :git => 'https://github.com/alphagov/puppet-account.git',
@@ -11,7 +14,7 @@ mod 'evenup/kibana',                   '2.0.1'
 mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
 mod 'jfryman/nginx',                   '0.2.2'
-mod 'jfryman/selinux',                 '0.2.3'
+mod 'jfryman/selinux',                 '0.3.0'
 mod 'puppet-gradle',                   :git => 'https://github.com/LandRegistry-Ops/puppet-gradle.git',
                                        :ref => 'ddca379e88c07d37bc1c902f5a380412ffc5ec38'
 mod 'puppet-wsgi',                     :git => 'https://github.com/LandRegistry-Ops/puppet-wsgi.git',
