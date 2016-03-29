@@ -1,4 +1,4 @@
 ---
 
 classes:
-  - profiles::postgresql_standalone
+  - profiles::postgresqlha_master

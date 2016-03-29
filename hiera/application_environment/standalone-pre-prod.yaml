@@ -185,9 +185,6 @@ postgresqlha_keys:
 pg_cluster_member_hostnames:
   puppet puppetmaster puppet-master-91.control.net:
     ip_address:          192.168.42.50
-  vip:
-    ip_address:          192.168.42.100
-    initial_role:        vip
   server1:
     ip_address:          192.168.42.49
     initial_role:        master

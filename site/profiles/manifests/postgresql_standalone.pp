@@ -212,21 +212,26 @@ class profiles::postgresql_standalone(
     include postgresql::lib::devel
 
     if $users {
-      create_resources('postgresql::server::role', $users)
+      create_resources('postgresql::server::role', $users,
+        {before => Exec['stop_postgres']})
     }
 
     if $databases {
-      create_resources('postgresql::server::db', $databases)
+      create_resources('postgresql::server::db', $databases,
+        {before => Exec['stop_postgres']})
     }
 
     $pg_hba_rules = parseyaml(template('profiles/postgres_hba_conf.erb'))
-    create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules)
+    create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules,
+      {before => Exec['stop_postgres']})
+
 
     postgresql::server::role { 'barman':
       login         => true,
       superuser     => true,
       password_hash => postgresql_password('barman', hiera('barman_password') )
     } ->
+
 
     # Running postgresql-9.4 as a systemd service causes issues when postgres
     # clustering is being manged by repmgr, so we stop and disable it immediatly
@@ -246,7 +251,7 @@ class profiles::postgresql_standalone(
       command => "/usr/pgsql-${version}/bin/pg_ctl -D ${postgresql::globals::datadir} start",
       user    => 'postgres',
       require => File["${postgresql::globals::confdir}/${pg_aux_conf}"]
-    } ->
+    }
 
     file { '/var/lib/pgsql/.pgpass' :
       ensure  => file,

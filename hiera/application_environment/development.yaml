@@ -187,33 +187,28 @@ postgresqlha_keys:
 
 pg_cluster_member_hostnames:
   puppet puppetmaster puppet-master-91.control.net:
-    ip_address:          192.168.33.5
+    ip_address:          192.168.42.5
     initial_role:        puppetmaster
   vip:
-    ip_address:          192.168.33.100
+    ip_address:          192.168.42.50
     initial_role:        vip
-  nodea:
-    ip_address:          192.168.33.10
+  server1:
+    ip_address:          192.168.42.51
     initial_role:        master
     keepalived_priority: 100
     repmgr_node_number:  1
-  nodeb:
-    ip_address:          192.168.33.20
+  server2:
+    ip_address:          192.168.42.52
     initial_role:        standby
     keepalived_priority: 99
     repmgr_node_number:  2
-  nodec:
-    ip_address:          192.168.33.30
+  server3:
+    ip_address:          192.168.42.53
     initial_role:        standby
     keepalived_priority: 98
     repmgr_node_number:  3
-  noded:
-    ip_address:          192.168.33.40
-    initial_role:        standby
-    keepalived_priority: 97
-    repmgr_node_number:  4
-  barman:
-    ip_address:          192.168.33.90
+  server4:
+    ip_address:          192.168.42.54
     initial_role:        backup
 
 postgres_databases:
