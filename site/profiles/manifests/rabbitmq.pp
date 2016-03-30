@@ -17,15 +17,20 @@
 #
 class profiles::rabbitmq(
 
-  $port              = 5672,
-  $version           = '3.4.4',
-  $delete_guest_user = true,
-  $default_user      = 'guest',
-  $default_pass      = 'guest',
-  $cluster           = false,
-  $cluster_nodes     = [],
-  $erlang_cookie     = 'super_secret_key',
-  $admin_enable      = false
+  $port                      = 5672,
+  $version                   = '3.4.4',
+  $delete_guest_user         = true,
+  $default_user              = 'guest',
+  $default_pass              = 'guest',
+  $cluster                   = false,
+  $cluster_nodes             = [],
+  $erlang_cookie             = 'super_secret_key',
+  $admin_enable              = false,
+  $rabbitmq_users            = hiera_hash('rabbitmq_users', false),
+  $rabbitmq_user_permissions = hiera_hash('rabbitmq_user_permissions', false),
+  $rabbitmq_vhosts           = hiera_hash('rabbitmq_vhosts', false)
+
+
 
 ){
 
@@ -79,7 +84,13 @@ class profiles::rabbitmq(
 
   include stdlib
 
-  create_resources('rabbitmq_user', hiera_hash('rabbitmq_users'))
-  create_resources('rabbitmq_user_permissions', hiera_hash('rabbitmq_user_permissions'))
-
+  if $rabbitmq_users {
+    create_resources('rabbitmq_user', $rabbitmq_users)
+  }
+  if $rabbitmq_user_permissions {
+    create_resources('rabbitmq_user_permissions', $rabbitmq_user_permissions)
+  }
+  if $rabbitmq_vhosts {
+    create_resources('rabbitmq_vhost', $rabbitmq_vhosts)
+  }
 }
