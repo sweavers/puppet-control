@@ -1,6 +1,6 @@
 <% scope.function_hiera(['pg_cluster_member_hostnames']).each do |host_name,config|
-  trimmed_host_name = @hostname.gsub(/\..*$/, '')
-  trimmed_hiera_host_name = host_name.gsub(/\..*$/, '')
+  trimmed_host_name = @hostname.gsub(/\..*$/, '').downcase
+  trimmed_hiera_host_name = host_name.gsub(/\..*$/, '').downcase
   if trimmed_hiera_host_name == trimmed_host_name
     @kd_priority = config['keepalived_priority']
   end

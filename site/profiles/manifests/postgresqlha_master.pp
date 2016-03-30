@@ -236,15 +236,19 @@ class profiles::postgresqlha_master(
     include postgresql::lib::devel
 
     if $users {
-      create_resources('postgresql::server::role', $users)
+      create_resources('postgresql::server::role', $users,
+        {before => postgresql::server::role['repmgr']})
     }
 
     if $databases {
-      create_resources('postgresql::server::db', $databases)
+      create_resources('postgresql::server::db', $databases,
+        {before => postgresql::server::role['repmgr']})
     }
 
     $pg_hba_rules = parseyaml(template('profiles/postgres_hba_conf.erb'))
-    create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules)
+    create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules,
+      {before => postgresql::server::role['repmgr']})
+
 
     file { "/etc/repmgr/${version}/repmgr.conf" :
       ensure  => file,
