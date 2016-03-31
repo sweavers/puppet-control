@@ -269,9 +269,9 @@ class profiles::postgresql_standalone(
     } ->
 
     file { '/var/lib/pgsql/postgres_setup_done' :
-      ensure  => file,
-      owner   => 'postgres',
-      group   => 'postgres',
+      ensure => file,
+      owner  => 'postgres',
+      group  => 'postgres',
     }
   }
 }
