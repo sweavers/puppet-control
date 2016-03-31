@@ -213,17 +213,18 @@ class profiles::postgresql_standalone(
 
     if $users {
       create_resources('postgresql::server::role', $users,
-        {before => postgresql::server::role['barman']})
+        {before => Postgresql::Server::Role['barman']})
     }
 
     if $databases {
       create_resources('postgresql::server::db', $databases,
-        {before => postgresql::server::role['barman']})
+        {before =>
+          Postgresql::Server::Role['barman']})
     }
 
     $pg_hba_rules = parseyaml(template('profiles/postgres_hba_conf.erb'))
     create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules,
-      {before => postgresql::server::role['barman']})
+      {before => Postgresql::Server::Role['barman']})
 
 
     postgresql::server::role { 'barman':
