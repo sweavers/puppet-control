@@ -1,10 +1,10 @@
 <% @nodecount = 1
 scope.function_hiera(['pg_cluster_member_hostnames']).each do |host_name,config|
-  trimmed_host_name = host_name.gsub(/\..*$/, '')
-  if trimmed_host_name == @hostname
+  trimmed_host_name = host_name.gsub(/\..*$/, '').downcase
+  if trimmed_host_name == @hostname.downcase
     @node_number = config['repmgr_node_number']
   end
-  if config['initial_role'] == 'master' or config['initial_role'] == 'standby'
+  if config['initial_role'].downcase == 'master' or config['initial_role'].downcase == 'standby'
     @nodecount += 1
   end
 end %>
