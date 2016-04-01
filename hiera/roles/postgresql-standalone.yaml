@@ -1,0 +1,4 @@
+---
+
+classes:
+  - profiles::postgresql_standalone
