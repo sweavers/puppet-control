@@ -150,9 +150,6 @@ log_broker_logstash_config: |
 
 profiles::nagios_client::nagios_server: 192.16.42.47
 
-repmgr_password: repmgr
-barman_password: barman
-
 postgresqlha_keys:
   public: |
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMzfsdYHHcHDq3Br1zh7F1GtjlTHX5eLRgbx4L/KPdRoR8zFsUe+EfVBLqUJnirFs9f7oAQ7gsmssYZ67Zi32/Guzs1jXFtrIbqnftJZNl1cVt8KxQtPC0V1VwvCOOROIy+TYBHNsi4MMIP7tVyneD4tDMZxjQnaQ1TKi2KAaDq5DHfvbP/1IA9Ef83IDu3m04tTVV+AI4YuFWUT4PsXOlscZXBa7rljZcJnXn/jH3TRAAMgs5zgWMM6W4OIm/NRWO9SvR13eqYkmO+hPx9DBCoCL+M9e2XjjTvm5K6gokeaowZo1ZVcmxTXxysf7wlb30jEKx2fQj4gKx13o/1eHj
@@ -187,28 +184,12 @@ postgresqlha_keys:
 
 pg_cluster_member_hostnames:
   puppet puppetmaster puppet-master-91.control.net:
-    ip_address:          192.168.42.5
-    initial_role:        puppetmaster
-  vip:
     ip_address:          192.168.42.50
-    initial_role:        vip
   server1:
-    ip_address:          192.168.42.51
+    ip_address:          192.168.42.49
     initial_role:        master
-    keepalived_priority: 100
-    repmgr_node_number:  1
   server2:
-    ip_address:          192.168.42.52
-    initial_role:        standby
-    keepalived_priority: 99
-    repmgr_node_number:  2
-  server3:
-    ip_address:          192.168.42.53
-    initial_role:        standby
-    keepalived_priority: 98
-    repmgr_node_number:  3
-  server4:
-    ip_address:          192.168.42.54
+    ip_address:          192.168.42.50
     initial_role:        backup
 
 postgres_databases:

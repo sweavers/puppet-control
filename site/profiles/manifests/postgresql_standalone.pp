@@ -1,4 +1,4 @@
-# Class profiles::postgresqlHA
+# Class profiles::postgresq_standalone
 #
 # This class will manage PostgreSQL installations
 #
@@ -40,7 +40,7 @@
 #     auth_method: md5
 #
 
-class profiles::postgresqlha_master(
+class profiles::postgresql_standalone(
     $port          = 5432,
     $version       = '9.4',
     $remote        = true,
@@ -63,9 +63,7 @@ class profiles::postgresqlha_master(
   }
 
   $pkglist = [
-    'keepalived',
-    'rsync',
-    "repmgr${shortversion}"
+    'rsync'
   ]
   ensure_packages($pkglist)
 
@@ -76,11 +74,6 @@ class profiles::postgresqlha_master(
     home       => $dbroot,
     managehome => true,
     shell      => '/bin/bash',
-  }
-
-  selinux::module { 'keepalivedlr':
-    ensure => 'present',
-    source => 'puppet:///modules/profiles/keepalivedlr.te'
   }
 
   file { $dbroot :
@@ -100,12 +93,10 @@ class profiles::postgresqlha_master(
     require => File[$dbroot]
   }
 
-  if $::postgres_ha_setup_done != 0 {
+  if $::postgres_setup_done != 0 {
 
     include ::stdlib
 
-    $master_hostname = template('profiles/postgres_master_hostname.erb')
-    $vip_hostname    = template('profiles/postgres_vip_hostname.erb')
     $barman_hostname = template('profiles/postgres_barman_hostname.erb')
     $pg_conf         = 'postgresql.conf'
     $pg_aux_conf     = 'postgresql.aux.conf'
@@ -137,7 +128,6 @@ class profiles::postgresqlha_master(
       listen_addresses        => $bind,
       ip_mask_allow_all_users => '0.0.0.0/0',
       require                 => Class['postgresql::globals'],
-      before                  => Package["repmgr${shortversion}"],
     }
 
     postgresql_conf { 'include' :
@@ -149,13 +139,7 @@ class profiles::postgresqlha_master(
     $default_postgres_conf = {
       archive_command          => "\'rsync -aq %p barman@${barman_hostname}:primary/incoming/%f\'",
       archive_mode             => 'on',
-      hot_standby              => 'on',
-      max_replication_slots    => '10',
-      max_wal_senders          => '10',
-      shared_preload_libraries => 'repmgr_funcs',
-      synchronous_commit       => 'on',
-      wal_keep_segments        => '5000',
-      wal_level                => 'hot_standby',
+      wal_level                => 'archive',
     }
 
     if $postgres_conf { $hash = merge($default_postgres_conf, $postgres_conf)
@@ -166,14 +150,6 @@ class profiles::postgresqlha_master(
     file { "${postgresql::globals::confdir}/${pg_aux_conf}" :
       content => template('profiles/postgres_aux_conf.erb'),
       require => Class['postgresql::server'],
-    }
-
-    file { "/etc/repmgr/${version}/auto_failover.sh" :
-      ensure  => file,
-      owner   => 'postgres',
-      source  => 'puppet:///modules/profiles/postgres_auto_failover.sh',
-      require => Package["repmgr${shortversion}"],
-      mode    => '0544'
     }
 
     file { 'PSQL History' :
@@ -190,9 +166,9 @@ class profiles::postgresqlha_master(
       enable => true,
     }
 
-    file { '/etc/puppetlabs/facter/facts.d/postgres_ha_setup_done.sh' :
+    file { '/etc/puppetlabs/facter/facts.d/postgres_setup_done.sh' :
       ensure => file,
-      source => 'puppet:///modules/profiles/postgres_ha_setup_done.sh',
+      source => 'puppet:///modules/profiles/postgres_setup_done.sh',
       owner  => 'root',
       mode   => '0755'
     } ->
@@ -237,49 +213,19 @@ class profiles::postgresqlha_master(
 
     if $users {
       create_resources('postgresql::server::role', $users,
-        {before => Postgresql::Server::Role['repmgr']})
+        {before => Postgresql::Server::Role['barman']})
     }
 
     if $databases {
       create_resources('postgresql::server::db', $databases,
-        {before => Postgresql::Server::Role['repmgr']})
+        {before =>
+          Postgresql::Server::Role['barman']})
     }
 
     $pg_hba_rules = parseyaml(template('profiles/postgres_hba_conf.erb'))
     create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules,
-      {before => Postgresql::Server::Role['repmgr']})
+      {before => Postgresql::Server::Role['barman']})
 
-
-    file { "/etc/repmgr/${version}/repmgr.conf" :
-      ensure  => file,
-      content => template('profiles/postgres_repmgr_config.erb'),
-      require => Package["repmgr${shortversion}"],
-      before  => Exec['master_register_repmgrd'],
-    }
-
-    file { '/etc/keepalived/keepalived.conf' :
-      ensure  => file,
-      content => template('profiles/postgres_keepalived_config.erb'),
-    } ->
-
-    file { '/etc/keepalived/health_check.sh' :
-      ensure => file,
-      source => 'puppet:///modules/profiles/keepalived_health_check.sh',
-      owner  => 'postgres',
-      mode   => '0544',
-    }
-
-    service {'keepalived' :
-      ensure => running,
-      enable => true,
-    }
-
-    postgresql::server::role { 'repmgr':
-      login         => true,
-      superuser     => true,
-      replication   => true,
-      password_hash => postgresql_password('repmgr', hiera('repmgr_password') )
-    } ->
 
     postgresql::server::role { 'barman':
       login         => true,
@@ -287,9 +233,6 @@ class profiles::postgresqlha_master(
       password_hash => postgresql_password('barman', hiera('barman_password') )
     } ->
 
-    postgresql::server::database { 'repmgr' :
-      owner  => 'repmgr'
-    } ->
 
     # Running postgresql-9.4 as a systemd service causes issues when postgres
     # clustering is being manged by repmgr, so we stop and disable it immediatly
@@ -309,15 +252,7 @@ class profiles::postgresqlha_master(
       command => "/usr/pgsql-${version}/bin/pg_ctl -D ${postgresql::globals::datadir} start",
       user    => 'postgres',
       require => File["${postgresql::globals::confdir}/${pg_aux_conf}"]
-    } ->
-
-    file { '/usr/lib/systemd/system/repmgr.service' :
-      ensure  => file,
-      owner   => 'postgres',
-      group   => 'postgres',
-      mode    => '0664',
-      content => template('profiles/repmgrd.service.erb')
-    } ->
+    }
 
     file { '/var/lib/pgsql/.pgpass' :
       ensure  => file,
@@ -332,25 +267,11 @@ class profiles::postgresqlha_master(
       content => template('profiles/pgpass.erb'),
       mode    => '0600',
     } ->
-    # added sleep before next command as on ESX repmanager tries to start before the postgres database is up.
-    exec { 'master_register_repmgrd' :
-      command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf master register",
-      user    => 'postgres',
-      require => File['/var/lib/pgsql/.pgpass'],
-      unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show",
-    } ->
 
-    service { 'repmgr' :
-      ensure  => running,
-      enable  => true,
-      require => File['/usr/lib/systemd/system/repmgr.service']
-    } ->
-
-    file { '/var/lib/pgsql/postgres_ha_setup_done' :
-      ensure  => file,
-      owner   => 'postgres',
-      group   => 'postgres',
-      require => Service['repmgr'],
+    file { '/var/lib/pgsql/postgres_setup_done' :
+      ensure => file,
+      owner  => 'postgres',
+      group  => 'postgres',
     }
   }
 }

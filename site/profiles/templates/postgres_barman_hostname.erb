@@ -1,2 +1,2 @@
 <% scope.function_hiera(['pg_cluster_member_hostnames']).each do |host_name,config| -%><%
-if config[ 'initial_role' ] == 'backup' %><%= host_name -%><% end -%><% end -%>
+if config[ 'initial_role' ].downcase == 'backup' %><%= host_name -%><% end -%><% end -%>
