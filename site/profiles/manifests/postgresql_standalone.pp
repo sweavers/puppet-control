@@ -256,7 +256,7 @@ class profiles::postgresql_standalone(
 
     file { '/var/lib/pgsql/.pgpass' :
       ensure  => file,
-      content => template('profiles/pgpass.erb'),
+      content => template('profiles/pgpass_standalone.erb'),
       owner   => 'postgres',
       group   => 'postgres',
       mode    => '0600',
@@ -264,7 +264,7 @@ class profiles::postgresql_standalone(
 
     file { '/root/.pgpass' :
       ensure  => file,
-      content => template('profiles/pgpass.erb'),
+      content => template('profiles/pgpass_standalone.erb'),
       mode    => '0600',
     } ->
 

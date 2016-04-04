@@ -1,6 +1,6 @@
 <% scope.function_hiera(['pg_cluster_member_hostnames']).each do |host_name,config|
-  if config['initial_role'].downcase == 'vip' then @config_hostname = host_name end
-  if config['initial_role'].downcase == 'master' then @master_hostname = host_name end
+  if config['initial_role'] == 'vip' then @config_hostname = host_name end
+  if config['initial_role'] == 'master' then @master_hostname = host_name end
 end
 unless defined?(@config_hostname) then @config_hostname = @master_hostname end -%>
 ; Barman, Backup and Recovery Manager for PostgreSQL
