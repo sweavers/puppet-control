@@ -1,3 +1,4 @@
+#
 
 class es (
   $interface     = 'eth0',
