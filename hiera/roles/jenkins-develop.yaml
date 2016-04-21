@@ -56,6 +56,8 @@ profiles::jenkins::plugins:
     version: 1.6+build.142
   parameterized-trigger:
     version: 2.29
+  text-finder:
+    version: 1.10
 
 profiles::jenkins::jobs:
   sample-build-and-ut:
