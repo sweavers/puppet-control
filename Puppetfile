@@ -1,7 +1,7 @@
 forge 'https://forge.puppetlabs.com'
 
 # Third-party modules
-mod 'ajcrowe/supervisord',             '0.5.2'
+mod 'ajcrowe/supervisord',             '0.6.1'
 mod 'alphagov/account',                :git => 'https://github.com/alphagov/puppet-account.git',
                                        :ref => '8bc0e9981174fd175d630dd98538334a2814065b'
 mod 'elasticsearch/elasticsearch',     '0.9.9'
