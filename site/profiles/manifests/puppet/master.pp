@@ -108,7 +108,7 @@ class profiles::puppet::master (
       group   => 'root',
       source  => 'puppet:///modules/profiles/puppetmaster-unicorn.service',
       notify  => Exec ['systemctl daemon-reload'],
-      require => Package ['unicorn']
+      require => Package ['unicorn','rack']
     }
 
     # Reload systemd to pick up config change
