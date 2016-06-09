@@ -66,6 +66,8 @@ profiles::jenkins::plugins:
     version: 0.41
   Parameterized-Remote-Trigger:
     version: 2.2.2
+  text-finder:
+    version: 1.10
 
 
 profiles::jenkins::jenkins_ssl: true
