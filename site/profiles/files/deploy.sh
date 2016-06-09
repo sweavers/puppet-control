@@ -69,4 +69,4 @@ for CI in ${REMOTECI} ; do
 done
 
 # Tidying up step to remove old Artifacts.  Currently set to keep the 3 most recently modified files.
-ls -t /var/lib/jenkins/artifact_r10k/artifacts | sed -e '1,3d' | xargs -d '\n' rm
+ls -t /var/lib/jenkins/artifact_r10k/artifacts | sed -e '1,3d' | xargs -d '\n' rm -f
