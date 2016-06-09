@@ -40,13 +40,15 @@ for PUPPET in ${PUPPETMASTER} ; do
   fi
 
   # SSH to puppet master, stop puppetmaster service, purge existing environments,
-  # uncompress artifact and restart puppetmaster service
+  # uncompress artifact and restart puppetmaster service then delete compressed artifact.
   ssh -o StrictHostKeyChecking=no deployment@${PUPPET} "sudo systemctl stop puppetmaster-unicorn.service" > /dev/null 2>&1
   [[ $? != '0' ]] && echo "Error stopping puppetmaster service on ${PUPPET}" | output ERROR && exit 1
   ssh deployment@${PUPPET} "sudo rm -rf /etc/puppet/environments" #> /dev/null 2>&1
   [[ $? != '0' ]] && echo "Error purging existing environments on  ${PUPPET}" | output ERROR && exit 1
   ssh -o StrictHostKeyChecking=no deployment@${PUPPET} "sudo tar -C /etc/puppet/ -xzf /tmp/${ARTIFACT}" > /dev/null 2>&1
   [[ $? != '0' ]] && echo "Error extracting artifact on  ${PUPPET}" | output ERROR && exit 1
+  ssh -o StrictHostKeyChecking=no deployment@${PUPPET} "sudo rm /tmp/${ARTIFACT}" > /dev/null 2>&1
+  [[ $? != '0' ]] && echo "Error removing compressed version of artifact on  ${PUPPET}" | output ERROR && exit 1
   ssh -o StrictHostKeyChecking=no deployment@${PUPPET} "sudo systemctl start puppetmaster-unicorn.service" > /dev/null 2>&1
   if [[ $? == '0' ]]; then
     echo "Puppet environment code and dependencies successfully deployed" | output SUCCESS
@@ -65,3 +67,6 @@ for CI in ${REMOTECI} ; do
     echo "Error copying ${ARTIFACT} to ${CI}" | output ERROR && exit 1
   fi
 done
+
+# Tidying up step to remove old Artifacts.  Currently set to keep the 3 most recently modified files.
+ls -t /var/lib/jenkins/artifact_r10k/artifacts | sed -e '1,3d' | xargs -d '\n' rm -f
