@@ -26,19 +26,54 @@ class profiles::puppet::agent (
 
 ){
 
+  # Set up puppetlabs repos
+  yumrepo { 'puppetlabs-deps':
+    baseurl  => "http://yum.puppetlabs.com/el/\$releasever/dependencies/\$basearch",
+    descr    => 'Puppet Labs Dependencies $releasever - $basearch ',
+    enabled  => '1',
+    gpgcheck => '1',
+    gpgkey   => 'http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs',
+  }
 
+  yumrepo { 'puppetlabs':
+    baseurl  => "http://yum.puppetlabs.com/el/\$releasever/products/\$basearch",
+    descr    => 'Puppet Labs Products $releasever - $basearch',
+    enabled  => '1',
+    gpgcheck => '1',
+    gpgkey   => 'http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs',
+  }
 
+  # Install puppet
+  package { 'puppet':
+    ensure  => present,
+    require => Yumrepo['puppetlabs-deps','puppetlabs']
+  }
 
-  # stephenrjohnson/puppet
-  class { '::puppet::agent':
-    puppet_server       => $master_fqdn,
-    environment         => $environment,
+  # Ensure service is not running so that agent runs can be controlled by cron
+  service { 'puppet':
+    ensure  => stopped,
+    enable  => false,
+    require => Package['puppet']
+  }
 
-    # Scheduling
-    puppet_run_style    => 'external',
-    puppet_run_interval => 30,
-    splay               => true,
-    ordering            => 'title-hash',
+  # Ensure that the puppet agent config file is only written from the template on the first run
+  if $::puppet_agent_initial_setup_done != 1 {
+
+    # Create the agent config file from template
+    file { '/etc/puppet/puppet.conf':
+      ensure  => file,
+      content => template('profiles/puppet-agent.conf.erb'),
+      require => Package['puppet']
+    } ->
+
+    # Create a fact confirming that the initial set up is complete.
+    file { '/etc/puppetlabs/facter/facts.d/puppet_agent_initial_setup_done.sh':
+      ensure  => file,
+      mode    => '0755',
+      owner   => 'root',
+      group   => 'root',
+      content => "echo 'puppet_agent_initial_setup_done=1'"
+    }
   }
 
   # Only carry out Puppet runs inside of a specific time window
@@ -49,5 +84,4 @@ class profiles::puppet::agent (
     hour    => $run_hours,
     weekday => $run_days,
   }
-
 }
