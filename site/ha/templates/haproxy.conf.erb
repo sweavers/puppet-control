@@ -27,7 +27,6 @@ listen <%= name %> *:<%= config['port'] %>
 <% config['backends'].each do |backend| -%>
     server <%= backend.split(':')[0] %> <%= backend %> cookie check
 <% end -%>
-<% end -%>
 
 <% else -%>
     option httpchk GET <%=config['healthcheck'] %>
@@ -36,4 +35,5 @@ listen <%= name %> *:<%= config['port'] %>
 <% end -%>
 <% end -%>
 
+<% end -%>
 <% end -%>
