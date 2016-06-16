@@ -23,8 +23,7 @@ class profiles::puppet(
   case $do_not_manage{
     default: {
       class { 'profiles::puppet::agent':
-        master_fqdn => $master_fqdn,
-        environment => $environment
+        master_fqdn => $master_fqdn
       }
     }
     true: {
