@@ -37,7 +37,7 @@ mod '3fs/phantomjs',                   '0.0.8'
 mod 'camptocamp/archive',              '0.8.1'
 mod 'thias/resolvconf',                '0.0.3'
 mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-Ops/puppet-dnsserver.git',
-                                       :ref => '14f7a919e0bff38e6e0c9267b521bfd18cfff0de'
+                                       :ref => '73ca75084e7d0124988499274e5b7ece21e57742'
 mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-Ops/puppet-files.git',
                                        :ref => '3d3cbee15a91abf160275abe7d2961cf89beba77'
 
