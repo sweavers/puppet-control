@@ -1,6 +1,6 @@
 #
 class profiles::application_remote (
-  $ham_host = undef,
+  $ham_host       = undef,
   $ham_host_token = undef,
 ){
   include ::wsgi
