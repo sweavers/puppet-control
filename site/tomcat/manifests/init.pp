@@ -13,7 +13,7 @@ class tomcat (
   ##############################################################################
 
   # Make sure dependencies are installed, but don't necessarily manage them.
-  $java_pkgs = [ 'java-1.7.0-openjdk', 'java-1.7.0-openjdk-devel', 'java-1.7.0-openjdk-headless' ]
+  $java_pkgs = [ 'java-1.8.0-openjdk', 'java-1.8.0-openjdk-devel', 'java-1.8.0-openjdk-headless' ]
   package { $java_pkgs :
     ensure => present,
   }
@@ -25,10 +25,10 @@ class tomcat (
     require => Package[$java_pkgs]
   }
 
-  package { 'java-1.8.0-openjdk':
-    ensure  => absent,
-    require => Package[$java_pkgs]
-  }
+#  package { 'java-1.8.0-openjdk':
+#    ensure  => absent,
+#    require => Package[$java_pkgs]
+#  }
 
   ##############################################################################
   #################################TOMCAT CONF##################################
