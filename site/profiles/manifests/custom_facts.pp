@@ -10,11 +10,19 @@
 class profiles::custom_facts() {
 
   # Create facts directory
+  file { '/etc/facter/' :
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755'
+  }
+
+  # Create facts directory
   file { '/etc/facter/facts.d/' :
     ensure => directory,
     owner  => 'root',
     group  => 'root',
-    mode   => '0700'
+    mode   => '0755'
   }
 
   # Add executable fact
@@ -22,7 +30,7 @@ class profiles::custom_facts() {
     ensure => present,
     owner  => 'root',
     group  => 'root',
-    mode   => '0700',
+    mode   => '0755',
     source => 'puppet:///modules/profiles/custom_facts.sh'
   }
 
