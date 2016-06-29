@@ -6,6 +6,7 @@ classes:
   - 'profiles::ntp'
   - 'profiles::git'
   - 'profiles::firewall'
+  - 'profiles::custom_facts'
   - 'selinux'
   - 'sudo'
   - 'profiles::nagios_client'
