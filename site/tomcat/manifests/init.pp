@@ -68,16 +68,16 @@ class tomcat (
     match => 'shared.loader'
   } ->
   file_line { 'catalina_prorperties_config_root':
-    path  => '/usr/share/tomcat/conf/catalina.properties',
-    line  => 'LR_TOMCAT_CONFIG_ROOT=/usr/share/tomcat/lr_classes'
+    path => '/usr/share/tomcat/conf/catalina.properties',
+    line => 'LR_TOMCAT_CONFIG_ROOT=/usr/share/tomcat/lr_classes'
   }
 
   file { $tomcat_users_xml :
-    ensure => present,
+    ensure  => present,
     require => Package[$tomcat_pkgs],
     notify  => Service[$tomcat_service],
-    owner  => 'tomcat',
-    group  => 'tomcat'
+    owner   => 'tomcat',
+    group   => 'tomcat'
   }->
   file_line { 'tomcat_users_conf1':
     path  => '/usr/share/tomcat/conf/tomcat-users.xml',
@@ -85,16 +85,16 @@ class tomcat (
     match => '</tomcat-users>'
   }->
   file_line { 'tomcat_users_man':
-    path  => '/usr/share/tomcat/conf/tomcat-users.xml',
-    line  => '<role rolename="manager-gui"/>',
+    path => '/usr/share/tomcat/conf/tomcat-users.xml',
+    line => '<role rolename="manager-gui"/>',
   }->
   file_line { 'tomcat_users_pass':
-    path  => '/usr/share/tomcat/conf/tomcat-users.xml',
-    line  => "<user name=\"tomcat\" password=\"${tomcat_manager_gui_password}\" roles=\"manager-gui\" />"
+    path => '/usr/share/tomcat/conf/tomcat-users.xml',
+    line => "<user name=\"tomcat\" password=\"${tomcat_manager_gui_password}\" roles=\"manager-gui\" />"
   }->
   file_line { 'tomcat_users_conf2':
-    path  => '/usr/share/tomcat/conf/tomcat-users.xml',
-    line  => '</tomcat-users>'
+    path => '/usr/share/tomcat/conf/tomcat-users.xml',
+    line => '</tomcat-users>'
   }
 
   service { $tomcat_service :

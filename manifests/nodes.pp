@@ -20,11 +20,11 @@ node default {
 
   file {
       '/etc/sudoers.d/webapp':
-          ensure  => absent,
-          source  => 'puppet:///modules/profiles/webapp',
-          owner   => 'root',
-          group   => 'root',
-          mode    => '0644';
+          ensure => absent,
+          source => 'puppet:///modules/profiles/webapp',
+          owner  => 'root',
+          group  => 'root',
+          mode   => '0644';
   }
 
   # Create 'lr-admin' group on all hosts
