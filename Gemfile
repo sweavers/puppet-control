@@ -10,9 +10,9 @@ group :puppet do
 end
 
 group :test do
-  gem 'puppet-syntax'
-  gem 'puppet-lint'
-  gem 'librarian-puppet'
+  gem 'puppet-syntax', '~> 2.1.0'
+  gem 'puppet-lint', '~> 1.1.0'
+  gem 'librarian-puppet', '~> 2.2.3'
   gem 'colorize', '>= 0.7.5'
   gem 'open4', '>= 1.3.4'
 end
