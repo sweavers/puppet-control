@@ -25,7 +25,7 @@
     when: check_puppet_env.rc == 0
 
   - name: Write the ip address to the environment host file
-    local_action: copy content={{ ansible_eth1.ipv4.address }} dest=/home/<%= @ansible_user %>/{{ puppet_environment }}_hosts
+    local_action: copy content={{ ansible_eth1.ipv4.address }} dest=/etc/ansible/{{ puppet_environment }}_hosts
     when: check_puppet_env.rc == 0
 
   - name: Return IP address and host name if host exists in sepcified env
