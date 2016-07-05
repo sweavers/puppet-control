@@ -16,6 +16,10 @@ postgres_databases:
     user: transaction_data
     password: md5ba7c47e511be7788d5c8c11851f206a4
     owner: transaction_data
+  public_account_services_data:
+    user: public_account_services_data
+    password: md509d623b16fdf1b322864e45c2f6dcf16
+    owner: public_account_services_data
 
 postgres_users:
   deployment:
