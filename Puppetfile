@@ -40,6 +40,7 @@ mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-
                                        :ref => '73ca75084e7d0124988499274e5b7ece21e57742'
 mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-Ops/puppet-files.git',
                                        :ref => '3d3cbee15a91abf160275abe7d2961cf89beba77'
+mod 'willdurand/nodejs',               '1.9.5'				       
 
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.6'
