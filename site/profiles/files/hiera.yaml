@@ -7,6 +7,7 @@
   - secrets/network_location/%{::network_location}/%{::application_environment}
   - secrets/network_location/%{::network_location}/common
   - secrets/nodes/%{::fqdn}
+  - secrets/cluster/%{::server_type}
   - secrets/types/%{::server_type}
   - secrets/application_environment/%{::application_environment}
   - secrets/secrets
@@ -14,6 +15,7 @@
   - hosts/%{::fqdn}
   - network_location/%{::network_location}/%{::application_environment}
   - network_location/%{::network_location}/common
+  - cluster/%{::server_type}
   - types/%{::server_type}
   - roles/%{::puppet_role}
   - common
