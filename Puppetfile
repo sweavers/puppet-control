@@ -5,8 +5,6 @@ mod 'ajcrowe/supervisord',             '0.5.2'
 mod 'alphagov/account',                :git => 'https://github.com/alphagov/puppet-account.git',
                                        :ref => '8bc0e9981174fd175d630dd98538334a2814065b'
 mod 'elasticsearch/elasticsearch',     '0.9.9'
-mod 'elasticsearch/logstash',          '0.5.1'
-mod 'elasticsearch/logstashforwarder', '0.1.1'
 mod 'evenup/kibana',                   '2.0.1'
 mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
