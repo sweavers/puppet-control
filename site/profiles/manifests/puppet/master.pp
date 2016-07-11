@@ -50,8 +50,7 @@ class profiles::puppet::master (
       ensure  => directory,
       owner   => puppet,
       group   => puppet,
-      mode    => '0644',
-      recurse => true
+      mode    => '0644'
     }
 
     # Install build dependancies
