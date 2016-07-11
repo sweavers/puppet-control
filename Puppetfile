@@ -5,8 +5,6 @@ mod 'ajcrowe/supervisord',             '0.5.2'
 mod 'alphagov/account',                :git => 'https://github.com/alphagov/puppet-account.git',
                                        :ref => '8bc0e9981174fd175d630dd98538334a2814065b'
 mod 'elasticsearch/elasticsearch',     '0.9.9'
-mod 'elasticsearch/logstash',          '0.5.1'
-mod 'elasticsearch/logstashforwarder', '0.1.1'
 mod 'evenup/kibana',                   '2.0.1'
 mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
@@ -40,6 +38,7 @@ mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-
                                        :ref => '73ca75084e7d0124988499274e5b7ece21e57742'
 mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-Ops/puppet-files.git',
                                        :ref => '3d3cbee15a91abf160275abe7d2961cf89beba77'
+mod 'willdurand/nodejs',               '1.9.5'				       
 
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.6'

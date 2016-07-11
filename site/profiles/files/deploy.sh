@@ -45,7 +45,7 @@ for PUPPET in ${PUPPETMASTER} ; do
   [[ $? != '0' ]] && echo "Error stopping puppetmaster service on ${PUPPET}" | output ERROR && exit 1
   ssh deployment@${PUPPET} "sudo rm -rf /etc/puppet/environments" #> /dev/null 2>&1
   [[ $? != '0' ]] && echo "Error purging existing environments on  ${PUPPET}" | output ERROR && exit 1
-  ssh -o StrictHostKeyChecking=no deployment@${PUPPET} "sudo tar -C /etc/puppet/ -xzf /tmp/${ARTIFACT}" > /dev/null 2>&1
+  ssh -o StrictHostKeyChecking=no deployment@${PUPPET} "sudo tar -C /etc/puppet/ -xzf /tmp/${ARTIFACT} --selinux" > /dev/null 2>&1
   [[ $? != '0' ]] && echo "Error extracting artifact on  ${PUPPET}" | output ERROR && exit 1
   ssh -o StrictHostKeyChecking=no deployment@${PUPPET} "sudo rm /tmp/${ARTIFACT}" > /dev/null 2>&1
   [[ $? != '0' ]] && echo "Error removing compressed version of artifact on  ${PUPPET}" | output ERROR && exit 1
