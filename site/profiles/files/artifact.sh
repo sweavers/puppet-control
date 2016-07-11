@@ -123,9 +123,16 @@ done
 # Purge temp secrets directory
 #rm -rf ${TEMPDIR} 2>&1 >/dev/null
 
+# Ensure that file permissions are set to 644 for all regular files
+echo "Ensuring correct permissions" | output
+find ${DIR}/environments -type f -print0 | xargs -0 chmod 644 > /dev/null 2>&1
+# Ensure that the correct SE Linux user and type are set for all files
+echo "Ensuring correct SE Linux user and type"
+chcon -R -u system_u -t puppet_etc_t ${DIR}/environments/ > /dev/null 2>&1
+
 # Create compressed tar archive of the puppet enviroment code and dependancies
 echo "Attempting to create artifact" | output
-tar -C ${DIR} -czf ${DIR}/artifacts/${TIMESTAMP}.tgz environments/ > /dev/null 2>&1
+tar -C ${DIR} -czf ${DIR}/artifacts/${TIMESTAMP}.tgz environments/ --owner=puppet --group=puppet --selinux > /dev/null 2>&1
 if [[ $? == '0' ]]; then
   echo "Artifact successfully created" | output SUCCESS && exit 0
 else

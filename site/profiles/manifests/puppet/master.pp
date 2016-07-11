@@ -47,10 +47,10 @@ class profiles::puppet::master (
 
     # Ensure permissions are set correctly on puppet/environments dir
     file { '/etc/puppet/environments' :
-      ensure  => directory,
-      owner   => puppet,
-      group   => puppet,
-      mode    => '0644'
+      ensure => directory,
+      owner  => puppet,
+      group  => puppet,
+      mode   => '0644'
     }
 
     # Install build dependancies
