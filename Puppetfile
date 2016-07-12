@@ -21,7 +21,7 @@ mod 'openstackci/pip',                 :git => 'https://github.com/openstack-inf
 mod 'puppetlabs/firewall',             '1.3.0'
 mod 'puppetlabs/mongodb',              '0.10.0'
 mod 'puppetlabs/ntp',                  '3.3.0'
-mod 'puppetlabs/postgresql',           '4.6.0'
+mod 'puppetlabs/postgresql',           '4.7.1'
 mod 'puppetlabs/puppetdb',             '4.1.0'
 mod 'puppetlabs/rabbitmq',             '5.0.0'
 mod 'rtyler/jenkins',                  :git => 'https://github.com/jenkinsci/puppet-jenkins.git',
