@@ -83,7 +83,7 @@ class profiles::postgresql(
   if $version_in_path == true {
     $version_path = "/${version}"
   } else {
-    $version_path = ""
+    $version_path = ''
   }
 
   class { 'postgresql::globals':
