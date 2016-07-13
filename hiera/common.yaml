@@ -5,7 +5,6 @@ classes:
   - 'profiles::deployment'
   - 'profiles::ntp'
   - 'profiles::git'
-  - 'profiles::firewall'
   - 'profiles::custom_facts'
   - 'selinux'
   - 'sudo'
