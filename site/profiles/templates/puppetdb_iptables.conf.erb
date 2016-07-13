@@ -1,0 +1,65 @@
+# Establish Chain policies
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+:FILTER - [0:0]
+:SERVICE - [0:0]
+:SSH - [0:0]
+
+# INPUT chain rules
+-A INPUT -p icmp -m icmp --icmp-type echo-request -m limit --limit 10/min -m comment --comment "Throttle pings to 10/m" -j ACCEPT
+-A INPUT -p icmp -m icmp --icmp-type echo-request -m comment --comment "Drop pings over threshold" -j DROP
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -m comment --comment "Allow all established connections" -j ACCEPT
+-A INPUT -i lo -m comment --comment "Allow loopback traffic" -j ACCEPT
+-A INPUT -m conntrack --ctstate INVALID -m comment --comment "Drop invalid packets" -j DROP
+-A INPUT -p tcp -m conntrack --ctstate NEW -m comment --comment "Pass TCP traffic to FILTER chain" -j FILTER
+-A INPUT -p udp -m conntrack --ctstate NEW -m comment --comment "Pass UDP traffic to FILTER chain" -j FILTER
+-A INPUT -m comment --comment "Reject other protocols" -j REJECT --reject-with icmp-proto-unreachable
+#
+# In the INPUT chain we accept all related and established traffic, drop any
+# invalid packets before then passing TCP and UDP traffic off to the FILTER
+# chain. Any other protocols are rejected. We also accept icmp echos (pings)
+# but they are throttled to 10/minute.
+#
+
+# FILTER chain rules
+#-A FILTER -p tcp -m recent --update --seconds 60 --name BLACKLIST --rsource -m comment --comment "Block SYN scans" -j REJECT --reject-with tcp-rst
+#-A FILTER -p udp -m recent --update --seconds 60 --name BLACKLIST --rsource -m comment --comment "Block UDP scans" -j REJECT --reject-with icmp-port-unreachable
+-A FILTER -m comment --comment "Pass traffic to SERVICE chain to check for valid service port" -j SERVICE
+#-A FILTER -p tcp -m recent --set --name BLACKLIST -m comment --comment "Blacklist SYN scans" -j REJECT --reject-with tcp-rst
+#-A FILTER -p udp -m recent --set --name BLACKLIST -m comment --comment "Blacklist UDP scans" -j REJECT --reject-with icmp-port-unreach
+#
+# In the FILTER chain we block any data LAN connections for 60 seconds which
+# have been labelled as BLACKLIST due to hitting invalid ports. All traffic
+# which has not yet hit an invalid port is passed to the SERVICE chain to allow
+# valid connections to be established. If it is not accepted by the SERVICE
+# chain it comes back here and is labelled with BLACKLIST.
+#
+
+# SERVICE chain rules
+-A SERVICE -p tcp -m tcp --dport 22 -m comment --comment "Pass management SSH to SSH chain" -j SSH
+<% puts services.inspect -%>
+<% if !services.empty? -%>
+<% services.each_pair do |key, val| -%>
+-A SERVICE -p tcp -m tcp -s <%= val['range'] %> --dport <%= val['port'] %> -m comment --comment "Allow data <%= key %> on <%= val['port'] %>" -j ACCEPT
+<% end -%>
+<% end -%>
+
+#
+# In the SERVICE chain we accept connections to services we have opened up to
+# the network. We are passing management LAN connections to SSH on 22 to the
+# SSH chain for filtering. On the data LAN we accept service connections.
+#
+
+# SSH chain rules
+-A SSH -m recent --name BRUTEFORCE --rttl --rcheck --hitcount 3 --seconds 15 -m comment --comment "Block SSH > 3 in 15s" -j DROP
+-A SSH -m recent --name BRUTEFORCE --rttl --rcheck --hitcount 10 --seconds 900 -m comment --comment "Block SSH > 10 in 900s" -j DROP
+-A SSH -m recent --name BRUTEFORCE --set -s <%= @ssh_allowed_range -%> -m comment --comment "Allow SSH not blacklisted" -j ACCEPT
+#
+
+# In the SSH chain we allow SSH connections to pass through unhindered on their
+# first go. If the machine then tries to connect again more than 3 times in 15
+# seconds or 5 times in 15 minutes their connection is dropped.
+#
+COMMIT
