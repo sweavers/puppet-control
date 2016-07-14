@@ -24,12 +24,12 @@ class profiles::puppet::agent (
   $run_days    = '1-5'
 ){
 
-  # Set puppet environment from fact (or set as production if fact does not exist)
+  # Set puppet environment from fact (set as production if fact does not exist)
     if $::puppet_environment != undef {
       notify { "Puppet environment ${::puppet_environment} set by fact":}
-      $environment = "${::puppet_environment}"
+      $environment = $::puppet_environment
     } else {
-      notify { "Puppet environment not set by fact defauling to production":}
+      notify { 'Puppet environment not set by fact defauling to production':}
       $environment = 'production'
     }
 
