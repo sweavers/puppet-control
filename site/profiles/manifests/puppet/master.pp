@@ -29,6 +29,9 @@ class profiles::puppet::master (
 
     $environment = hiera( environment , 'production')
 
+    # Configure puppetdb firewall
+    include profiles::puppet::puppetdb_firewall
+
     # Install nginx
     include ::profiles::nginx
 
@@ -47,11 +50,10 @@ class profiles::puppet::master (
 
     # Ensure permissions are set correctly on puppet/environments dir
     file { '/etc/puppet/environments' :
-      ensure  => directory,
-      owner   => puppet,
-      group   => puppet,
-      mode    => '0644',
-      recurse => true
+      ensure => directory,
+      owner  => puppet,
+      group  => puppet,
+      mode   => '0644'
     }
 
     # Install build dependancies
@@ -61,12 +63,17 @@ class profiles::puppet::master (
     }
 
     # Install required gems
-    $gems = ['rack', 'unicorn']
-    package { $gems :
+    package { 'rack' :
+      ensure   => '1.6.4', # 1.6.4 is not dependennt on specific ruby version
+      provider => gem,
+      require  => Package [ $build_dependencies, 'rubygems','ruby-devel']
+    }
+    package { 'unicorn' :
       ensure   => installed,
       provider => gem,
       require  => Package [ $build_dependencies, 'rubygems','ruby-devel']
     }
+
 
     # Copy standard puppet rack config
     file { '/etc/puppet/config.ru' :
@@ -108,7 +115,7 @@ class profiles::puppet::master (
       group   => 'root',
       source  => 'puppet:///modules/profiles/puppetmaster-unicorn.service',
       notify  => Exec ['systemctl daemon-reload'],
-      require => Package ['unicorn']
+      require => Package ['unicorn','rack']
     }
 
     # Reload systemd to pick up config change

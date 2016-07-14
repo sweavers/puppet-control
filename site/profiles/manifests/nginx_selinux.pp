@@ -18,5 +18,10 @@ class profiles::nginx_selinux (
     ensure => 'present',
     source => 'puppet:///modules/profiles/nginx_proxy.te'
   }
+  # Load SELinuux policy for NginX
+  selinux::module { 'nginx_unreservedport_name_connect':
+    ensure => 'present',
+    source => 'puppet:///modules/profiles/nginx_unreservedport_name_connect.te'
+  }
 
 }

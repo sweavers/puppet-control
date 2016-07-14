@@ -5,8 +5,6 @@ mod 'ajcrowe/supervisord',             '0.5.2'
 mod 'alphagov/account',                :git => 'https://github.com/alphagov/puppet-account.git',
                                        :ref => '8bc0e9981174fd175d630dd98538334a2814065b'
 mod 'elasticsearch/elasticsearch',     '0.9.9'
-mod 'elasticsearch/logstash',          '0.5.1'
-mod 'elasticsearch/logstashforwarder', '0.1.1'
 mod 'evenup/kibana',                   '2.0.1'
 mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
@@ -23,7 +21,7 @@ mod 'openstackci/pip',                 :git => 'https://github.com/openstack-inf
 mod 'puppetlabs/firewall',             '1.3.0'
 mod 'puppetlabs/mongodb',              '0.10.0'
 mod 'puppetlabs/ntp',                  '3.3.0'
-mod 'puppetlabs/postgresql',           '4.6.0'
+mod 'puppetlabs/postgresql',           '4.7.1'
 mod 'puppetlabs/puppetdb',             '4.1.0'
 mod 'puppetlabs/rabbitmq',             '5.0.0'
 mod 'rtyler/jenkins',                  :git => 'https://github.com/jenkinsci/puppet-jenkins.git',
@@ -37,9 +35,10 @@ mod '3fs/phantomjs',                   '0.0.8'
 mod 'camptocamp/archive',              '0.8.1'
 mod 'thias/resolvconf',                '0.0.3'
 mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-Ops/puppet-dnsserver.git',
-                                       :ref => '14f7a919e0bff38e6e0c9267b521bfd18cfff0de'
+                                       :ref => '73ca75084e7d0124988499274e5b7ece21e57742'
 mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-Ops/puppet-files.git',
                                        :ref => '3d3cbee15a91abf160275abe7d2961cf89beba77'
+mod 'willdurand/nodejs',               '1.9.5'				       
 
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.6'
