@@ -13,7 +13,7 @@ mod 'jfryman/selinux',                 '0.2.3'
 mod 'puppet-gradle',                   :git => 'https://github.com/LandRegistry-Ops/puppet-gradle.git',
                                        :ref => 'ddca379e88c07d37bc1c902f5a380412ffc5ec38'
 mod 'puppet-wsgi',                     :git => 'https://github.com/LandRegistry-Ops/puppet-wsgi.git',
-                                       :ref => '22ccbd31dc5a91ae7ac1d26190416a39980b20ab'
+                                       :ref => '790cafc1ac7770d9263a292e203e283229633769'
 mod 'leinaddm/htpasswd',               '0.0.3'
 mod 'maestrodev/wget',                 '1.5.7'
 mod 'openstackci/pip',                 :git => 'https://github.com/openstack-infra/puppet-pip.git',
@@ -38,7 +38,7 @@ mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-
                                        :ref => '73ca75084e7d0124988499274e5b7ece21e57742'
 mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-Ops/puppet-files.git',
                                        :ref => '3d3cbee15a91abf160275abe7d2961cf89beba77'
-mod 'willdurand/nodejs',               '1.9.5'				       
+mod 'willdurand/nodejs',               '1.9.5'
 
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.6'
