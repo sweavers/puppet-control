@@ -5,7 +5,6 @@ classes:
   - 'profiles::deployment'
   - 'profiles::ntp'
   - 'profiles::git'
-  - 'profiles::firewall'
   - 'profiles::custom_facts'
   - 'selinux'
   - 'sudo'
@@ -30,8 +29,6 @@ selinux::mode: enforcing
 profiles::ntp::ntp_restrict_array:
   - '127.0.1.0'
   - '127.0.1.1'
-
-environment: production
 
 #Add test user NB must be removed (in hiera)for all internal and AWS deployments
 accounts:
