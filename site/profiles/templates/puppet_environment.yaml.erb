@@ -1,0 +1,36 @@
+---
+
+# Basic play book to manage puppet agent conf file on all hosts
+
+- remote_user: <%= @ansible_user %>
+  become: yes
+  become_method: sudo
+  serial: 2
+  vars_prompt:
+    - name: puppet_environment
+      prompt: "Please input the puppt envionrment which you wish to move the servers to"
+      private: no
+    - name: hosts
+      prompt: "Please input the hosts to which this change should apply"
+      private: no
+  hosts: "{{ hosts }}"
+
+  tasks:
+    - name: check server is up
+      ping:
+
+    - name: Amend puppet_environment line if it exists
+      lineinfile: "dest=/etc/puppetlabs/facter/facts.d/host.yaml
+                  regexp='^  puppet_environment'
+                  line='  puppet_environment: {{ puppet_environment }}'
+                  state=present"
+    - name: Append puppet_environment line to file if it does not exist
+      lineinfile: "dest=/etc/puppetlabs/facter/facts.d/host.yaml
+                  line='  puppet_environment: {{ puppet_environment }}'
+                  state=present"
+
+    - name: run puppet agent
+      command: /usr/bin/puppet agent -t
+      register: puppet_agent_result
+      changed_when: puppet_agent_result.rc == 2
+      failed_when: puppet_agent_result.rc != 2 and puppet_agent_result.rc != 0

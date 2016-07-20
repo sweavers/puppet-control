@@ -28,9 +28,9 @@ class profiles::ntp (
 
   # puppetlabs/ntp
     class { '::ntp':
-      package_ensure => 'present',
-      servers        => $ntp_server_array,
-      restrict       => $ntp_restrict_array
+      package_ensure  => 'present',
+      disable_monitor => true,
+      servers         => $ntp_server_array,
+      restrict        => $ntp_restrict_array
     }
 }
-

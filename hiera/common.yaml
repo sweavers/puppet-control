@@ -4,7 +4,7 @@ classes:
   - 'profiles::puppet'
   - 'profiles::ntp'
   - 'profiles::git'
-  - 'profiles::firewall'
+  - 'profiles::custom_facts'
   - 'selinux'
   - 'sudo'
   - 'resolvconf'
@@ -20,8 +20,6 @@ profiles::ntp::ntp_restrict_array:
   - '127.0.1.0'
   - '127.0.1.1'
 
-environment: development
-
 #Add test user NB must be removed (in hiera)for all internal and AWS deployments
 accounts:
  lr-test-user:
@@ -34,24 +32,6 @@ accounts:
    ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDky5bUs3nlN78+0d+nzt2z2ZeZ4lUsiDSV2FPl3Oc0HZ2tkwM+FF++QJp8VycEoQ+fRIB9ZMksYDghJBymNG0paNH1YwjXtRz3/bfc/qtXm1BBG1s+L+9LKnncjiYHCh+9uQ65IZQ+r/eandUnGnOzVZQAgX69Qd+PlafLH/W1W6pfrRTq8sI/yyINWhXfDlSX5WuZ3hp783dt6WptyEaQdptTz74A5MG9Szp31eLL+mJl8UYWelDH/S8jzNOiLuh9sQzv9hKqHeRXZzZjk+MVAcb1UoJjNUvLA0+N26fWhqa8mSrtXHo/4wjCt1Yo2J+fU967oV3KJNbyY84kFysB
    groups:
      - lr-admin
-
-logbroker_extranet_logstash_config: |
-  input {
-    lumberjack {
-      port => 5000
-      type => "logs"
-      ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
-      ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
-    }
-  }
-  output {
-    redis {
-      host => "localhost"
-      data_type => "list"
-      key => "logstash"
-      codec => json
-    }
-  }
 
 profiles::jenkins::deploy_from_jenkins_rsa: |
  -----BEGIN RSA PRIVATE KEY-----

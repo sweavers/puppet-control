@@ -20,9 +20,20 @@ defaults
 <% @lb_instances.each do |name,config| -%>
 listen <%= name %> *:<%= config['port'] %>
     balance roundrobin
+
+<% if @sticky == true -%>
+    cookie JSESSIONID prefix
     option httpchk GET  <%= config['healthcheck'] %>
+<% config['backends'].each do |backend| -%>
+    server <%= backend.split(':')[0] %> <%= backend %> cookie check
+<% end -%>
+
+<% else -%>
+    option httpchk GET <%=config['healthcheck'] %>
 <% config['backends'].each do |backend| -%>
     server <%= backend.split(':')[0] %> <%= backend %> check
 <% end -%>
+<% end -%>
+
 <% end -%>
 <% end -%>

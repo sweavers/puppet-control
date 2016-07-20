@@ -24,7 +24,8 @@
 #    user: systemofrecord
 #    password: md511c5a6395e27555ef43eb7b05c76d7c1
 #    owner: systemofrecord
-
+#
+#
 # postgres_users:
 #   deployment:
 #     password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
@@ -47,16 +48,18 @@
 
 class profiles::postgresql(
 
-  $port           = 5432,
-  $version        = '9.3',
-  $remote         = true,
-  $dbroot         = '/postgres',
-  $databases      = hiera_hash('postgres_databases',false),
-  $users          = hiera_hash('postgres_users', false),
-  $pg_hba_rule    = hiera_hash('pg_hba_rule', false),
-  $pg_db_grant    = hiera_hash('pg_db_grant', false),
-  $pg_table_grant = hiera_hash('pg_table_grant', false),
-  $pg_grant       = hiera_hash('pg_grant', false)
+  $port            = 5432,
+  $version         = '9.3',
+  $remote          = true,
+  $dbroot          = '/postgres',
+  $version_in_path = '',
+  $databases       = hiera_hash('postgres_databases',false),
+  $extensions      = hiera_hash('postgres_extensions',false),
+  $users           = hiera_hash('postgres_users', false),
+  $pg_hba_rule     = hiera_hash('pg_hba_rule', false),
+  $pg_db_grant     = hiera_hash('pg_db_grant', false),
+  $pg_table_grant  = hiera_hash('pg_table_grant', false),
+  $pg_grant        = hiera_hash('pg_grant', false)
 
 ){
 
@@ -77,11 +80,17 @@ class profiles::postgresql(
     $bind = join(concat(['127.0.0.1'],$bind_array),',')
   }
 
+  if $version_in_path == true {
+    $version_path = "/${version}"
+  } else {
+    $version_path = ''
+  }
+
   class { 'postgresql::globals':
     manage_package_repo => true,
     version             => $version,
-    datadir             => "${dbroot}/data",
-    confdir             => "${dbroot}/data",
+    datadir             => "${dbroot}${version_path}/data",
+    confdir             => "${dbroot}${version_path}/data",
     needs_initdb        => true,
     service_name        => 'postgresql', # confirm on ubuntu
     require             => File[$dbroot]
@@ -133,7 +142,7 @@ class profiles::postgresql(
   include stdlib
   include postgresql::client
   include postgresql::server::contrib
-  #include postgresql::server::postgis
+  # include postgresql::server::postgis
 
   package { $postgis_version :
     ensure => installed,
@@ -146,6 +155,9 @@ class profiles::postgresql(
   }
   if $users {
     create_resources('postgresql::server::role', $users)
+  }
+  if $extensions {
+    create_resources('postgresql::server::extension', $extensions)
   }
   #Will allow hba rules to be set for specific users/dbs via hiera
   if $pg_hba_rule {
