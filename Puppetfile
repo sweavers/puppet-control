@@ -1,4 +1,4 @@
-forge 'https://forge.puppetlabs.com'
+forge 'https://forgeapi.puppetlabs.com'
 
 # Third-party modules
 mod 'ajcrowe/supervisord',             '0.6.1'
@@ -38,26 +38,30 @@ mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-
                                        :ref => '73ca75084e7d0124988499274e5b7ece21e57742'
 mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-Ops/puppet-files.git',
                                        :ref => '3d3cbee15a91abf160275abe7d2961cf89beba77'
+mod 'puppet-filebeat',                 :git => 'https://github.com/LandRegistry-Ops/puppet-filebeat.git',
+                                       :ref => '7c1a02397ad226f51d49b6ab5f6ebd43bf9bb1fa'
+mod 'puppet-logreceiver',              :git => 'https://github.com/LandRegistry-Ops/puppet-logreceiver.git',
+                                       :ref => 'c3d740f4d80425ebb6bd65dbd6b2b7e8300085e8'
 mod 'willdurand/nodejs',               '1.9.5'
 
 # Dependency modules
-mod 'ceritsc/yum',                     '0.9.6'
+mod 'ceritsc/yum',                     '0.9.8'
 mod 'croddy/make',                     '0.0.5'
 mod 'darin/zypprepo',                  '1.0.2'
 mod 'garethr/erlang',                  '0.3.0'
-mod 'gentoo/portage',                  '2.2.0'
+mod 'gentoo/portage',                  '2.3.0'
 mod 'nanliu/staging',                  '1.0.3'
-mod 'puppetlabs/apache',               '1.3.0'
+mod 'puppetlabs/apache',               '1.10.0'
 mod 'puppetlabs/apt',                  '2.2.2'
-mod 'puppetlabs/concat',               '1.2.0'
-mod 'puppetlabs/gcc',                  '0.2.0'
-mod 'puppetlabs/git',                  '0.3.0'
-mod 'puppetlabs/inifile',              '1.2.0'
+mod 'puppetlabs/concat',               '1.2.5'
+mod 'puppetlabs/gcc',                  '0.3.0'
+mod 'puppetlabs/git',                  '0.4.0'
+mod 'puppetlabs/inifile',              '1.5.0'
 mod 'puppetlabs/java',                 '1.3.0'
-mod 'puppetlabs/pe_gem',               '0.1.0'
-mod 'puppetlabs/ruby',                 '0.4.0'
-mod 'puppetlabs/stdlib',               '4.9.0'
-mod 'puppetlabs/vcsrepo',              '1.3.0'
-mod 'stahnma/epel',                    '1.0.2'
+mod 'puppetlabs/pe_gem',               '0.2.0'
+mod 'puppetlabs/ruby',                 '0.5.0'
+mod 'puppetlabs/stdlib',               '4.12.0'
+mod 'puppetlabs/vcsrepo',              '1.3.2'
+mod 'stahnma/epel',                    '1.2.2'
 mod 'ajjahn/dns',                      :git => 'https://github.com/ajjahn/puppet-dns.git',
                                        :ref => 'c545493603f1a1352db73f49346f9e253d7599aa'
