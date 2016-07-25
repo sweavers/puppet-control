@@ -1,11 +1,16 @@
 #
+
 class es (
   $interface     = 'eth0',
   $cluster_name  = 'elasticsearch',
   $manage_java   = true,
   $minimum_nodes = 1,
   $shards        = 5,
-  $replicas      = 2
+  $replicas      = 2,
+  $enable_backup = false,
+  $backup_dir    = '/backups',
+  $backup_hour   = '02',
+  $remote_fs     = false
 ){
 
   include stdlib
@@ -23,11 +28,10 @@ class es (
   } else {
     $heap_size = 268435456
   }
-  $repo_version = '1.7'
-  $version      = '1.7.3'
-  $data_dir = "/var/lib/elasticsearch/${cluster_name}/data"
-  $backup_dir = '/backups'
-  $log_dir =  "/var/lib/elasticsearch/${cluster_name}/logs"
+  $repo_version  = '1.7'
+  $version       = '1.7.3'
+  $data_dir      = "/var/lib/elasticsearch/${cluster_name}/data"
+  $log_dir       = "/var/lib/elasticsearch/${cluster_name}/logs"
 
   class { 'elasticsearch' :
     ensure       => present,
@@ -79,26 +83,61 @@ class es (
     }
   }
 
-  #Create Elasticsearch backup directory
-  file { $backup_dir :
-    ensure  => directory,
-    owner   => elasticsearch,
-    group   => elasticsearch,
-    require => Package ['elasticsearch']
-  }
+  if $enable_backup {
+    # Create Elasticsearch backup directory
+    file { $backup_dir :
+      ensure  => directory,
+      owner   => elasticsearch,
+      group   => elasticsearch,
+      require => Package ['elasticsearch']
+    }
 
-  # Install jq - required for ESbackup script
-  package { 'jq' :
-    ensure => installed
-  }
+    # Mout remote file system if specified
+    if $remote_fs {
+      package { 'nfs-utils' :
+        ensure => present
+      }
 
-  # ensure ESBackup script is installed
-  file { '/usr/bin/elasticsearch_snapshot':
-    ensure => present,
-    path   => '/usr/local/bin/elasticsearch_snapshot',
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
-    source => 'puppet:///modules/profiles/elasticsearch_snapshot.sh'
+      mount { $backup_dir :
+        ensure  => 'mounted',
+        device  => $remote_fs,
+        fstype  => 'nfs',
+        options => 'defaults',
+        atboot  => true,
+        require => [
+          Package [ 'nfs-utils' ],
+          File [ $backup_dir ]
+        ]
+        }
+      }
+
+    # Install jq - required for ESbackup script
+    package { 'jq' :
+      ensure => installed
+    }
+
+    # Ensure ESBackup script is installed
+    file { '/usr/bin/elasticsearch_snapshot':
+      ensure => present,
+      path   => '/usr/local/bin/elasticsearch_snapshot',
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
+      source => 'puppet:///modules/profiles/elasticsearch_snapshot.sh'
+    }
+
+    # Set backup cron job
+    cron { 'elasticsearch_snapshot':
+      ensure  => present,
+      command => '/usr/local/bin/elasticsearch_snapshot localhost:9200',
+      hour    => $backup_hour,
+      minute  => fqdn_rand(60), # Randomise the minute value for the job
+      user    => root
+    }
+  } else {
+    # Remove backup cron job
+    cron { 'elasticsearch_snapshot':
+      ensure => absent
+    }
   }
 }

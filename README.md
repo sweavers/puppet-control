@@ -32,6 +32,7 @@ and stored in __/etc/puppetlabs/facter/facts.d/__.
 * __server_type__: Similar to 'puppet_role' but specific to an environment.
 * __application_environment__: The environment name of the application (e.g. production, pre-production)
 * __hosting_platform__: The platform the code will be hosted on (e.g. aws, internal, vagrant)
+* __puppet_environment__: The puppet environment in which the machine sits (e.g.prodcution, development)
 
 _/etc/puppetlabs/facter/facts.d/host.yaml_
 ```
@@ -40,4 +41,5 @@ puppet_role: digital-register-frontend
 server_type: drf-production
 application_environment: production
 hosting_platform: aws
+puppet_environment: production
 ```

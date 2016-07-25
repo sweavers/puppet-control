@@ -49,9 +49,9 @@ class profiles::vagrant{
 
   package {
       'python-pip':
-          ensure      => installed,
-          provider    => yum,
-          require     => Package[$PKGLIST];
+          ensure   => installed,
+          provider => yum,
+          require  => Package[$PKGLIST];
   }
 
   file{'LR Python package':

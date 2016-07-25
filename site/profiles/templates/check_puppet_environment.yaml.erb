@@ -1,0 +1,33 @@
+---
+
+# Basic play book to check all hosts to confirm if they are in a specified environment and to produce a list of their IPs
+
+- remote_user: <%= @ansible_user %>
+  become: yes
+  become_method: sudo
+  serial: 2
+  vars_prompt:
+    - name: puppet_environment
+      prompt: "Please input the puppt envionrment which you wish to check"
+      private: no
+  hosts: all
+
+  tasks:
+  - name: Check puppet environemnt
+    command: grep -Fq "environment = {{ puppet_environment }}" /etc/puppet/puppet.conf
+    register: check_puppet_env
+    always_run: True
+    ignore_errors: True
+    changed_when: False
+
+  - name: Return IP address and host name if host exists in sepcified env
+    debug: msg="Server {{ ansible_eth1.ipv4.address }} is in enviorment {{ puppet_environment }}"
+    when: check_puppet_env.rc == 0
+
+  - name: Write the ip address to the environment host file
+    local_action: copy content={{ ansible_eth1.ipv4.address }} dest=/etc/ansible/{{ puppet_environment }}_hosts
+    when: check_puppet_env.rc == 0
+
+  - name: Return IP address and host name if host exists in sepcified env
+    debug: msg="Server is not in enviorment {{ puppet_environment }}"
+    when: check_puppet_env.rc == 1

@@ -21,13 +21,17 @@ class profiles::puppet::agent (
   $master_fqdn = 'puppet',
   $arguments   = '--no-daemonize --onetime --logdest syslog > /dev/null 2>&1',
   $run_hours   = '08-16',
-  $run_days    = '1-5',
-  $environment = hiera( environment , 'production')
-
+  $run_days    = '1-5'
 ){
 
-
-
+  # Set puppet environment from fact (set as production if fact does not exist)
+    if $::puppet_environment != undef {
+      notify { "Puppet environment ${::puppet_environment} set by fact":}
+      $environment = $::puppet_environment
+    } else {
+      notify { 'Puppet environment not set by fact defauling to production':}
+      $environment = 'production'
+    }
 
   # stephenrjohnson/puppet
   class { '::puppet::agent':
@@ -38,7 +42,7 @@ class profiles::puppet::agent (
     puppet_run_style    => 'external',
     puppet_run_interval => 30,
     splay               => true,
-    ordering            => 'title-hash',
+    ordering            => 'title-hash'
   }
 
   # Only carry out Puppet runs inside of a specific time window
