@@ -8,7 +8,7 @@
     @vip_ip = config['ip_address']
   end
 end %>
-vrrp_script postgresql-9.4 {
+vrrp_script postgresql-status {
   script "su - postgres -c '/etc/keepalived/health_check.sh'"
   interval 2
   wait 2
@@ -23,6 +23,6 @@ vrrp_instance <%= @application_environment.upcase %>-PG-CLUSTER {
       <%= @vip_ip %>
     }
     track_script {
-      postgresql-9.4
+      postgresql-status
     }
 }

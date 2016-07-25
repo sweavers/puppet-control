@@ -12,12 +12,12 @@ cluster=<%= @application_environment.gsub(/-/, '_') %>
 node=<%= @node_number %>
 node_name=node<%= @node_number %>
 conninfo='host=<%= @hostname %> user=repmgr dbname=repmgr connect_timeout=2'
-pg_bindir=/usr/pgsql-9.4/bin
+pg_bindir=/usr/pgsql-<%= @version %>/bin
 master_response_timeout=60
 reconnect_attempts=6
 reconnect_interval=10
 failover=automatic
-promote_command='/etc/repmgr/9.4/auto_failover.sh'
-follow_command='/usr/pgsql-9.4/bin/repmgr standby follow -f /etc/repmgr/9.4/repmgr.conf -W'
+promote_command='/etc/repmgr/<%= @version %>/auto_failover.sh'
+follow_command='/usr/pgsql-<%= @version %>/bin/repmgr standby follow -f /etc/repmgr/<%= @version %>/repmgr.conf -W'
 priority=<%= @nodecount - @node_number %>
 use_replication_slots=1
