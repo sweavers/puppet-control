@@ -234,7 +234,7 @@ class profiles::postgresql_standalone(
     } ->
 
 
-    # Running postgresql-9.4 as a systemd service causes issues when postgres
+    # Running postgresql as a systemd service causes issues when postgres
     # clustering is being manged by repmgr, so we stop and disable it immediatly
     # after installation by puppet. Postgres is managed by pg_ctl from then on.
 

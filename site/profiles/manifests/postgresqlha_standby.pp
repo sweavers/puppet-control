@@ -62,6 +62,14 @@ class profiles::postgresqlha_standby (
     require => File[$dbroot]
   }
 
+  file_line { 'enable_pgsql_profile' :
+    ensure  => present,
+    line    => "[ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
+    match   => "^# [ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
+    path    => "${dbroot}/.bash_profile",
+    require => Class['postgresql::server']
+  }
+
   if $::postgres_ha_setup_done != 0 {
     $vip_hostname = template('profiles/postgres_vip_hostname.erb')
     $pg_conf = "${dbroot}/${version}/data/postgresql.conf"
@@ -100,7 +108,7 @@ class profiles::postgresqlha_standby (
     file { "/etc/repmgr/${version}/auto_failover.sh" :
       ensure  => file,
       owner   => 'postgres',
-      source  => 'puppet:///modules/profiles/postgres_auto_failover.sh',
+      content => template('profiles/postgres_auto_failover.erb'),
       require => Package["repmgr${shortversion}"],
       mode    => '0555'
     }
@@ -165,10 +173,10 @@ class profiles::postgresqlha_standby (
     } ->
 
     file { '/etc/keepalived/health_check.sh' :
-      ensure => file,
-      source => 'puppet:///modules/profiles/keepalived_health_check.sh',
-      owner  => 'postgres',
-      mode   => '0544',
+      ensure  => file,
+      content => template('profiles/keepalived_health_check.erb'),
+      owner   => 'postgres',
+      mode    => '0544',
     }
 
     service {'keepalived' :

@@ -1,4 +1,0 @@
----
-
-classes:
-  - profiles::postgresqlha_master

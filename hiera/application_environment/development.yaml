@@ -185,6 +185,7 @@ postgresqlha_keys:
     sQRz3Dp06A5Sr56Oo4g0hj478F7NK+vzPhCpgyvOugCbjfjEdoBj5g==
     -----END RSA PRIVATE KEY-----
 
+
 pg_cluster_member_hostnames:
   puppet puppetmaster puppet-master-91.control.net:
     ip_address:          192.168.42.5
@@ -192,22 +193,22 @@ pg_cluster_member_hostnames:
   vip:
     ip_address:          192.168.42.50
     initial_role:        vip
-  server1:
+  server-1:
     ip_address:          192.168.42.51
     initial_role:        master
     keepalived_priority: 100
     repmgr_node_number:  1
-  server2:
+  server-2:
     ip_address:          192.168.42.52
     initial_role:        standby
     keepalived_priority: 99
     repmgr_node_number:  2
-  server3:
+  server-3:
     ip_address:          192.168.42.53
     initial_role:        standby
     keepalived_priority: 98
     repmgr_node_number:  3
-  server4:
+  barman:
     ip_address:          192.168.42.54
     initial_role:        backup
 
@@ -231,3 +232,4 @@ barman_retention_policy: RECOVERY WINDOW OF 2 WEEKS
 
 postgres_conf:
   wal_keep_segments: 500
+  wal_log_hints: on
