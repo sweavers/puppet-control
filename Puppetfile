@@ -15,7 +15,7 @@ mod 'puppet-gradle',                   :git => 'https://github.com/LandRegistry-
 mod 'puppet-wsgi',                     :git => 'https://github.com/LandRegistry-Ops/puppet-wsgi.git',
                                        :ref => '790cafc1ac7770d9263a292e203e283229633769'
 mod 'leinaddm/htpasswd',               '0.0.3'
-mod 'maestrodev/wget',                 '1.5.7'
+mod 'maestrodev/wget',                 '1.7.3'
 mod 'openstackci/pip',                 :git => 'https://github.com/openstack-infra/puppet-pip.git',
                                        :ref => '88c1e708d421f397283fd88266147175855426dd'
 mod 'puppetlabs/firewall',             '1.3.0'
