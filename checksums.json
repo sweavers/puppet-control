@@ -117,6 +117,7 @@
    "site/profiles/files/webapp": "257920730512a9cd56d9aba5f4b0f1fc",
    "site/profiles/lib/facter/meminbytes.rb": "32275918d8bbb5e7fbc439504eee5454",
    "site/profiles/lib/facter/postgres_ha_setup_done.rb": "370f48fafdfe5149c8cd6b4c4707f386",
+   "site/profiles/lib/facter/rabbitmq_plugins_done.rb": "e706ad541a9866530a977ac281ce6e4a",
    "site/profiles/lib/puppet/parser/functions/remote_json.rb": "31552209a531da9abe75a6652094e118",
    "site/profiles/manifests/ansible.pp": "00c0cf630deaf9da0d9fd5d6651bea41",
    "site/profiles/manifests/application.pp": "0fda6f467daf3abd5d7c56b4abab3285",
