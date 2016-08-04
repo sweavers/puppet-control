@@ -206,5 +206,5 @@
    "site/tomcat/manifests/init.pp": "ac3da5e77a2d70823d1891ec342e2288",
    "site/tomcat/templates/haproxy.cfg.erb": "5c5759b3c25b2d643e2a539f4d6e6ee0",
    "site/tomcat/templates/server.xml.erb": "cce1d486f3e631c4d3334a8b0eaa2084",
-   "Puppetfile": "f3ed655c3704605bdbf7c985d7408407"
+   "Puppetfile": "5807c700f87b71c5b82dddd567e1d331"
 }
