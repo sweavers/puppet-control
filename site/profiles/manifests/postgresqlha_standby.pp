@@ -13,6 +13,13 @@ class profiles::postgresqlha_standby (
     $postgres_conf = hiera_hash('postgres_conf',undef)
   ){
 
+  case $version {
+      '9.3': { $postgis_version = 'postgis2_93' }
+      '9.4': { $postgis_version = 'postgis2_94' }
+      '9.5': { $postgis_version = 'postgis2_95' }
+      default: { $postgis_version = 'postgis2_94' }
+  }
+
   include ::stdlib
 
   $shortversion = regsubst($version, '\.', '')
@@ -55,19 +62,11 @@ class profiles::postgresqlha_standby (
 
   file { "${dbroot}/.pgsql_profile" :
     ensure  => 'file',
-    content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
+    content => template('profiles/postgres_pgsql_config.erb'),
     owner   => 'postgres',
     group   => 'postgres',
     mode    => '0750',
     require => File[$dbroot]
-  }
-
-  file_line { 'enable_pgsql_profile' :
-    ensure  => present,
-    line    => "[ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
-    match   => "^# [ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
-    path    => "${dbroot}/.bash_profile",
-    require => Class['postgresql::server']
   }
 
   if $::postgres_ha_setup_done != 0 {
@@ -76,6 +75,19 @@ class profiles::postgresqlha_standby (
     $this_hostname = $::hostname
 
     include ::stdlib
+
+    package { $postgis_version :
+      ensure  => installed,
+      require => Package["postgresql${shortversion}-server"]
+    }
+
+    file_line { 'enable_pgsql_profile' :
+      ensure  => present,
+      line    => "[ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
+      match   => "^#*[ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
+      path    => "${dbroot}/.bash_profile",
+      require => Package["postgresql${shortversion}-server"]
+    }
 
     $pkglist = [
       'keepalived',
@@ -111,6 +123,13 @@ class profiles::postgresqlha_standby (
       content => template('profiles/postgres_auto_failover.erb'),
       require => Package["repmgr${shortversion}"],
       mode    => '0555'
+    }
+
+    file { "${dbroot}/repmgr.conf" :
+      ensure  => link,
+      owner   => 'postgres',
+      target  => "/etc/repmgr/${version}/repmgr.conf",
+      require => Package["repmgr${shortversion}"]
     }
 
     file { 'PSQL History' :
