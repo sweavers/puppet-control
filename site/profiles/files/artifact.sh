@@ -109,6 +109,11 @@ for environment in ${DIR}/environments/*; do
     cp -R ${TEMPDIR}/* ${environment}/${HIERA_PATH}
     if [ $? == '0' ]; then
       echo "New secrets deployed to ${envname}" | output
+      # If additions script exists in secrets repository, run that.
+      ADDITIONS_SCRIPT="${environment}/${HIERA_PATH}/additions.sh"
+      if [[ -f ${ADDITIONS_SCRIPT} ]]; then
+        bash ${ADDITIONS_SCRIPT}
+      fi
     else
       echo "ERROR - Unable to deploy secrets from ${TEMPDIR} to ${environment}" | output ERROR
       SOFTFAIL+=("${envname}")
