@@ -61,8 +61,8 @@ class profiles::gitlab (
 
     gitlab_rails        => {
       gitlab_default_theme  => 4,
-      #ldap_enabled          => false,
-      #ldap_servers          => $ldap_config,
+      ldap_enabled          => false,
+      ldap_servers          => $ldap_config,
       backup_path           => '/var/opt/gitlab/backups',
       backup_keep_time      => '5184000', # In seconds, 5184000 = 60 days
     },
