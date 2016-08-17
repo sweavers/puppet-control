@@ -205,8 +205,9 @@ class profiles::puppet::master (
 
     # Load SELinuux policy for NginX
     selinux::module { 'puppetmaster':
-      ensure => 'present',
-      source => 'puppet:///modules/profiles/puppetmaster.te'
+      ensure      => 'present',
+      syncversion => false,
+      source      => 'puppet:///modules/profiles/puppetmaster.te'
     }
 
     # Configure puppet agent runs
