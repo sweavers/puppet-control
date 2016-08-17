@@ -203,6 +203,12 @@ class profiles::puppet::master (
       force  => true
     }
 
+    # Load SELinuux policy for NginX
+    selinux::module { 'puppetmaster':
+      ensure => 'present',
+      source => 'puppet:///modules/profiles/puppetmaster.te'
+    }
+
     # Configure puppet agent runs
     cron { 'puppet-agent':
       command => "/usr/bin/puppet agent ${arguments}",
