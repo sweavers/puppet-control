@@ -93,7 +93,6 @@
    "site/profiles/files/sample-build-and-ut.xml": "8052faafedb670a965db56ec2b317ffd",
    "site/profiles/files/secrets.sh": "f1591b05a70c3438ad8f9c3476bf0362",
    "site/profiles/files/webapp": "257920730512a9cd56d9aba5f4b0f1fc",
-   "site/profiles/files/artifact.sh": "999b7fac94f5cffc2aee90e7917ccbd7",
    "site/profiles/files/.bash_profile": "8f2126aa3318d270180a19b932c9cfd5",
    "site/profiles/files/app-deploy-api.sh": "6c2877ca5ffc5fd0371174e796016591",
    "site/profiles/files/app-deploy-login-api.sh": "0cf1dbed319def9203dc7130236ba3bd",
@@ -205,6 +204,6 @@
    "Vagrantfile": "8be9a6767e0f1c483ac98eba4c20047d",
    "environment.conf": "b39f01c6d7cd4121ad5e92493fc47eda",
    "hiera.vagrant.yaml": "fc0b304fd3663c76435d36b65df77c64",
-   ".travis.yml": "b0006f50ad1eeaf364eb487c2e7f27a2",
-   "Puppetfile": "28ef6284809fecf3d0985210a352dc5c"
+   "Puppetfile": "28ef6284809fecf3d0985210a352dc5c",
+   ".travis.yml": "b0006f50ad1eeaf364eb487c2e7f27a2"
 }
