@@ -36,7 +36,7 @@ postgresqlha_keys:
     -----END RSA PRIVATE KEY-----
 
 pg_cluster_member_hostnames:
-  puppet puppetmaster puppet-master-91.control.net:
+  puppet_main puppetmaster puppet-master-91.control.net:
     ip_address:          192.168.42.5
     initial_role:        puppetmaster
   vip:
