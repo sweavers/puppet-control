@@ -206,5 +206,5 @@
    "environment.conf": "b39f01c6d7cd4121ad5e92493fc47eda",
    "hiera.vagrant.yaml": "fc0b304fd3663c76435d36b65df77c64",
    ".travis.yml": "b0006f50ad1eeaf364eb487c2e7f27a2",
-   "Puppetfile": "989a3694d0b937d3f83baedd650fbbf4"
+   "Puppetfile": "28ef6284809fecf3d0985210a352dc5c"
 }
