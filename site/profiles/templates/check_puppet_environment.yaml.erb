@@ -25,8 +25,10 @@
     when: check_puppet_env.rc == 0
 
   - name: Write the ip address to the environment host file
-    local_action: copy content={{ ansible_eth1.ipv4.address }} dest=/etc/ansible/{{ puppet_environment }}_hosts
+    become: no
+    local_action: lineinfile dest=/var/lib/jenkins/{{ puppet_environment }}_hosts line={{ ansible_eth0.ipv4.address }} create=yes
     when: check_puppet_env.rc == 0
+
 
   - name: Return IP address and host name if host exists in sepcified env
     debug: msg="Server is not in enviorment {{ puppet_environment }}"
