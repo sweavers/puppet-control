@@ -43,10 +43,19 @@ class profiles::ansible (
   }
 
   # Create basic playbook to run puppet agent
-  #  Set up the anssible hosts file
   file { '/etc/ansible/puppet_agent.yaml':
     ensure  => present,
     content => template('profiles/puppet_agent.yaml.erb'),
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    require => Package['ansible']
+  }
+
+  # Create basic playbook to switch machines between puppet environments
+  file { '/etc/ansible/puppet_environment.yaml':
+    ensure  => present,
+    content => template('profiles/puppet_environment.yaml.erb'),
     owner   => root,
     group   => root,
     mode    => '0644',

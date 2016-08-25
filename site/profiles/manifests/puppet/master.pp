@@ -27,7 +27,17 @@ class profiles::puppet::master (
 
   ){
 
-    $environment = hiera( environment , 'production')
+  # Set puppet environment from fact (set as production if fact does not exist)
+    if $::puppet_environment != undef {
+      notify { "Puppet environment ${::puppet_environment} set by fact":}
+      $environment = $::puppet_environment
+    } else {
+      notify { 'Puppet environment not set by fact defaulting to production':}
+      $environment = 'production'
+    }
+
+    # Configure puppetdb firewall
+    include profiles::puppet::puppetdb_firewall
 
     # Install nginx
     include ::profiles::nginx
@@ -47,11 +57,10 @@ class profiles::puppet::master (
 
     # Ensure permissions are set correctly on puppet/environments dir
     file { '/etc/puppet/environments' :
-      ensure  => directory,
-      owner   => puppet,
-      group   => puppet,
-      mode    => '0644',
-      recurse => true
+      ensure => directory,
+      owner  => puppet,
+      group  => puppet,
+      mode   => '0644'
     }
 
     # Install build dependancies
@@ -61,12 +70,17 @@ class profiles::puppet::master (
     }
 
     # Install required gems
-    $gems = ['rack', 'unicorn']
-    package { $gems :
+    package { 'rack' :
+      ensure   => '1.6.4', # 1.6.4 is not dependennt on specific ruby version
+      provider => gem,
+      require  => Package [ $build_dependencies, 'rubygems','ruby-devel']
+    }
+    package { 'unicorn' :
       ensure   => installed,
       provider => gem,
       require  => Package [ $build_dependencies, 'rubygems','ruby-devel']
     }
+
 
     # Copy standard puppet rack config
     file { '/etc/puppet/config.ru' :
@@ -108,7 +122,7 @@ class profiles::puppet::master (
       group   => 'root',
       source  => 'puppet:///modules/profiles/puppetmaster-unicorn.service',
       notify  => Exec ['systemctl daemon-reload'],
-      require => Package ['unicorn']
+      require => Package ['unicorn','rack']
     }
 
     # Reload systemd to pick up config change
@@ -191,8 +205,9 @@ class profiles::puppet::master (
 
     # Load SELinuux policy for NginX
     selinux::module { 'puppetmaster':
-      ensure => 'present',
-      source => 'puppet:///modules/profiles/puppetmaster.te'
+      ensure      => 'present',
+      syncversion => false,
+      source      => 'puppet:///modules/profiles/puppetmaster.te'
     }
 
     # Configure puppet agent runs

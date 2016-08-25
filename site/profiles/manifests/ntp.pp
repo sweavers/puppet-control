@@ -21,7 +21,7 @@
 #
 class profiles::ntp (
 
-  $ntp_server_array   = ['0.uk.pool.ntp.org', '1.uk.pool.ntp.org',],
+  $ntp_server_array   = ['0.uk.pool.ntp.org', '1.uk.pool.ntp.org','2.uk.pool.ntp.org', '3.uk.pool.ntp.org',],
   $ntp_restrict_array = ['127.0.0.1']
 
 ) {

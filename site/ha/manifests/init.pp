@@ -20,12 +20,14 @@ class ha (
   $lb_instances = undef,
   $interface   = 'eth0',
   $virtual_ip  = undef,
+  $sticky      = false
 ) {
 
   include stdlib
   validate_hash($lb_instances)
   validate_string($interface)
   validate_string($virtual_ip)
+  validate_bool($sticky)
 
   unless has_interface_with($interface) {
     fail("${interface} is not a valid network port")

@@ -1,6 +1,7 @@
 ---
 
-profiles::nagios_client::nagios_server: 192.16.42.47
+repmgr_password: repmgr
+barman_password: barman
 
 postgresqlha_keys:
   public: |
@@ -35,13 +36,29 @@ postgresqlha_keys:
     -----END RSA PRIVATE KEY-----
 
 pg_cluster_member_hostnames:
-  puppet puppetmaster puppet-master-91.control.net:
+  puppet_main puppetmaster puppet-master-91.control.net:
+    ip_address:          192.168.42.5
+    initial_role:        puppetmaster
+  vip:
     ip_address:          192.168.42.50
-  server1:
-    ip_address:          192.168.42.49
+    initial_role:        vip
+  postgresqlha-master.ec2.internal:
+    ip_address:          192.168.42.51
     initial_role:        master
-  server2:
-    ip_address:          192.168.42.50
+    keepalived_priority: 100
+    repmgr_node_number:  1
+  postgresqlha-standby.ec2.internal:
+    ip_address:          192.168.42.52
+    initial_role:        standby
+    keepalived_priority: 99
+    repmgr_node_number:  2
+  postgresql-standalone.ec2.internal:
+    ip_address:          192.168.42.52
+    initial_role:        standby
+    keepalived_priority: 99
+    repmgr_node_number:  2
+  barman.ec2.internal:
+    ip_address:          192.168.42.54
     initial_role:        backup
 
 postgres_databases:
