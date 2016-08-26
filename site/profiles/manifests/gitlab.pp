@@ -5,7 +5,6 @@
 # Parameters:
 #  ['backup_location'] - NFS location for backups
 #  ['smtp_relay']      - SMTP relay server and port ('server:port')
-#  ['local_login']     - Should local login should be permitted. (Boolean)
 #
 # Requires:
 # - vshn/gitlab
@@ -16,12 +15,20 @@
 #
 class profiles::gitlab (
 
+  $package_version = '8.11.2-ce.1.el7',
   $external_url    = 'http://localhost',
   $enable_backup   = false,
   $backup_location = 'undef',
   $gitlab_crt      = '',
   $gitlab_key      = '',
-  $ldap_config     = 'puppet:///site/profiles/files/ldap_conf.erb',
+  $smtp_relay      = undef,
+  $ldap_enabled    = false,
+  $ldap_host       = 'undef',
+  $ldap_base       = 'undef',
+  $ldap_bind_dn    = 'undef',
+  $ldap_password   = 'undef',
+  $aws_acccess_key = undef,
+  $aws_secret_key  = undef
 
 ){
 
@@ -56,28 +63,37 @@ class profiles::gitlab (
   }
 
   class { '::gitlab' :
-    external_url        => $external_url,
-    require             => File['/etc/gitlab/ssl/gitlab.crt', '/etc/gitlab/ssl/gitlab.key'],
+    package_ensure => $package_version,
+    external_url   => $external_url,
+    require        => File['/etc/gitlab/ssl/gitlab.crt',
+      '/etc/gitlab/ssl/gitlab.key'],
 
-    gitlab_rails        => {
-      gitlab_default_theme  => 4,
-      ldap_enabled          => false,
-      ldap_servers          => $ldap_config,
-      backup_path           => '/var/opt/gitlab/backups',
-      backup_keep_time      => '5184000', # In seconds, 5184000 = 60 days
+    gitlab_rails   => {
+      gitlab_default_theme => 4,
+      ldap_enabled         => $ldap_enabled,
+
+      ldap_servers         => {
+        host     => $ldap_host,
+        base     => $ldap_base,
+        bind_dn  => $ldap_bind_dn,
+        password => $ldap_password
+      },
+
+      backup_path          => '/var/opt/gitlab/backups',
+      backup_keep_time     => '5184000', # In seconds, 5184000 = 60 days
     },
 
-    nginx               => {
+    nginx          => {
       redirect_http_to_https => true,
       ssl_certificate        => '/etc/gitlab/ssl/gitlab.crt',
       ssl_certificate_key    => '/etc/gitlab/ssl/gitlab.key',
     },
 
-    logging             => {
-      svlogd_size     => 209715200,
-      svlogd_num      => 30,
-      svlogd_timeout  => 86400,
-      svlogd_filter   => 'gzip',
+    logging        => {
+      svlogd_size    => 209715200,
+      svlogd_num     => 30,
+      svlogd_timeout => 86400,
+      svlogd_filter  => 'gzip',
     },
   }
 
@@ -119,4 +135,9 @@ class profiles::gitlab (
     }
   }
 
+  file_line { 'internal smtp relay config':
+    ensure => present,
+    line   => "relayhost = ${smtp_relay}",
+    path   => '/etc/postfix/main.cf',
+  }
 }
