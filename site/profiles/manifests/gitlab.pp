@@ -71,14 +71,7 @@ class profiles::gitlab (
     gitlab_rails   => {
       gitlab_default_theme => 4,
       ldap_enabled         => $ldap_enabled,
-
-      ldap_servers         => {
-        host     => $ldap_host,
-        base     => $ldap_base,
-        bind_dn  => $ldap_bind_dn,
-        password => $ldap_password
-      },
-
+      ldap_servers         => template('profiles/ldap_servers.erb'),
       backup_path          => '/var/opt/gitlab/backups',
       backup_keep_time     => '5184000', # In seconds, 5184000 = 60 days
     },
