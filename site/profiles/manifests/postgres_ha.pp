@@ -188,7 +188,7 @@ class profiles::postgres_ha(
   file { "/etc/repmgr/${version}/auto_failover.sh" :
     ensure  => file,
     owner   => 'postgres',
-    content => template('profiles/postgres_auto_failover.erb'),
+    content => template('profiles/postgres_ha_auto_failover.erb'),
     require => Package["repmgr${shortversion}"],
     mode    => '0544'
   }
@@ -279,6 +279,8 @@ class profiles::postgres_ha(
   if $::postgres_server_is_master == undef {
     if $::hostname == $master_hostname {
 
+      $repmgr_role = 'master'
+
       postgresql::server::role { 'repmgr':
         login         => true,
         superuser     => true,
@@ -308,36 +310,40 @@ class profiles::postgres_ha(
 
     } else {
 
+      $repmgr_role = 'standby'
+
       exec { 'stop_postgres' :
         command => "/bin/systemctl stop postgresql-${version}",
         user    => 'root',
         require => Class['postgresql::server']
-      }
+      } ->
 
       exec { 'empty_postgres_data_dir' :
-        command => 'rm -rf /var/lib/pgsql/9.5/data/*',
+        command => "rm -rf ${::datadir}/*",
         user    => 'postgres',
-      }
+      } ->
 
       exec { 'clone_postgres' :
-        command => "/usr/pgsql-${version}/bin/repmgr -r -F -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr ${wal_keep_segments} --verbose standby clone ${vip_hostname}",
+        command => "/usr/pgsql-${version}/bin/repmgr -r -F -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr ${::wal_keep_segments} --verbose standby clone ${vip_hostname}",
         user    => 'postgres',
         cwd     => "/etc/repmgr/${version}/",
-      }
+      } ->
 
       exec { 'start_postgres' :
         command => "/bin/systemctl start postgresql-${version}",
         user    => 'root',
+        before  => Exec['register_repmgrd'],
       }
 
     }
+
   }
 
-  if $::postgres_server_is_master == 't' {
-    $repmgr_role = 'master'
-  } else {
-    $repmgr_role = 'standby'
-  }
+  # if $::postgres_server_is_master == 't' {
+  #   $repmgr_role = 'master'
+  # } else {
+  #   $repmgr_role = 'standby'
+  # }
 
   $pg_hba_rules = parseyaml(template('profiles/postgres_hba_conf.erb'))
   create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules)
@@ -421,7 +427,7 @@ class profiles::postgres_ha(
     command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf ${repmgr_role} register --force",
     user    => 'postgres',
     require => File['/var/lib/pgsql/.pgpass'],
-    # unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show",
+    unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show 2> /dev/null | grep -q ${::hostname}",
   } ->
 
   service { 'repmgr' :
