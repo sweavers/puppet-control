@@ -189,7 +189,7 @@ class profiles::jenkins (
     }
 
     class { '::phantomjs':
-      package_version => '1.9.8',
+      package_version => '2.1.1',
       package_update  => false,
       install_dir     => '/usr/local/bin',
       source_dir      => '/opt',
