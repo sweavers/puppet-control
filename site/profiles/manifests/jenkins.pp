@@ -23,7 +23,7 @@ class profiles::jenkins (
   $jobs                    = undef,
   $deploy_from_jenkins_rsa = undef,
   $version                 = '1.644-1.1',
-
+  $phantomjs_version       = '1.9.8',
   $jenkins_url             = [ $::hostname ],
   $jenkins_ssl             = false,
   $ssl_protocols           = 'TLSv1 SSLv3',
@@ -189,7 +189,7 @@ class profiles::jenkins (
     }
 
     class { '::phantomjs':
-      package_version => '2.1.1',
+      package_version => $phantomjs_version,
       package_update  => false,
       install_dir     => '/usr/local/bin',
       source_dir      => '/opt',
