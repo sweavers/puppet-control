@@ -15,20 +15,21 @@
 #
 class profiles::gitlab (
 
-  $package_version = '8.11.2-ce.1.el7',
-  $external_url    = 'http://localhost',
-  $enable_backup   = false,
-  $backup_location = 'undef',
-  $gitlab_crt      = '',
-  $gitlab_key      = '',
-  $smtp_relay      = undef,
-  $ldap_enabled    = false,
-  $ldap_host       = 'undef',
-  $ldap_base       = 'undef',
-  $ldap_bind_dn    = 'undef',
-  $ldap_password   = 'undef',
-  $aws_acccess_key = undef,
-  $aws_secret_key  = undef
+  $package_version  = '8.11.2-ce.1.el7',
+  $external_url     = 'http://localhost',
+  $enable_backup    = false,
+  $backup_location  = 'undef',
+  $backup_retention = 3, # in days
+  $gitlab_crt       = '',
+  $gitlab_key       = '',
+  $smtp_relay       = undef,
+  $ldap_enabled     = false,
+  $ldap_host        = 'undef',
+  $ldap_base        = 'undef',
+  $ldap_bind_dn     = 'undef',
+  $ldap_password    = 'undef',
+  $aws_acccess_key  = undef,
+  $aws_secret_key   = undef
 
 ){
 
@@ -73,7 +74,7 @@ class profiles::gitlab (
       ldap_enabled         => $ldap_enabled,
       ldap_servers         => template('profiles/ldap_servers.erb'),
       backup_path          => '/var/opt/gitlab/backups',
-      backup_keep_time     => '5184000', # In seconds, 5184000 = 60 days
+      backup_keep_time     => ((($backup_retention * 24) * 60) * 60)  # Value needs to be converted to seconds
     },
 
     nginx          => {
@@ -90,40 +91,44 @@ class profiles::gitlab (
     },
   }
 
+  if $enable_backup == true {
 
-  #Set up s3 backups if on AWS
-  if $::hosting_platform == AWS {
-
-    package { 's3cmd':
-      ensure  => present,
-    }
-    cron  { 's3-backup-syc':
-      command => "s3cmd sync /var/opt/gitlab/backups s3://lr-gitlab-backups --access_key=${aws_acccess_key} --secret_key=${aws_secret_key}",
+    cron  { 'gitlab-backup':
+      command => '/opt/gitlab/bin/gitlab-rake gitlab:backup:create',
       user    => root,
       hour    => 2,
-      minute  => 30
+      minute  => 0
     }
-  }
 
-  $nfs_package = $::operatingsystem ? {
-    CentOS     => 'nfs-utils',
-    Redhat     => 'nfs-utils',
-    Ubuntu     => 'nfs-common',
-  }
+    #Set up s3 backups if on AWS
+    if $::hosting_platform == AWS {
 
-  package { $nfs_package :
-    ensure => present
-  }
+      package { 's3cmd':
+        ensure => present,
+      }
 
-  if $::hosting_platform == 'internal' {
-    if $enable_backup == true {
-        mount { '/var/opt/gitlab/backups':
-          ensure  => 'mounted',
-          device  => $backup_location,
-          fstype  => 'nfs',
-          options => 'defaults',
-          atboot  => true,
-          require => Package [ $nfs_package ]
+      cron  { 's3-backup-syc':
+        command => "s3cmd sync /var/opt/gitlab/backups s3://lr-gitlab-backups --access_key=${aws_acccess_key} --secret_key=${aws_secret_key}",
+        user    => root,
+        hour    => 2,
+        minute  => 30
+      }
+    }
+
+    #Set up nfs mount for internal backups
+    if $::hosting_platform == 'internal' {
+
+      package { 'nfs-utils' :
+        ensure => present
+      }
+
+      mount { '/var/opt/gitlab/backups':
+        ensure  => 'mounted',
+        device  => $backup_location,
+        fstype  => 'nfs',
+        options => 'defaults',
+        atboot  => true,
+        require => Package [ 'nfs-utils' ]
       }
     }
   }
