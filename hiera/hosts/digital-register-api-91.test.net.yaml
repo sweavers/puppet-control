@@ -1,7 +1,0 @@
----
-
-profiles::firewall::firewall_state: 'on'
-profiles::firewall::services:
-  HTTP:
-    port: 80
-    range: 192.16.42.0/24

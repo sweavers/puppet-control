@@ -31,7 +31,6 @@ class profiles::digitalregister_app(
   ){
 
   include ::stdlib
-  include ::profiles::deployment
   include ::profiles::nginx
   include ::wsgi
 

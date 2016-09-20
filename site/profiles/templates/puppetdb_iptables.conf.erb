@@ -54,7 +54,7 @@
 
 # SSH chain rules
 -A SSH -m recent --name BRUTEFORCE --rttl --rcheck --hitcount 10 --seconds 15 -m comment --comment "Block SSH > 3 in 15s" -j DROP
--A SSH -m recent --name BRUTEFORCE --rttl --rcheck --hitcount 100 --seconds 900 -m comment --comment "Block SSH > 10 in 900s" -j DROP
+-A SSH -m recent --name BRUTEFORCE --rttl --rcheck --hitcount 20 --seconds 900 -m comment --comment "Block SSH > 10 in 900s" -j DROP
 -A SSH -m recent --name BRUTEFORCE --set -s <%= @ssh_allowed_range -%> -m comment --comment "Allow SSH not blacklisted" -j ACCEPT
 #
 

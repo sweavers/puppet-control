@@ -16,22 +16,22 @@ class profiles::appserver(
 ){
 
   include ::stdlib
-  include ::profiles::deployment
 
   $supervisor_lookup = any2array($supervisor_conf)
-
-  class { 'supervisord':
-    inet_server => true,
-    install_pip => true,
-    config_dirs => $supervisor_lookup
-  }
 
   file { '/etc/supervisord.d/':
     ensure  => directory,
     owner   => root,
     group   => deployment,
     mode    => '0775',
-    require => Class[Profiles::Deployment]
+    require => User[deployment]
+  }
+
+  class { 'supervisord':
+    inet_server => true,
+    install_pip => true,
+    config_dirs => $supervisor_lookup,
+    require     => File['/etc/supervisord.d/']
   }
 
   #  Install required packages for Ruby and Java
