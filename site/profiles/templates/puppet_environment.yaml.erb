@@ -21,12 +21,12 @@
 
     - name: Amend puppet_environment line if it exists
       lineinfile: "dest=/etc/puppetlabs/facter/facts.d/host.yaml
-                  regexp='^  puppet_environment'
-                  line='  puppet_environment: {{ puppet_environment }}'
+                  regexp='^puppet_environment'
+                  line='puppet_environment: {{ puppet_environment }}'
                   state=present"
     - name: Append puppet_environment line to file if it does not exist
       lineinfile: "dest=/etc/puppetlabs/facter/facts.d/host.yaml
-                  line='  puppet_environment: {{ puppet_environment }}'
+                  line='puppet_environment: {{ puppet_environment }}'
                   state=present"
 
     - name: run puppet agent
