@@ -2,26 +2,16 @@
 
 classes:
   - 'profiles::puppet'
-  - 'profiles::deployment'
   - 'profiles::ntp'
   - 'profiles::git'
   - 'profiles::custom_facts'
   - 'selinux'
   - 'sudo'
-  - 'profiles::nagios_client'
   - 'resolvconf'
 
 # Prevent sudo from purging unmanaged sudo configs (for vagrant)
 sudo::purge: false
 sudo::config_file_replace: false
-
-# Allow deployment to run ssh commands with sudo
-sudo::configs:
-    deployment:
-        content: |
-          Defaults: %deployment !requiretty
-          %deployment ALL=(ALL) NOPASSWD: ALL
-        priority : 10
 
 # Set SELinux to enforcing
 selinux::mode: enforcing
@@ -35,6 +25,12 @@ accounts:
  lr-test-user:
    comment: lr-test-user
    ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQC2JcuGfXBiaUKCRf9qJ/SSswEy+V7TW0BiN7sfKqycWoWIas7tMKCHdsJSayXO12rz1fP59vCyThUayAdwLrzzVQjGxsN43eS80aGeo83GoxcqGVjNQcNK6NKT5EzbpdxN1FEtSFEVGnpJznpbSetKtwCUuMARVTJ1xtZUZNgWzRkgBRTcaaq6SxulJ42BB3fxReOCswDnTHnHUjk+xigH+QyZgI9Vmp8/k9i6dtV8VTBs32dPaB5SzuP+ljjoW06+UND0MRxl9UeW82UGMLKMXRhL5gBLyDhP+/9lIIeqc9f6p7JU8bJz3pwFVNKxCKW9LjKUAxAUEboiryKx7GYv
+   groups:
+     - lr-admin
+ deployment:
+   home_dir: /opt/deployment
+   comment: Automated CI deployment
+   ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDky5bUs3nlN78+0d+nzt2z2ZeZ4lUsiDSV2FPl3Oc0HZ2tkwM+FF++QJp8VycEoQ+fRIB9ZMksYDghJBymNG0paNH1YwjXtRz3/bfc/qtXm1BBG1s+L+9LKnncjiYHCh+9uQ65IZQ+r/eandUnGnOzVZQAgX69Qd+PlafLH/W1W6pfrRTq8sI/yyINWhXfDlSX5WuZ3hp783dt6WptyEaQdptTz74A5MG9Szp31eLL+mJl8UYWelDH/S8jzNOiLuh9sQzv9hKqHeRXZzZjk+MVAcb1UoJjNUvLA0+N26fWhqa8mSrtXHo/4wjCt1Yo2J+fU967oV3KJNbyY84kFysB
    groups:
      - lr-admin
 
@@ -66,10 +62,6 @@ profiles::jenkins::deploy_from_jenkins_rsa: |
  U8Vh0MBxlX2AYVtUFDA6VqekSDO3lBFZowELaZuSNNvp1uo5nOhOzozEjDhNAgBZ
  9/pUlnwbF15fqp/fJYgKCK2+NC5GXCPda2AZNnGSElpQ3m49ESI=
  -----END RSA PRIVATE KEY-----
-
-
-profiles::deployment::public_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDky5bUs3nlN78+0d+nzt2z2ZeZ4lUsiDSV2FPl3Oc0HZ2tkwM+FF++QJp8VycEoQ+fRIB9ZMksYDghJBymNG0paNH1YwjXtRz3/bfc/qtXm1BBG1s+L+9LKnncjiYHCh+9uQ65IZQ+r/eandUnGnOzVZQAgX69Qd+PlafLH/W1W6pfrRTq8sI/yyINWhXfDlSX5WuZ3hp783dt6WptyEaQdptTz74A5MG9Szp31eLL+mJl8UYWelDH/S8jzNOiLuh9sQzv9hKqHeRXZzZjk+MVAcb1UoJjNUvLA0+N26fWhqa8mSrtXHo/4wjCt1Yo2J+fU967oV3KJNbyY84kFysB
-
 
 # Add once there is a dns server
 # resolvconf::nameserver:

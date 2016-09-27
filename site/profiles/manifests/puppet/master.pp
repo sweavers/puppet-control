@@ -27,7 +27,14 @@ class profiles::puppet::master (
 
   ){
 
-    $environment = hiera( environment , 'production')
+  # Set puppet environment from fact (set as production if fact does not exist)
+    if $::puppet_environment != undef {
+      notify { "Puppet environment ${::puppet_environment} set by fact":}
+      $environment = $::puppet_environment
+    } else {
+      notify { 'Puppet environment not set by fact defaulting to production':}
+      $environment = 'production'
+    }
 
     # Configure puppetdb firewall
     include profiles::puppet::puppetdb_firewall
@@ -198,8 +205,9 @@ class profiles::puppet::master (
 
     # Load SELinuux policy for NginX
     selinux::module { 'puppetmaster':
-      ensure => 'present',
-      source => 'puppet:///modules/profiles/puppetmaster.te'
+      ensure      => 'present',
+      syncversion => false,
+      source      => 'puppet:///modules/profiles/puppetmaster.te'
     }
 
     # Configure puppet agent runs
