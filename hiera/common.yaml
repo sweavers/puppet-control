@@ -32,7 +32,7 @@ accounts:
    comment: Automated CI deployment
    ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDky5bUs3nlN78+0d+nzt2z2ZeZ4lUsiDSV2FPl3Oc0HZ2tkwM+FF++QJp8VycEoQ+fRIB9ZMksYDghJBymNG0paNH1YwjXtRz3/bfc/qtXm1BBG1s+L+9LKnncjiYHCh+9uQ65IZQ+r/eandUnGnOzVZQAgX69Qd+PlafLH/W1W6pfrRTq8sI/yyINWhXfDlSX5WuZ3hp783dt6WptyEaQdptTz74A5MG9Szp31eLL+mJl8UYWelDH/S8jzNOiLuh9sQzv9hKqHeRXZzZjk+MVAcb1UoJjNUvLA0+N26fWhqa8mSrtXHo/4wjCt1Yo2J+fU967oV3KJNbyY84kFysB
    groups:
-     - lr-admin
+     - deployment
 
 profiles::jenkins::deploy_from_jenkins_rsa: |
  -----BEGIN RSA PRIVATE KEY-----
