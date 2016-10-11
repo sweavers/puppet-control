@@ -37,6 +37,7 @@ mod 'camptocamp/openssl',              '1.7.1'
 mod 'puppetlabs/java_ks',              '1.4.1'
 mod 'pcfens/ca_cert',                  '1.2.0'
 mod 'thias/resolvconf',                '0.0.3'
+mod 'puppet-nagiosclient',             :git => 'https://github.com/LandRegistry-Ops/puppet-nagiosclient.git'
 mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-Ops/puppet-dnsserver.git'
 mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-Ops/puppet-files.git',
                                        :ref => '3d3cbee15a91abf160275abe7d2961cf89beba77'
