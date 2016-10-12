@@ -1,7 +1,7 @@
 ---
 
 classes:
-  - profiles::digitalregister_app
+  - profiles::application
 
 applications:
   test-app:
