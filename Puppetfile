@@ -37,7 +37,6 @@ mod 'camptocamp/openssl',              '1.7.1'
 mod 'puppetlabs/java_ks',              '1.4.1'
 mod 'pcfens/ca_cert',                  '1.2.0'
 mod 'thias/resolvconf',                '0.0.3'
-mod 'willdurand/nodejs',               '1.9.5'
 mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-Ops/puppet-dnsserver.git',
                                        :ref => '5be34a1c13b4f1b754a2307a3b1b27936e563ff2'
 mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-Ops/puppet-files.git',
@@ -48,6 +47,7 @@ mod 'puppet-logreceiver',              :git => 'https://github.com/LandRegistry-
                                        :ref => '826a2ac7a243ece6876fc4cc1ea9b39df4173c48'
 mod 'puppet-logconsumer',              :git => 'https://github.com/LandRegistry-Ops/puppet-logconsumer.git',
                                        :ref => '577c1e51d90e8ce716c2a8d8aacff78a25e828a1'
+mod 'willdurand/nodejs',               '1.9.5'
 mod 'puppet-rabbit',                   :git => 'https://github.com/LandRegistry-Ops/puppet-rabbit.git',
                                        :ref => '99ee2d70725b98e8d43e2645d95598327cbcf845'
 mod 'puppet-elastic',                  :git => 'https://github.com/LandRegistry-Ops/puppet-elastic.git',
