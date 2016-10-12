@@ -8,7 +8,6 @@
 class profiles::geos_addins{
 
   include ::stdlib
-  include ::profiles::deployment
 
   #  Install required packages for Ruby and Java
   case $::osfamily{

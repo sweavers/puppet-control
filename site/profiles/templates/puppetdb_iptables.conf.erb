@@ -53,13 +53,12 @@
 #
 
 # SSH chain rules
--A SSH -m recent --name BRUTEFORCE --rttl --rcheck --hitcount 3 --seconds 15 -m comment --comment "Block SSH > 3 in 15s" -j DROP
--A SSH -m recent --name BRUTEFORCE --rttl --rcheck --hitcount 10 --seconds 900 -m comment --comment "Block SSH > 10 in 900s" -j DROP
+-A SSH -m recent --name BRUTEFORCE --rttl --rcheck --hitcount 10 --seconds 15 -m comment --comment "Block SSH > 3 in 15s" -j DROP
 -A SSH -m recent --name BRUTEFORCE --set -s <%= @ssh_allowed_range -%> -m comment --comment "Allow SSH not blacklisted" -j ACCEPT
 #
 
 # In the SSH chain we allow SSH connections to pass through unhindered on their
-# first go. If the machine then tries to connect again more than 3 times in 15
-# seconds or 5 times in 15 minutes their connection is dropped.
+# first go. If the machine then tries to connect again more than 10 times in 15
+# seconds or 100 times in 15 minutes their connection is dropped.
 #
 COMMIT

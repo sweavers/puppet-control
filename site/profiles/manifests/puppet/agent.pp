@@ -29,7 +29,7 @@ class profiles::puppet::agent (
       notify { "Puppet environment ${::puppet_environment} set by fact":}
       $environment = $::puppet_environment
     } else {
-      notify { 'Puppet environment not set by fact defauling to production':}
+      notify { 'Puppet environment not set by fact defaulting to production':}
       $environment = 'production'
     }
 

@@ -1,7 +1,39 @@
 # Global defaults for all nodes
 
+notify{"Puppet Role: ${::puppet_role}": loglevel => debug,}
+notify{"Network Location: ${::network_location}": loglevel => debug,}
+notify{"Application Environment: ${::application_environment}": loglevel => debug,}
+
 # Include classes specified in Hiera
 hiera_include('classes')
+
+# Create 'lr-admin' group on all hosts
+group { 'lr-admin' :
+  ensure => present,
+  gid    => 2000
+}
+
+# Configure passwor sudo + not tty for deployment
+sudo::conf { 'deployment' :
+  priority => 10,
+  content  => 'Defaults: %deployment !requiretty
+%lr-admin  ALL=(ALL)  NOPASSWD: ALL',
+}
+
+# Configure passwordless sudo for 'lr-admin' group
+sudo::conf { 'lr-admin' :
+  priority => 20,
+  content  => '%lr-admin  ALL=(ALL)  NOPASSWD: ALL',
+}
+
+# Create accounts from Hiera data
+create_resources( 'account', hiera_hash('accounts', {require => Group['lr-admin']}) )
+
+# Disable root login with password
+user { root :
+  ensure   => present,
+  password => '!'
+}
 
 # Default executable path
 Exec {
@@ -26,6 +58,7 @@ if versioncmp($::puppetversion,'3.6.1') >= 0 {
 
 }
 
+# Add entry for host in ansible host file
 @@file_line { "ansible_host_${::fqdn}":
   line => $::fqdn,
   tag  => 'ansible_hosts'

@@ -28,9 +28,8 @@ class profiles::rabbitmq(
   $admin_enable              = false,
   $rabbitmq_users            = hiera_hash('rabbitmq_users', false),
   $rabbitmq_user_permissions = hiera_hash('rabbitmq_user_permissions', false),
-  $rabbitmq_vhosts           = hiera_hash('rabbitmq_vhosts', false)
-
-
+  $rabbitmq_vhosts           = hiera_hash('rabbitmq_vhosts', false),
+  $rabbitmq_policy           = hiera_hash('rabbitmq_policy', false)
 
 ){
 
@@ -40,21 +39,27 @@ class profiles::rabbitmq(
     source => 'puppet:///modules/profiles/rabbit.te'
   }
 
-  # Red Hat uses weird version numbers
-  if $::osfamily == 'RedHat' {
-    $ver = "${version}-1"
-    class { 'erlang': epel_enable => true }
-  } else {
-    $ver = $version
-    package { 'erlang-base': ensure => 'latest' }
-  }
-
+  class { 'erlang': epel_enable => true }
   include ::erlang
+
+  # Install rabbit direct from rabbit (if not epel version)
+  if $version != '3.3.5' {
+    package { "rabbitmq-server-${version}-1.noarch" :
+      ensure   => 'installed',
+      provider => 'rpm',
+      source   => "https://www.rabbitmq.com/releases/rabbitmq-server/v${version}/rabbitmq-server-${version}-1.noarch.rpm",
+      require  => Class[erlang]
+    }
+    notify { "rabbit-server package version ${version} installed direct from rabbit":}
+  } else {
+    notify { "rabbit-server package version ${version} will be installed from epel":}
+  }
 
   case $cluster {
     true : {
       class { '::rabbitmq':
-        version                  => $ver,
+        version                  => "${version}-1",
+        repos_ensure             => true,
         port                     => $port,
         default_user             => $default_user,
         default_pass             => $default_pass,
@@ -67,10 +72,22 @@ class profiles::rabbitmq(
         admin_enable             => $admin_enable,
         require                  => Class[erlang]
       }
+
+      rabbitmq_policy { 'ha-all@/':
+        pattern    => '.*',
+        priority   => 0,
+        applyto    => 'all',
+        definition => {
+          'ha-mode'      => 'all',
+          'ha-sync-mode' => 'automatic',
+        }
+      }
     }
+
     default : {
       class { '::rabbitmq':
-        version           => $ver,
+        version           => "${version}-1",
+        repos_ensure      => true,
         port              => $port,
         default_user      => $default_user,
         default_pass      => $default_pass,
@@ -80,7 +97,6 @@ class profiles::rabbitmq(
       }
     }
   }
-
 
   include stdlib
 
@@ -92,5 +108,8 @@ class profiles::rabbitmq(
   }
   if $rabbitmq_vhosts {
     create_resources('rabbitmq_vhost', $rabbitmq_vhosts)
+  }
+  if $rabbitmq_policy {
+    create_resources('rabbitmq_policy', $rabbitmq_policy)
   }
 }
