@@ -63,3 +63,8 @@ profiles::jenkins::deploy_from_jenkins_rsa: |
  9/pUlnwbF15fqp/fJYgKCK2+NC5GXCPda2AZNnGSElpQ3m49ESI=
  -----END RSA PRIVATE KEY-----
 
+# Add once there is a dns server
+# resolvconf::nameserver:
+#   - 'localhost'
+# resolvconf::search:
+#   - 'example.com'

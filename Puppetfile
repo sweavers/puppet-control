@@ -1,4 +1,4 @@
-forge 'https://forge.puppetlabs.com'
+forge 'https://forgeapi.puppetlabs.com'
 
 # Third-party modules
 mod 'ajcrowe/supervisord',             '0.6.1'
@@ -13,7 +13,7 @@ mod 'jfryman/selinux',                 '0.4.0'
 mod 'puppet-gradle',                   :git => 'https://github.com/LandRegistry-Ops/puppet-gradle.git',
                                        :ref => 'ddca379e88c07d37bc1c902f5a380412ffc5ec38'
 mod 'puppet-wsgi',                     :git => 'https://github.com/LandRegistry-Ops/puppet-wsgi.git',
-                                       :ref => '790cafc1ac7770d9263a292e203e283229633769'
+                                       :ref => 'b8b2e691cff9338310d25ec1a9098a1922ac4fc9'
 mod 'leinaddm/htpasswd',               '0.0.3'
 mod 'maestrodev/wget',                 '1.7.3'
 mod 'openstackci/pip',                 :git => 'https://github.com/openstack-infra/puppet-pip.git',
