@@ -1,7 +1,0 @@
----
-
-# the node configuration for all ELK stack log-receiver servers
-# -------------------------------------------------------------
-
-classes:
-  - logreceiver
