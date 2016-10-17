@@ -11,7 +11,7 @@ mod 'ispavailability/file_concat',     '0.2.1'
 mod 'jfryman/nginx',                   '0.3.0'
 mod 'jfryman/selinux',                 '0.4.0'
 mod 'puppet-gradle',                   :git => 'https://github.com/LandRegistry-Ops/puppet-gradle.git',
-                                       :ref => 'ddca379e88c07d37bc1c902f5a380412ffc5ec38'
+                                       :ref => '8aec2ee291a34e79531a0045a7c0027aaa8138d8'
 mod 'puppet-wsgi',                     :git => 'https://github.com/LandRegistry-Ops/puppet-wsgi.git',
                                        :ref => 'b8b2e691cff9338310d25ec1a9098a1922ac4fc9'
 mod 'leinaddm/htpasswd',               '0.0.3'
