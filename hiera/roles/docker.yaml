@@ -1,0 +1,5 @@
+---
+
+classes:
+  - 'profiles::docker'
+  - 'profiles::application'
