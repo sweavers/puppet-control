@@ -25,9 +25,12 @@ yumrepo { 'DockerRepository':
 package {'python-pip' :
   ensure => present,
 }
+# added ensure = running and enable = true
 
 package { 'docker-engine' :
   ensure  => present,
+  ensure  => running,
+  enable  => true,
   require => Yumrepo['DockerRepository']
   }
 
