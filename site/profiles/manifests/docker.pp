@@ -25,6 +25,7 @@ yumrepo { 'DockerRepository':
 package {'python-pip' :
   ensure => present,
 }
+# added ensure = running and enable = true
 
 package { 'docker-engine' :
   ensure  => present,
@@ -42,5 +43,11 @@ package {'docker-compose' :
   provider => pip,
   require  => Package['backports.ssl-match-hostname']
 }
+
+service { 'docker' :
+  ensure  => running,
+  enable  => true,
+  require => Package['docker-engine']
+  }
 
 }
