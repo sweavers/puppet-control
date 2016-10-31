@@ -46,4 +46,11 @@ package {'docker-compose' :
   require  => Package['backports.ssl-match-hostname']
 }
 
+package { 'docker' :
+  ensure  => present,
+  ensure  => running,
+  enable  => true,
+  require => Yumrepo['docker-engine']
+  }
+
 }
