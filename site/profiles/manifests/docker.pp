@@ -29,8 +29,6 @@ package {'python-pip' :
 
 package { 'docker-engine' :
   ensure  => present,
-  ensure  => running,
-  enable  => true,
   require => Yumrepo['DockerRepository']
   }
 
@@ -46,11 +44,10 @@ package {'docker-compose' :
   require  => Package['backports.ssl-match-hostname']
 }
 
-package { 'docker' :
-  ensure  => present,
+service { 'docker' :
   ensure  => running,
   enable  => true,
-  require => Yumrepo['docker-engine']
+  require => Package['docker-engine']
   }
 
 }
