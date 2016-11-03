@@ -54,6 +54,8 @@ mod 'puppet-elastic',                  :git => 'https://github.com/LandRegistry-
                                        :ref => '9dca154599132f220ed560d9b8efd38abae87b66'
 mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-Ops/puppet-kibana.git',
                                        :ref => '84d1aecbeb01eef6de616f252f372257492a974d'
+mod 'puppet-firewallservice',          :git => 'https://github.com/LandRegistry-Ops/puppet-firewallservice.git',
+                                       :ref => '0.1.0'
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.8'
 mod 'croddy/make',                     '0.0.5'
