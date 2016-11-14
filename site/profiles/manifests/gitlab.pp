@@ -15,7 +15,7 @@
 #
 class profiles::gitlab (
 
-  $package_version  = '8.11.2-ce.1.el7',
+  $package_version  = installed,
   $external_url     = 'http://localhost',
   $enable_backup    = false,
   $backup_location  = 'undef',

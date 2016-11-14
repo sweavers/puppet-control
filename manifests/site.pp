@@ -13,6 +13,13 @@ group { 'lr-admin' :
   gid    => 2000
 }
 
+# Configure passwor sudo + not tty for deployment
+sudo::conf { 'deployment' :
+  priority => 10,
+  content  => 'Defaults: %deployment !requiretty
+%lr-admin  ALL=(ALL)  NOPASSWD: ALL',
+}
+
 # Configure passwordless sudo for 'lr-admin' group
 sudo::conf { 'lr-admin' :
   priority => 20,
