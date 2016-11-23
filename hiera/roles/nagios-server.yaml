@@ -1,0 +1,4 @@
+---
+  classes:
+    - profiles::nagios_server
+    - profiles::nagios_client
