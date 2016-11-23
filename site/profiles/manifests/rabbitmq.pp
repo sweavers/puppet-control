@@ -73,15 +73,6 @@ class profiles::rabbitmq(
         require                  => Class[erlang]
       }
 
-      rabbitmq_policy { 'ha-all@/':
-        pattern    => '.*',
-        priority   => 0,
-        applyto    => 'all',
-        definition => {
-          'ha-mode'      => 'all',
-          'ha-sync-mode' => 'automatic',
-        }
-      }
     }
 
     default : {
