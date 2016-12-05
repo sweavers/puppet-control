@@ -22,7 +22,7 @@ class profiles::jenkins (
   $plugins                 = undef,
   $jobs                    = undef,
   $deploy_from_jenkins_rsa = undef,
-  $version                 = '1.644-1.1',
+  $version                 = '1.651-1.1',
   $phantomjs_version       = '1.9.8',
   $jenkins_url             = [ $::hostname ],
   $jenkins_ssl             = false,
