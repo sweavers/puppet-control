@@ -1,5 +1,5 @@
 
-module nginx_name_connect 1.0;
+module local_nginx_name_connect 1.0;
 
 require {
         type httpd_t;

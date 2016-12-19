@@ -1,4 +1,4 @@
-module puppetmaster.te 2.0;
+module local_puppetmaster 2.0;
 
 require {
         type httpd_t;

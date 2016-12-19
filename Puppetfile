@@ -8,7 +8,9 @@ mod 'elasticsearch/elasticsearch',     '0.11.0'
 mod 'lesaux/kibana4',                  '1.0.15'
 mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
-mod 'jfryman/nginx',                   '0.3.0'
+#mod 'jfryman/nginx',                   '0.3.0'
+mod 'puppet-nginx',                    :git => 'https://github.com/LandRegistry-Ops/puppet-nginx.git',
+                                       :ref => 'b821432d26e065c9d6d0fa6d8e8deebfcbc46f1e'
 mod 'jfryman/selinux',                 '0.4.0'
 mod 'puppet-gradle',                   :git => 'https://github.com/LandRegistry-Ops/puppet-gradle.git',
                                        :ref => '8aec2ee291a34e79531a0045a7c0027aaa8138d8'
@@ -57,9 +59,9 @@ mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-
 mod 'puppet-firewallservice',          :git => 'https://github.com/LandRegistry-Ops/puppet-firewallservice.git',
                                        :ref => '0.1.1'
 mod 'puppet-nagios',                   :git => 'https://github.com/LandRegistry-Ops/puppet-nagios.git',
-                                       :ref => 'a8f2bf0a827496fd068327ec60fd44b2edff8396'
+                                       :ref => '0.9.9'
 mod 'puppet-nagiosclient',             :git => 'https://github.com/LandRegistry-Ops/puppet-nagiosclient.git',
-                                       :ref => '1b360a82224b936b1960931b09b587a68aa5fce3'
+                                       :ref => '0.9.9'
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.8'
 mod 'croddy/make',                     '0.0.5'
