@@ -1,0 +1,2 @@
+---
+  nagiosclient::c_nagios_server_ip: 192.168.42.51
