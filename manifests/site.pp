@@ -63,3 +63,8 @@ if versioncmp($::puppetversion,'3.6.1') >= 0 {
   line => $::fqdn,
   tag  => 'ansible_hosts'
 }
+
+# Set SELinux module files to have no fiel name prefix
+Selinux::Module {
+  prefix => ''
+}
