@@ -1,4 +1,4 @@
-module nginx-jenkins 1.0;
+module nginx_jenkins 1.0;
 
 require {
   type httpd_t;
