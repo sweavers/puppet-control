@@ -3,7 +3,7 @@
 # This class will manage Postgres Barman installations
 #
 
-class profiles::postgresqlha_barman(
+class profiles::postgres_ha_barman(
   $version      = '9.4',
   $ssh_keys     = hiera_hash('postgresqlha_keys',false)
   ){
@@ -16,24 +16,26 @@ class profiles::postgresqlha_barman(
     content => $custom_hosts,
     owner   => 'root',
     mode    => '0644',
+    before  => Package['barman'],
   }
 
   $pkglist = [
     'rsync',
+    "postgresql${shortversion}",
     'barman'
   ]
   ensure_packages($pkglist)
 
-  exec { 'get_pbarman' :
-    command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-7-x86_64/pgdg-centos${shortversion}-${version}-2.noarch.rpm -y",
+  exec { 'get_postgres' :
+    command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-7-x86_64/pgdg-centos${shortversion}-${version}-3.noarch.rpm -y",
     user    => 'root',
-    before  => Package['barman']
+    before  => Package["postgresql${shortversion}"]
   } ->
 
   service {'sshd' :
     ensure => running,
     enable => true,
-  }
+  } ->
 
   file { '/etc/barman.conf' :
     ensure  => file,
@@ -111,6 +113,32 @@ class profiles::postgresqlha_barman(
     minute  => '0',
     weekday => '5',
   } ->
+
+  file { '/var/lib/barman/.bash_profile' :
+    ensure  => present,
+    content => "export PATH+=:/usr/pgsql-${version}/bin",
+    owner   => 'barman',
+    group   => 'barman',
+    mode    => '0700',
+  } ->
+
+  file { '/var/lib/barman/.bashrc' :
+    ensure  => present,
+    content => "export PATH+=:/usr/pgsql-${version}/bin",
+    owner   => 'barman',
+    group   => 'barman',
+    mode    => '0700',
+  } ->
+
+  # exec { 'initialise_barman' :
+  #   command => 'barman receive-wal --create-slot primary && barman cron && barman switch-xlog && barman cron',
+  #   user    => 'barman',
+  #   require => [
+  #     Package["postgresql${shortversion}"],
+  #     Package['barman']
+  #   ],
+  #   unless  => 'test -s /var/lib/barman/primary/wals/xlog.db',
+  # } ->
 
   cron { 'barman_cron' :
     ensure  => present,

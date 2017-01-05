@@ -17,7 +17,15 @@ master_response_timeout=60
 reconnect_attempts=6
 reconnect_interval=10
 failover=automatic
+service_start_command='sudo systemctl start postgresql-<%= @version %>'
+service_stop_command='sudo systemctl stop postgresql-<%= @version %>'
+service_restart_command='sudo systemctl restart postgresql-<%= @version %>'
+service_reload_command='sudo systemctl reload postgresql-<%= @version %>'
 promote_command='/etc/repmgr/<%= @version %>/auto_failover.sh'
+<% if @shortversion.to_i >= 95 -%>
+follow_command='/usr/pgsql-<%= @version %>/bin/repmgr standby follow -f /etc/repmgr/<%= @version %>/repmgr.conf -W; /usr/pgsql-<%= @version %>/bin/repmgr standby register -F'
+<% else -%>
 follow_command='/usr/pgsql-<%= @version %>/bin/repmgr standby follow -f /etc/repmgr/<%= @version %>/repmgr.conf -W'
+<% end -%>
 priority=<%= @nodecount - @node_number %>
 use_replication_slots=1

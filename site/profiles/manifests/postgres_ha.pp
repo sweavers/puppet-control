@@ -162,6 +162,7 @@ class profiles::postgres_ha(
     synchronous_commit       => 'on',
     wal_keep_segments        => '5000',
     wal_level                => 'hot_standby',
+    wal_log_hints            => 'on',
   }
 
   if $postgres_conf { $hash = merge($default_postgres_conf, $postgres_conf)
@@ -217,13 +218,6 @@ class profiles::postgres_ha(
   file { '/etc/puppetlabs/facter/facts.d/postgres_server_is_master.bash' :
     ensure => file,
     source => 'puppet:///modules/profiles/postgres_server_is_master.bash',
-    owner  => 'root',
-    mode   => '0755'
-  } ->
-
-  file { '/etc/puppetlabs/facter/facts.d/postgres_ha_setup_done.sh' :
-    ensure => file,
-    source => 'puppet:///modules/profiles/postgres_ha_setup_done.sh',
     owner  => 'root',
     mode   => '0755'
   } ->
@@ -306,6 +300,8 @@ class profiles::postgres_ha(
       exec { 'restart_postgres' :
         command => "/bin/systemctl restart postgresql-${version}",
         user    => 'root',
+        require => File ["${postgresql::globals::confdir}/${pg_aux_conf}"],
+        before  => Exec['register_repmgrd'],
       }
 
     } else {
@@ -319,7 +315,7 @@ class profiles::postgres_ha(
       } ->
 
       exec { 'empty_postgres_data_dir' :
-        command => "rm -rf ${::datadir}/*",
+        command => "rm -rf ${postgresql::globals::datadir}/*",
         user    => 'postgres',
       } ->
 
@@ -327,41 +323,34 @@ class profiles::postgres_ha(
         command => "/usr/pgsql-${version}/bin/repmgr -r -F -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr ${::wal_keep_segments} --verbose standby clone ${vip_hostname}",
         user    => 'postgres',
         cwd     => "/etc/repmgr/${version}/",
+        require => File["/etc/repmgr/${version}/repmgr.conf"]
       } ->
 
       exec { 'start_postgres' :
         command => "/bin/systemctl start postgresql-${version}",
         user    => 'root',
-        before  => Exec['register_repmgrd'],
+        before  => Exec['register_repmgrd']
       }
 
     }
 
   }
 
-  # if $::postgres_server_is_master == 't' {
-  #   $repmgr_role = 'master'
-  # } else {
-  #   $repmgr_role = 'standby'
-  # }
-
   $pg_hba_rules = parseyaml(template('profiles/postgres_hba_conf.erb'))
   create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules)
-  #  {before => Postgresql::Server::Role['repmgr']})
 
-  file { "/usr/pgsql-${version}/bin/pg_ctl.orig" :
-    source  => "puppet:///modules/profiles/pg_ctl.orig.${version}",
+  file { '/root/postgres_recover_former_master.bash' :
+    content => template('profiles/postgres_recover_former_master.erb'),
     owner   => 'root',
     group   => 'root',
-    mode    => '0655',
-    require => Class['postgresql::server']
+    mode    => '0744'
   } ->
 
-  file { "/usr/pgsql-${version}/bin/pg_ctl" :
-    content => template('profiles/pg_ctl.erb'),
+  file { '/root/postgres_standby_switchover.bash' :
+    content => template('profiles/postgres_standby_switchover.erb'),
     owner   => 'root',
     group   => 'root',
-    mode    => '0655'
+    mode    => '0744'
   } ->
 
   file { '/etc/sudoers.d/11_postgres' :
@@ -371,22 +360,17 @@ class profiles::postgres_ha(
     mode    => '0440'
   } ->
 
-  exec { 'service_pg_ctl_commands' :
-    command => "/bin/sed -i 's/pg_ctl /pg_ctl.orig /g' /usr/lib/systemd/system/postgresql-${version}.service",
-    user    => 'root',
-    require => Class['postgresql::server']
-  }
-
   file { "/etc/repmgr/${version}/repmgr.conf" :
     ensure  => file,
     content => template('profiles/postgres_repmgr_config.erb'),
     require => Package["repmgr${shortversion}"],
-    before  => Exec['register_repmgrd'],
-  }
+    before  => Exec['register_repmgrd']
+  } ->
 
   file { '/etc/keepalived/keepalived.conf' :
     ensure  => file,
     content => template('profiles/postgres_keepalived_config.erb'),
+    notify  => Service['keepalived'],
   } ->
 
   file { '/etc/keepalived/health_check.sh' :
@@ -397,8 +381,12 @@ class profiles::postgres_ha(
   }
 
   service {'keepalived' :
-    ensure => running,
-    enable => true,
+    ensure  => running,
+    enable  => true,
+    require => [
+      File['/etc/keepalived/keepalived.conf'],
+      File['/etc/keepalived/health_check.sh']
+    ],
   }
 
   file { '/usr/lib/systemd/system/repmgr.service' :
@@ -426,7 +414,6 @@ class profiles::postgres_ha(
   exec { 'register_repmgrd' :
     command => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf ${repmgr_role} register --force",
     user    => 'postgres',
-    require => File['/var/lib/pgsql/.pgpass'],
     unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show 2> /dev/null | grep -q ${::hostname}",
   } ->
 
