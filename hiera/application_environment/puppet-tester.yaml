@@ -1,10 +1,7 @@
 ---
 
-classes:
-  - profiles::postgres_ha
-
-profiles::nagios_client::nagios_server: 192.16.42.47
-profiles::postgres_ha::version: '9.5'
+repmgr_password: repmgr
+barman_password: barman
 
 postgresqlha_keys:
   public: |
@@ -39,44 +36,40 @@ postgresqlha_keys:
     -----END RSA PRIVATE KEY-----
 
 pg_cluster_member_hostnames:
-  puppet puppetmaster puppet-master-91.control.net:
+  puppet_main puppetmaster puppet-master-91.control.net:
     ip_address:          192.168.42.5
     initial_role:        puppetmaster
   vip:
     ip_address:          192.168.42.50
     initial_role:        vip
-  server1:
+  postgresqlha-master.ec2.internal:
     ip_address:          192.168.42.51
     initial_role:        master
     keepalived_priority: 100
     repmgr_node_number:  1
-  server2:
+  postgresqlha-standby.ec2.internal:
     ip_address:          192.168.42.52
     initial_role:        standby
     keepalived_priority: 99
     repmgr_node_number:  2
-  server3:
-    ip_address:          192.168.42.53
+  postgresql-standalone.ec2.internal:
+    ip_address:          192.168.42.52
     initial_role:        standby
-    keepalived_priority: 98
-    repmgr_node_number:  3
-  server4:
+    keepalived_priority: 99
+    repmgr_node_number:  2
+  barman.ec2.internal:
     ip_address:          192.168.42.54
     initial_role:        backup
 
 postgres_databases:
   register_data:
-    user:     register_data
+    user: register_data
     password: md5085815e3463853f3a1e9731b61ddb3a7
-    owner:    register_data
+    owner: register_data
   deeds:
-    user:     deeds
+    user: deeds
     password: md588b4ef42ed4df46d35bd60018ab6b63a
-    owner:    deeds
-  lez:
-    user:     lez
-    password: md588b4ef42ed4df46d35bd60018ab6b63a
-    owner:    lez
+    owner: deeds
 
 postgres_users:
   deployment:
