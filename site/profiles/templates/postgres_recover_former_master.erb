@@ -1,8 +1,15 @@
 #!/bin/bash
 
+################################################################################
+# This script invokes the pg_rewind command to recover a failed master node and
+# reinstate it as a standby following the newly promoted master and is used after
+# a failure of the master node and the subsequent failover.
+################################################################################
+
 # Check if the new master is available via the vip_ip
 # if not bail out recommending remedial action on the master
 
+BARMAN_HOSTNAME=<%= @barman_hostname %>
 VIP_HOSTNAME=<%= @vip_hostname -%>
 VERSION=<%= @version -%>
 
@@ -37,13 +44,22 @@ EOF
 chown postgres:postgres /var/lib/pgsql/${VERSION}/data/recovery.conf
 chmod 600 /var/lib/pgsql/${VERSION}/data/recovery.conf
 
-# Create a replcation slot on the new master if necessary
+# Create a replcation slot for this node on the new master if necessary
 x=$(su - postgres -c 'psql -U barman -h vip -d postgres -t -c "select slot_name from pg_replication_slots where slot_name = '\''''repmgr_slot_'${NODE_NUMBER}''\''''"')y
 if [ ${x} == 'y' ] ; then
   su - postgres -c 'psql -U barman -h vip -d postgres -c "select pg_create_physical_replication_slot('\'repmgr_slot_${NODE_NUMBER}\'')"' > /dev/null 2>&1
   echo Replication slot \'repmgr_slot_${NODE_NUMBER}\' has been created.
 else
   echo Replication slot \'repmgr_slot_${NODE_NUMBER}\' already exists, moving on.
+fi
+
+# Create a replcation slot for the barman server on the new master if necessary
+x=$(su - postgres -c 'psql -U barman -h vip -d postgres -t -c "select slot_name from pg_replication_slots where slot_name = '\''''barman'\''''"')y
+
+if [ ${x} == 'y' ] ; then
+  su - postgres -c "ssh barman@${BARMAN_HOSTNAME} '/usr/bin/barman receive-wal --create-slot primary; sleep 5; /usr/bin/barman cron; /usr/bin/barman check primary'"
+else
+  su - postgres -c "ssh barman@${BARMAN_HOSTNAME} '/usr/bin/barman cron; /usr/bin/barman check primary'"
 fi
 
 # Start postgres

@@ -1,7 +1,14 @@
 #!/bin/bash
 
+################################################################################
+# This script invokes the repmgr standby switchover command to swap a standby
+# node with the primarily node and is used for scheduled maintenance purposes.
+# It orchestrates activities across all the nodes to esure the integrity of the
+# cluster after the switchover.
+################################################################################
+
 PG_VERSION=<%= @version %>
-BARMAN_HOST=<%= @barman_hostname %>
+BARMAN_HOSTNAME=<%= @barman_hostname %>
 
 if ! systemctl status postgresql-${PG_VERSION} > /dev/null 2> /dev/null ; then
   echo -e "\nThe Postgres service isn't curretly running on the node and so it can't be promoted to a master,"
@@ -78,9 +85,9 @@ read
 x=$(su - postgres -c 'psql -U barman -h vip -d postgres -t -c "select slot_name from pg_replication_slots where slot_name = '\''''barman'\''''"')y
 
 if [ ${x} == 'y' ] ; then
-  su - postgres -c "ssh barman@${BARMAN_HOST} '/usr/bin/barman receive-wal --create-slot primary; sleep 5; /usr/bin/barman cron; /usr/bin/barman check primary'"
+  su - postgres -c "ssh barman@${BARMAN_HOSTNAME} '/usr/bin/barman receive-wal --create-slot primary; sleep 5; /usr/bin/barman cron; /usr/bin/barman check primary'"
 else
-  su - postgres -c "ssh barman@${BARMAN_HOST} '/usr/bin/barman cron; /usr/bin/barman check primary'"
+  su - postgres -c "ssh barman@${BARMAN_HOSTNAME} '/usr/bin/barman cron; /usr/bin/barman check primary'"
 fi
 
 set +f
