@@ -1,0 +1,89 @@
+---
+
+classes:
+  - profiles::postgres_ha_barman
+
+profiles::nagios_client::nagios_server: 192.16.42.47
+profiles::postgres_ha::version: '9.6'
+profiles::postgres_ha_barman::version: '9.6'
+
+repmgr_password: repmgr
+barman_password: barman
+
+postgresqlha_keys:
+  public: |
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMzfsdYHHcHDq3Br1zh7F1GtjlTHX5eLRgbx4L/KPdRoR8zFsUe+EfVBLqUJnirFs9f7oAQ7gsmssYZ67Zi32/Guzs1jXFtrIbqnftJZNl1cVt8KxQtPC0V1VwvCOOROIy+TYBHNsi4MMIP7tVyneD4tDMZxjQnaQ1TKi2KAaDq5DHfvbP/1IA9Ef83IDu3m04tTVV+AI4YuFWUT4PsXOlscZXBa7rljZcJnXn/jH3TRAAMgs5zgWMM6W4OIm/NRWO9SvR13eqYkmO+hPx9DBCoCL+M9e2XjjTvm5K6gokeaowZo1ZVcmxTXxysf7wlb30jEKx2fQj4gKx13o/1eHj
+  private: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpAIBAAKCAQEAzM37HWBx3Bw6twa9c4exdRrY5Ux1+Xi0YG8eC/yj3UaEfMxb
+    FHvhH1QS6lCZ4qxbPX+6AEO4LJrLGGeu2Yt9vxrs7NY1xbayG6p37SWTZdXFbfCs
+    ULTwtFdVcLwjjkTiMvk2ARzbIuDDCD+7Vcp3g+LQzGcY0J2kNUyotigGg6uQx372
+    z/9SAPRH/NyA7t5tOLU1VfgCOGLhVlE+D7FzpbHGVwWu65Y2XCZ15/4x900QADIL
+    Oc4FjDOluDiJvzUVjvUr0dd3qmJJjvoT8fQwQqAi/jPXtl44075uSuoKJHmqMGaN
+    WVXJsU18crH+8JW99IxCsdn0I+ICsdd6P9Xh4wIDAQABAoIBAHO1A+Rq8qjqgfmZ
+    ozs8NHP2wQd7FUPmf/HjlVQsXd/L0Vo4klSWUG/ErhMXinlX6wxptwojOFBq+8dD
+    /LMHbfmkGqsLssGLIEElJDAlBIuKJMqiKJhIQZ2BodHZWTUtkaY+ydYDGYMw/L8S
+    UqJ7it5GLLTuokRqa7V5I/AV2OhV6JWKOP86ubJk5qbYUWhlWeoDGU68L2aMXic+
+    58VPs/L6gObppLsb/M8W1B86CXM8PyPLFMsyQcW9DUfcrL4v/JyS5gXuDHNTYMWk
+    /2HXCYv6DIZpJkFL6FNG/IKLwU3OSxMRk1eGWK6tGmCSW0QdnbAS/jUs0Hu3BHVu
+    4TqNM/ECgYEA8VVX1VLhjb6aKkDXrzU1fvZ5XQn8nmgHdnRjpXIh3WUNlLC5Gyu5
+    WX3Q9lOemUYxghjrSsjYboWQP74+vYGvh1Zcis7Hehb1nMYkDWvtZFsE52g47yv9
+    ABnXM3mlSI2xBt8urEzHziQ+MsfDmS4rhbw0z2dIVusYkffZl9r8oncCgYEA2UBT
+    FjHoNDQzo5syr3RHaaM7JPYHp42DeQR9uDmdaAU4BHMTdKUSnP0sVmYoo4nBQQvk
+    RxHlxxeuwg02A91pRYJKJnYgMcgHImZBx+r4C8+vwA5bLNWlJd7JoA5ts8qkWM1L
+    I4p2OXddaMwLZWyegU3IyJ+azGLJTQTqxPGoSvUCgYA0PB2jvam2TV/+70P/10t5
+    7I0+NxAnlSqwV+bNg5OS4PF8kneuStt2ZEYbWuQEFu5WU2ByMmCuI1iig2H/EJfW
+    ejnTjYgdg+SrhzN8eDTMuOqpz6QrGGFNaUpsCNNejdSYQSxP/NpuYufXg+dxO04O
+    RztC/P7qWT5bMcM2HB78ZwKBgQDUim2+5Qx7JibvBMLNjEDhRGR0gI50ian6Fz63
+    oQYx4gkvsTVzhJt1IurhjAhuFjMO5Ads0EGwSacbCbmyhkabTiAlCKPuj/cK3Ge2
+    olYRmBolFuZ0Mn/jUNaI1BTXNIUcq5u7JZcMGY81G4p6q41WizbHr/3Nv0eZJhpY
+    muM+kQKBgQDIDj6cFDoCkYyem8A+SeLboy9k/JkecTEa+xN/eGHucC6Nmb7ua/3M
+    Y39lBPL+Q3RCb0iSrGsrLJGqvXtI8BHGBAqhnzxSeKSSdykjIJZFnl44IKpKM5sI
+    sQRz3Dp06A5Sr56Oo4g0hj478F7NK+vzPhCpgyvOugCbjfjEdoBj5g==
+    -----END RSA PRIVATE KEY-----
+pg_cluster_member_hostnames:
+  puppet puppetmaster puppet-master-91.control.net:
+    ip_address:          192.168.42.5
+    initial_role:        puppetmaster
+  vip:
+    ip_address:          192.168.42.50
+    initial_role:        vip
+  server1:
+    ip_address:          192.168.42.51
+    initial_role:        master
+    keepalived_priority: 100
+    repmgr_node_number:  1
+  server2:
+    ip_address:          192.168.42.52
+    initial_role:        standby
+    keepalived_priority: 99
+    repmgr_node_number:  2
+  server3:
+    ip_address:          192.168.42.53
+    initial_role:        standby
+    keepalived_priority: 98
+    repmgr_node_number:  3
+  server4:
+    ip_address:          192.168.42.54
+    initial_role:        backup
+
+postgres_databases:
+  register_data:
+    user: register_data
+    password: md5085815e3463853f3a1e9731b61ddb3a7
+    owner: register_data
+  deeds:
+    user: deeds
+    password: md588b4ef42ed4df46d35bd60018ab6b63a
+    owner: deeds
+
+postgres_users:
+  deployment:
+    password_hash: md5dddbab2fa26c65fadeaa8b1076329a14
+
+repmgr_password: repmgr
+barman_password: barman
+barman_retention_policy: RECOVERY WINDOW OF 2 WEEKS
+
+postgres_conf:
+  wal_keep_segments: 500
