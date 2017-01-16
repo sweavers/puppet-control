@@ -1,5 +1,5 @@
 
-module local_nginx 1.0;
+module nginx 1.0;
 
 require {
 	type httpd_t;
