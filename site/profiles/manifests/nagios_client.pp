@@ -48,7 +48,7 @@ class profiles::nagios_client(
   }
 
   # Export nagios host configuration
-  @@nagios_host { $::fqdn :
+  @@nagios_host { $::hostname :
     ensure                => present,
     alias                 => $::hostname,
     address               => inline_template("<%= scope.lookupvar('::ipaddress_${interface}') -%>"),
