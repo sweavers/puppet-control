@@ -1,3 +1,40 @@
+# Class profiles::nagios_client
+#
+# This class will export server specific nagios resources for collection by a
+# nagios server. Additional service resources can be looked up from heira.
+#
+# Parameters:
+# ['interface'] - The interface on which nagios server connections will be accepted
+# ['nagios_services'] - A hash of additional nagios services resources
+#
+# Requires:
+# - landregistry/nagiosclient
+#
+# Sample Usage:
+#
+#   include profiles::nagios_client
+#
+# Hiera Lookups:
+#
+#  Example of  a node specific nagios service resources in heira:
+#
+#    profiles::nagios_client::nagios_services:
+#      check_sshd_server3:
+#        ensure: present
+#        check_command: 'check_nrpe!check_sshd'
+#        mode: '0644'
+#        owner: root
+#        use: generic-service
+#        host_name: server3
+#        notification_period: 24x7
+#        service_description: sshd server3
+#
+#   Each node specific nagios service requires a coresponding nrpe command these
+#   are also configured in heira.
+#
+#     nrpe_commands:
+#       - 'command[check_sshd]=/usr/lib64/nagios/plugins/check_procs -c 1: -w 3: -C sshd'
+
 class profiles::nagios_client(
 
   $interface       = eth1,
@@ -120,5 +157,4 @@ class profiles::nagios_client(
   if $nagios_services {
     create_resources('@@nagios_service', $nagios_services)
   }
-
 }

@@ -59,9 +59,9 @@ mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-
 mod 'puppet-firewallservice',          :git => 'https://github.com/LandRegistry-Ops/puppet-firewallservice.git',
                                        :ref => '0.1.1'
 mod 'puppet-nagios',                   :git => 'https://github.com/LandRegistry-Ops/puppet-nagios.git',
-                                       :ref => '0.9.9'
+                                       :ref => 'be621dab7bc8c7ec290dce0c2cef56d80691170e'
 mod 'puppet-nagiosclient',             :git => 'https://github.com/LandRegistry-Ops/puppet-nagiosclient.git',
-                                       :ref => '0.9.9'
+                                       :ref => '1ebf1f4560adfd3541939edbc2014ff6c337b427'
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.8'
 mod 'croddy/make',                     '0.0.5'
