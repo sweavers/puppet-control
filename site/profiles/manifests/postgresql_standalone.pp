@@ -4,7 +4,7 @@
 #
 # Parameters:
 #  ['port']     - Port which PostgreSQL should listen on. Defaults = 5432
-#  ['version']  - Version of PostgreSQL to install. Default = 9.3
+#  ['version']  - Version of PostgreSQL to install. Default = 9.4
 #  ['remote']   - Should PostgreSQL listen for remote connections. Defaults true
 #  ['dbroot']   - Location installation should be placed. Defaults = /postgres
 #

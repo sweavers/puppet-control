@@ -4,7 +4,7 @@
 #
 # Parameters:
 #  ['port']     - Port which PostgreSQL should listen on. Defaults = 5432
-#  ['version']  - Version of PostgreSQL to install. Default = 9.3
+#  ['version']  - Version of PostgreSQL to install. Default = 9.4
 #  ['remote']   - Should PostgreSQL listen for remote connections. Defaults true
 #  ['dbroot']   - Location installation should be placed. Defaults = /postgres
 #
@@ -41,20 +41,24 @@
 #
 
 class profiles::postgres_ha(
-    $port          = 5432,
-    $version       = '9.4',
-    $remote        = true,
-    $dbroot        = '/var/lib/pgsql',
-    $databases     = hiera_hash('postgres_databases',false),
-    $users         = hiera_hash('postgres_users', false),
-    $dbs           = hiera_hash('postgres_dbs', false),
-    $ssh_keys      = hiera_hash('postgresqlha_keys',false),
-    $postgres_conf = hiera_hash('postgres_conf',undef)
+    $port           = 5432,
+    $version        = '9.4',
+    $remote         = true,
+    $dbroot         = '/var/lib/pgsql',
+    $databases      = hiera_hash('postgres_databases',false),
+    $users          = hiera_hash('postgres_users', false),
+    $dbs            = hiera_hash('postgres_dbs', false),
+    $ssh_keys       = hiera_hash('postgresqlha_keys',false),
+    $postgres_conf  = hiera_hash('postgres_conf',undef),
+    $extensions     = hiera_hash('postgres_extensions',undef),
+    $pg_hba_rule    = hiera_hash('postgres_hba_rule',undef),
+    $pg_db_grant    = hiera_hash('postgres_db_grant',undef),
+    $pg_table_grant = hiera_hash('postgres_table_grant',undef),
+    $pg_grant       = hiera_hash('postgres_grant',undef)
   ){
 
   $shortversion = regsubst($version, '\.', '')
   $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
-
   $postgis_version = "postgis2_${shortversion}"
 
 
@@ -267,6 +271,21 @@ class profiles::postgres_ha(
     }
     if $databases {
       create_resources('postgresql::server::db', $databases)
+    }
+    if $extensions {
+      create_resources('postgresql::server::extension', $extensions)
+    }
+    if $pg_hba_rule {
+      create_resources('postgresql::server::pg_hba_rule', $pg_hba_rule)
+    }
+    if $pg_db_grant {
+      create_resources('postgresql::server::database_grant', $pg_db_grant)
+    }
+    if $pg_table_grant {
+      create_resources('postgresql::server::table_grant', $pg_table_grant)
+    }
+    if $pg_grant {
+      create_resources('postgresql::server::grant', $pg_grant)
     }
   }
 
