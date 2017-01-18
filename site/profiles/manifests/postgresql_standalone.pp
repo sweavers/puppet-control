@@ -53,14 +53,8 @@ class profiles::postgresql_standalone(
     $postgres_conf = hiera_hash('postgres_conf',undef)
   ){
 
-  case $version {
-    '9.3': { $postgis_version = 'postgis2_93' }
-    '9.4': { $postgis_version = 'postgis2_94' }
-    '9.5': { $postgis_version = 'postgis2_95' }
-    default: { $postgis_version = 'postgis2_94' }
-  }
-
   $shortversion = regsubst($version, '\.', '')
+  $postgis_version = "postgis2_${shortversion}"
   $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
 
   file { '/etc/hosts' :
@@ -169,7 +163,7 @@ class profiles::postgresql_standalone(
     $hash = $default_postgres_conf
   }
 
-  file { "${postgresql::globals::confdir}${pg_aux_conf}" :
+  file { "${postgresql::globals::confdir}/${pg_aux_conf}" :
     content => template('profiles/postgres_aux_conf.erb'),
     owner   => 'postgres',
     group   => 'postgres',

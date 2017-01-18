@@ -25,7 +25,7 @@ class profiles::postgresqlha_barman(
   ensure_packages($pkglist)
 
   exec { 'get_pbarman' :
-    command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-7-x86_64/pgdg-centos${shortversion}-${version}-2.noarch.rpm -y",
+    command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-7-x86_64/pgdg-centos${shortversion}-${version}-3.noarch.rpm -y",
     user    => 'root',
     before  => Package['barman']
   } ->
