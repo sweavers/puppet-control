@@ -52,13 +52,6 @@ class profiles::postgresqlha_master(
     $postgres_conf = hiera_hash('postgres_conf',undef)
   ){
 
-  case $version {
-    '9.3': { $postgis_version = 'postgis2_93' }
-    '9.4': { $postgis_version = 'postgis2_94' }
-    '9.5': { $postgis_version = 'postgis2_95' }
-    default: { $postgis_version = 'postgis2_94' }
-  }
-
   $shortversion = regsubst($version, '\.', '')
   $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
 
@@ -85,7 +78,7 @@ class profiles::postgresqlha_master(
     shell      => '/bin/bash',
   }
 
-  selinux::module { 'keepalivedlr' :
+  selinux::module { 'keepalivedlr':
     ensure => 'present',
     source => 'puppet:///modules/profiles/keepalivedlr.te'
   }
@@ -100,7 +93,7 @@ class profiles::postgresqlha_master(
 
   file { "${dbroot}/.pgsql_profile" :
     ensure  => 'file',
-    content => template('profiles/postgres_pgsql_config.erb'),
+    content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
     owner   => 'postgres',
     group   => 'postgres',
     mode    => '0750',
@@ -110,11 +103,6 @@ class profiles::postgresqlha_master(
   if $::postgres_ha_setup_done != 0 {
 
     include ::stdlib
-
-    package { $postgis_version :
-      ensure  => installed,
-      require => Class['postgresql::server'],
-    }
 
     $master_hostname = template('profiles/postgres_master_hostname.erb')
     $vip_hostname    = template('profiles/postgres_vip_hostname.erb')
@@ -178,32 +166,14 @@ class profiles::postgresqlha_master(
     file { "${postgresql::globals::confdir}/${pg_aux_conf}" :
       content => template('profiles/postgres_aux_conf.erb'),
       require => Class['postgresql::server'],
-      owner   => 'postgres',
-      group   => 'postgres',
-      mode    => '0600'
-    }
-
-    file_line { 'enable_pgsql_profile' :
-      ensure  => present,
-      line    => "[ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
-      match   => "^#*[ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
-      path    => "${dbroot}/.bash_profile",
-      require => Class['postgresql::server']
     }
 
     file { "/etc/repmgr/${version}/auto_failover.sh" :
       ensure  => file,
       owner   => 'postgres',
-      content => template('profiles/postgres_auto_failover.erb'),
+      source  => 'puppet:///modules/profiles/postgres_auto_failover.sh',
       require => Package["repmgr${shortversion}"],
       mode    => '0544'
-    }
-
-    file { "${dbroot}/repmgr.conf" :
-      ensure  => link,
-      owner   => 'postgres',
-      target  => "/etc/repmgr/${version}/repmgr.conf",
-      require => Package["repmgr${shortversion}"]
     }
 
     file { 'PSQL History' :
@@ -293,10 +263,10 @@ class profiles::postgresqlha_master(
     } ->
 
     file { '/etc/keepalived/health_check.sh' :
-      ensure  => file,
-      content => template('profiles/keepalived_health_check.erb'),
-      owner   => 'postgres',
-      mode    => '0544',
+      ensure => file,
+      source => 'puppet:///modules/profiles/keepalived_health_check.sh',
+      owner  => 'postgres',
+      mode   => '0544',
     }
 
     service {'keepalived' :
@@ -321,7 +291,7 @@ class profiles::postgresqlha_master(
       owner  => 'repmgr'
     } ->
 
-    # Running postgresql as a systemd service causes issues when postgres
+    # Running postgresql-9.4 as a systemd service causes issues when postgres
     # clustering is being manged by repmgr, so we stop and disable it immediatly
     # after installation by puppet. Postgres is managed by pg_ctl from then on.
 
@@ -374,11 +344,6 @@ class profiles::postgresqlha_master(
       ensure  => running,
       enable  => true,
       require => File['/usr/lib/systemd/system/repmgr.service']
-    } ->
-
-    exec { 'initalize_xlog' :
-      command => 'psql -c \'select pg_switch_xlog();\'',
-      user    => 'postgres'
     } ->
 
     file { '/var/lib/pgsql/postgres_ha_setup_done' :

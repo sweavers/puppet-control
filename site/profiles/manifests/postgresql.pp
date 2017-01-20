@@ -66,7 +66,6 @@ class profiles::postgresql(
   case $version {
     '9.3': { $postgis_version = 'postgis2_93' }
     '9.4': { $postgis_version = 'postgis2_94' }
-    '9.5': { $postgis_version = 'postgis2_95' }
     default: { $postgis_version = 'postgis2_93' }
   }
 
@@ -119,23 +118,6 @@ class profiles::postgresql(
     group   => 'postgres',
     mode    => '0750',
     require => User[postgres]
-  }
-
-  file { "${dbroot}/.pgsql_profile" :
-    ensure  => 'file',
-    content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
-    owner   => 'postgres',
-    group   => 'postgres',
-    mode    => '0750',
-    require => File[$dbroot]
-  }
-
-  file_line { 'enable_pgsql_profile' :
-    ensure  => present,
-    line    => "[ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
-    match   => "^# [ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
-    path    => "${dbroot}/.bash_profile",
-    require => Class['postgresql::server']
   }
 
   file { 'PSQL History':

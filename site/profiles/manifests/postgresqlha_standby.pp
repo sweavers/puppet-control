@@ -13,13 +13,6 @@ class profiles::postgresqlha_standby (
     $postgres_conf = hiera_hash('postgres_conf',undef)
   ){
 
-  case $version {
-      '9.3': { $postgis_version = 'postgis2_93' }
-      '9.4': { $postgis_version = 'postgis2_94' }
-      '9.5': { $postgis_version = 'postgis2_95' }
-      default: { $postgis_version = 'postgis2_94' }
-  }
-
   include ::stdlib
 
   $shortversion = regsubst($version, '\.', '')
@@ -62,7 +55,7 @@ class profiles::postgresqlha_standby (
 
   file { "${dbroot}/.pgsql_profile" :
     ensure  => 'file',
-    content => template('profiles/postgres_pgsql_config.erb'),
+    content => "export PATH=\$PATH:/usr/pgsql-${version}/bin/",
     owner   => 'postgres',
     group   => 'postgres',
     mode    => '0750',
@@ -75,19 +68,6 @@ class profiles::postgresqlha_standby (
     $this_hostname = $::hostname
 
     include ::stdlib
-
-    package { $postgis_version :
-      ensure  => installed,
-      require => Package["postgresql${shortversion}-server"]
-    }
-
-    file_line { 'enable_pgsql_profile' :
-      ensure  => present,
-      line    => "[ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
-      match   => "^#*[ -f ${dbroot}/.pgsql_profile ] && source ${dbroot}/.pgsql_profile",
-      path    => "${dbroot}/.bash_profile",
-      require => Package["postgresql${shortversion}-server"]
-    }
 
     $pkglist = [
       'keepalived',
@@ -102,7 +82,7 @@ class profiles::postgresqlha_standby (
     } ->
 
     exec { "get_postgres_${shortversion}" :
-      command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-7-x86_64/pgdg-centos${shortversion}-${version}-3.noarch.rpm -y",
+      command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-6-x86_64/pgdg-centos${shortversion}-${version}-1.noarch.rpm -y",
       user    => 'root',
       before  => Package["postgresql${shortversion}-server"]
     } ->
@@ -120,16 +100,9 @@ class profiles::postgresqlha_standby (
     file { "/etc/repmgr/${version}/auto_failover.sh" :
       ensure  => file,
       owner   => 'postgres',
-      content => template('profiles/postgres_auto_failover.erb'),
+      source  => 'puppet:///modules/profiles/postgres_auto_failover.sh',
       require => Package["repmgr${shortversion}"],
       mode    => '0555'
-    }
-
-    file { "${dbroot}/repmgr.conf" :
-      ensure  => link,
-      owner   => 'postgres',
-      target  => "/etc/repmgr/${version}/repmgr.conf",
-      require => Package["repmgr${shortversion}"]
     }
 
     file { 'PSQL History' :
@@ -192,10 +165,10 @@ class profiles::postgresqlha_standby (
     } ->
 
     file { '/etc/keepalived/health_check.sh' :
-      ensure  => file,
-      content => template('profiles/keepalived_health_check.erb'),
-      owner   => 'postgres',
-      mode    => '0544',
+      ensure => file,
+      source => 'puppet:///modules/profiles/keepalived_health_check.sh',
+      owner  => 'postgres',
+      mode   => '0544',
     }
 
     service {'keepalived' :

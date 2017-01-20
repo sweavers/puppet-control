@@ -102,5 +102,8 @@ log_file = /var/log/barman/barman.log
 [primary]
 description = "Primary PostgreSQL Server"
 conninfo = "host=<%= @config_hostname %> user=barman dbname=postgres"
-ssh_command = "ssh postgres@<%= @config_hostname %>"
+streaming_conninfo = "host=<%= @config_hostname %> user=repmgr"
+backup_method = postgres
 retention_policy = <%= scope.function_hiera(['barman_retention_policy']) %>
+streaming_archiver = on
+slot_name = barman

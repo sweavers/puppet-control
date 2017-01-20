@@ -87,7 +87,7 @@ class profiles::postgres_ha(
 
   selinux::module { 'keepalivedlr' :
     ensure => 'present',
-    source => 'puppet:///modules/profiles/keepalivedlr.te'
+    source => 'puppet:///modules/profiles/keepalived_lr.te'
   }
 
   file { $dbroot :
@@ -100,7 +100,7 @@ class profiles::postgres_ha(
 
   file { "${dbroot}/.pgsql_profile" :
     ensure  => 'file',
-    content => template('profiles/postgres_ha_pgsql_config.erb'),
+    content => template('profiles/postgres_pgsql_profile.erb'),
     owner   => 'postgres',
     group   => 'postgres',
     mode    => '0750',
@@ -193,7 +193,7 @@ class profiles::postgres_ha(
   file { "/etc/repmgr/${version}/auto_failover.sh" :
     ensure  => file,
     owner   => 'postgres',
-    content => template('profiles/postgres_ha_auto_failover.erb'),
+    content => template('profiles/postgres_auto_failover.erb'),
     require => Package["repmgr${shortversion}"],
     mode    => '0544'
   }
@@ -355,7 +355,7 @@ class profiles::postgres_ha(
 
   }
 
-  $pg_hba_rules = parseyaml(template('profiles/postgres_hba_conf.erb'))
+  $pg_hba_rules = parseyaml(template('profiles/postgres_hba_conf_file.erb'))
   create_resources('postgresql::server::pg_hba_rule', $pg_hba_rules)
 
   file { '/root/postgres_recover_former_master.bash' :
@@ -381,14 +381,14 @@ class profiles::postgres_ha(
 
   file { "/etc/repmgr/${version}/repmgr.conf" :
     ensure  => file,
-    content => template('profiles/postgres_repmgr_config.erb'),
+    content => template('profiles/postgres_repmgr_conf_file.erb'),
     require => Package["repmgr${shortversion}"],
     before  => Exec['register_repmgrd']
   } ->
 
   file { '/etc/keepalived/keepalived.conf' :
     ensure  => file,
-    content => template('profiles/postgres_keepalived_config.erb'),
+    content => template('profiles/postgres_keepalived_conf_file.erb'),
     notify  => Service['keepalived'],
   } ->
 

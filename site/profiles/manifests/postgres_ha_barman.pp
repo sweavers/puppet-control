@@ -41,7 +41,7 @@ class profiles::postgres_ha_barman(
     ensure  => file,
     owner   => 'barman',
     group   => 'barman',
-    content => template('profiles/postgres_barman_config.erb'),
+    content => template('profiles/postgres_barman_conf_file.erb'),
     mode    => '0600',
     require => Package['barman'],
   } ->

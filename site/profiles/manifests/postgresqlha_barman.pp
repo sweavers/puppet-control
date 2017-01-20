@@ -8,7 +8,6 @@ class profiles::postgresqlha_barman(
   $ssh_keys     = hiera_hash('postgresqlha_keys',false)
   ){
 
-  $shortversion = regsubst($version, '\.', '')
   $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
 
   file { '/etc/hosts' :
@@ -25,7 +24,7 @@ class profiles::postgresqlha_barman(
   ensure_packages($pkglist)
 
   exec { 'get_pbarman' :
-    command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-7-x86_64/pgdg-centos${shortversion}-${version}-3.noarch.rpm -y",
+    command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-6-x86_64/pgdg-centos94-${version}-1.noarch.rpm -y",
     user    => 'root',
     before  => Package['barman']
   } ->
@@ -85,7 +84,7 @@ class profiles::postgresqlha_barman(
 
   file { '/var/lib/barman/.pgpass' :
     ensure  => file,
-    content => template('profiles/pgpass.erb'),
+    content => template('profiles/pgpass_barman_server.erb'),
     owner   => 'barman',
     group   => 'barman',
     mode    => '0600',
@@ -116,7 +115,7 @@ class profiles::postgresqlha_barman(
     ensure  => present,
     user    => 'barman',
     command => 'barman cron',
-    minute  => '*',
+    minute  => '0',
   }
 
 }
