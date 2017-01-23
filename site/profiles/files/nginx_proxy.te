@@ -1,5 +1,5 @@
 
-module local_nginx_proxy 1.0;
+module nginx_proxy 1.0;
 
 require {
 	type commplex_main_port_t;
