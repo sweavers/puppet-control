@@ -1,2 +1,3 @@
 ---
-  nagiosclient::c_nagios_server_ip: 192.168.42.51
+  nagiosclient::nagios_server: 192.168.42.50
+  profiles::nagios_server::monitor_localhost: false

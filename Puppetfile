@@ -8,9 +8,7 @@ mod 'elasticsearch/elasticsearch',     '0.11.0'
 mod 'lesaux/kibana4',                  '1.0.15'
 mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
-#mod 'jfryman/nginx',                   '0.3.0'
-mod 'puppet-nginx',                    :git => 'https://github.com/LandRegistry-Ops/puppet-nginx.git',
-                                       :ref => 'b821432d26e065c9d6d0fa6d8e8deebfcbc46f1e'
+mod 'jfryman/nginx',                   '0.3.0'
 mod 'jfryman/selinux',                 '0.4.0'
 mod 'puppet-gradle',                   :git => 'https://github.com/LandRegistry-Ops/puppet-gradle.git',
                                        :ref => '8aec2ee291a34e79531a0045a7c0027aaa8138d8'
@@ -57,7 +55,7 @@ mod 'puppet-elastic',                  :git => 'https://github.com/LandRegistry-
 mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-Ops/puppet-kibana.git',
                                        :ref => '84d1aecbeb01eef6de616f252f372257492a974d'
 mod 'puppet-firewallservice',          :git => 'https://github.com/LandRegistry-Ops/puppet-firewallservice.git',
-                                       :ref => '0.1.1'
+                                       :ref => '0.1.5'
 mod 'puppet-nagios',                   :git => 'https://github.com/LandRegistry-Ops/puppet-nagios.git',
                                        :ref => '0.10.0'
 mod 'puppet-nagiosclient',             :git => 'https://github.com/LandRegistry-Ops/puppet-nagiosclient.git',
@@ -84,5 +82,3 @@ mod 'richardc/datacat',                '0.6.2'
 mod 'stahnma/epel',                    '1.2.2'
 mod 'ajjahn/dns',                      '2.0.2'
 mod 'dsestero/download_uncompress',    '1.3.0'
-mod 'camptocamp/systemd',              '0.4.0'
-mod 'thias/php',                       '1.2.0'
