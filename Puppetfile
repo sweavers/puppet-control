@@ -49,13 +49,17 @@ mod 'puppet-logconsumer',              :git => 'https://github.com/LandRegistry-
                                        :ref => '2.0.3'
 mod 'willdurand/nodejs',               '1.9.5'
 mod 'puppet-rabbit',                   :git => 'https://github.com/LandRegistry-Ops/puppet-rabbit.git',
-                                       :ref => '2.0.2'
+                                       :ref => '2.0.3'
 mod 'puppet-elastic',                  :git => 'https://github.com/LandRegistry-Ops/puppet-elastic.git',
                                        :ref => '2.0.1'
 mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-Ops/puppet-kibana.git',
                                        :ref => '84d1aecbeb01eef6de616f252f372257492a974d'
 mod 'puppet-firewallservice',          :git => 'https://github.com/LandRegistry-Ops/puppet-firewallservice.git',
                                        :ref => '0.1.5'
+mod 'puppet-nagios',                   :git => 'https://github.com/LandRegistry-Ops/puppet-nagios.git',
+                                       :ref => '0.10.0'
+mod 'puppet-nagiosclient',             :git => 'https://github.com/LandRegistry-Ops/puppet-nagiosclient.git',
+                                       :ref => '0.10.1'
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.8'
 mod 'croddy/make',                     '0.0.5'
