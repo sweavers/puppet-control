@@ -395,7 +395,7 @@ class profiles::postgres_ha(
   file { '/etc/keepalived/health_check.sh' :
     ensure  => file,
     content => template('profiles/keepalived_health_check.erb'),
-    owner   => 'postgres',
+    owner   => 'root',
     mode    => '0544',
   }
 

@@ -10,7 +10,7 @@ require {
 	class tcp_socket name_connect;
 	class process { setrlimit setsched };
 	class file { execute execute_no_trans getattr open read };
-	class netlink_audit_socket { create nlmsg_relay };
+	class netlink_audit_socket { read write create nlmsg_relay };
 	class dir search;
 }
 
@@ -20,6 +20,6 @@ allow keepalived_t postgresql_db_t:dir search;
 allow keepalived_t postgresql_db_t:file { getattr open read };
 allow keepalived_t postgresql_port_t:tcp_socket name_connect;
 allow keepalived_t self:capability { audit_write dac_override setgid setuid sys_resource };
-allow keepalived_t self:netlink_audit_socket { create nlmsg_relay };
+allow keepalived_t self:netlink_audit_socket { read write create nlmsg_relay };
 allow keepalived_t self:process { setrlimit setsched };
 allow keepalived_t sudo_exec_t:file { execute execute_no_trans getattr open read };
