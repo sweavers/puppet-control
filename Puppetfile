@@ -60,6 +60,8 @@ mod 'puppet-nagios',                   :git => 'https://github.com/LandRegistry-
                                        :ref => '0.10.0'
 mod 'puppet-nagiosclient',             :git => 'https://github.com/LandRegistry-Ops/puppet-nagiosclient.git',
                                        :ref => '0.10.1'
+mod 'landregistry/powerdns',           :git => 'https://github.com/LandRegistry-Ops/puppet-powerdns.git',
+                                       :ref => '0.1.0'
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.8'
 mod 'croddy/make',                     '0.0.5'
