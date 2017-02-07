@@ -30,7 +30,7 @@ class profiles::dns (
 
   include ::stdlib
 
-  if has_key($interfaces, 'eth0') {
+  if (has_key($interfaces, 'eth0') and has_key($interfaces['eth0'], 'zone'))
     $eth0 = $interfaces['eth0']
     $eth0_hostname = "${eth0['prepend']}${hostname}${eth0['append']}"
     powerdns::record { $eth0_hostname :
@@ -42,7 +42,7 @@ class profiles::dns (
     }
   }
 
-  if has_key($interfaces, 'eth1') {
+  if (has_key($interfaces, 'eth1') and has_key($interfaces['eth1'], 'zone'))
     $eth1_hostname = "${interfaces['eth1']['prepend']}${hostname}${interfaces['eth1']['append']}"
     powerdns::record { $eth1_hostname :
       ensure   => present,
