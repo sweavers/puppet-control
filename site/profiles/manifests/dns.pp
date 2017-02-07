@@ -32,24 +32,24 @@ class profiles::dns (
 
   if (has_key($interfaces, 'eth0') and has_key($interfaces['eth0'], 'zone')) {
     $eth0 = $interfaces['eth0']
-    $eth0_hostname = "${eth0['prepend']}${hostname}${eth0['append']}"
+    $eth0_hostname = "${eth0['prepend']}${::hostname}${eth0['append']}"
     powerdns::record { $eth0_hostname :
-      ensure   => present,
-      type     => 'A',
-      ttl      => '3600',
-      zone     => $eth0['zone'],
-      content  => [ $::ipaddress_eth0 ]
+      ensure  => present,
+      type    => 'A',
+      ttl     => '3600',
+      zone    => $eth0['zone'],
+      content => [ $::ipaddress_eth0 ]
     }
   }
 
   if (has_key($interfaces, 'eth1') and has_key($interfaces['eth1'], 'zone')) {
-    $eth1_hostname = "${interfaces['eth1']['prepend']}${hostname}${interfaces['eth1']['append']}"
+    $eth1_hostname = "${interfaces['eth1']['prepend']}${::hostname}${interfaces['eth1']['append']}"
     powerdns::record { $eth1_hostname :
-      ensure   => present,
-      type     => 'A',
-      ttl      => '3600',
-      zone     => $interfaces['eth1']['zone'],
-      content  => [ $::ipaddress_eth1 ]
+      ensure  => present,
+      type    => 'A',
+      ttl     => '3600',
+      zone    => $interfaces['eth1']['zone'],
+      content => [ $::ipaddress_eth1 ]
     }
   }
 
