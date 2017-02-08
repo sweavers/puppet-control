@@ -30,9 +30,13 @@ listen <%= name %> *:<%= config['port'] %>
 <% end -%>
 
 <% else -%>
-    option httpchk GET <%=config['healthcheck'] %>
+    option httpchk GET <%= config['healthcheck'] %>
 <% config['backends'].each do |backend| -%>
+<% if config.key?('healthcheck_port') -%>
+    server <%= backend.split(':')[0] %> <%= backend %> check port <%= config['healthcheck_port'] %>
+<% else -%>
     server <%= backend.split(':')[0] %> <%= backend %> check
+<% end -%>
 <% end -%>
 <% end -%>
 
