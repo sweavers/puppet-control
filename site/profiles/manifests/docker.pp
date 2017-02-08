@@ -22,7 +22,7 @@ yumrepo { 'DockerRepository':
   gpgkey   => 'https://yum.dockerproject.org/gpg'
 }
 
-package {'python-pip' :
+package {'python2-pip' :
   ensure => present,
 }
 # added ensure = running and enable = true
@@ -35,7 +35,7 @@ package { 'docker-engine' :
 package {'backports.ssl-match-hostname' :
   ensure   => '3.5.0.1',
   provider => pip,
-  require  => Package['python-pip']
+  require  => Package['python2-pip']
 }
 
 package {'docker-compose' :
