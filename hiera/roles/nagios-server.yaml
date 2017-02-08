@@ -1,0 +1,3 @@
+---
+  classes:
+    - profiles::nagios_server

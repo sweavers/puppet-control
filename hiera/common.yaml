@@ -5,6 +5,7 @@ classes:
   - 'profiles::ntp'
   - 'profiles::git'
   - 'profiles::custom_facts'
+  - 'profiles::nagios_client'
   - 'selinux'
   - 'sudo'
   - 'resolvconf'
