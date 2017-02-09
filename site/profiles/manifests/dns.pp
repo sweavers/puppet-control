@@ -30,7 +30,7 @@ class profiles::dns (
 
   include ::stdlib
 
-  if is_hash($interfaces) {
+  if ($interfaces != undef and is_hash($interfaces)) {
     if ($::ipaddress_eth0 and has_key($interfaces, 'eth0') and has_key($interfaces['eth0'], 'zone')) {
       $eth0 = $interfaces['eth0']
       $eth0_hostname = "${eth0['prepend']}${::hostname}${eth0['append']}"
