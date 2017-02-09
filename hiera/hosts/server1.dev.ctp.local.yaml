@@ -1,0 +1,36 @@
+---
+  # knowledge management server for alpha server
+
+  classes:
+    - profiles::packages
+    - profiles::application
+    - elastic
+    - profiles::postgresql
+
+  packages:
+    - libxml2-devel
+    - libxslt-devel
+    - libjpeg-turbo-devel
+    - zlib-devel
+    - cairo
+    - pango
+    - gdk-pixbuf2
+    - libffi-devel
+    - gcc-c++
+    - java-1.8.0-openjdk-headless
+
+  # elasticserch configuration
+  elk_stack_elastic_clustername: "els-dev-cluster"
+  elk_stack_elastic_instance: "els-dev"
+  elk_stack_elastic_servers: ['localhost']
+  elk_stack_tls_protocol: "https"
+  elk_stack_do_housekeeping: true
+  elk_stack_days_to_keep: 30
+  elk_stack_index_prefix: ['logstash']
+
+  # postgres configuration
+  postgres_databases:
+    knowledge_management:
+      user: knowledge_management
+      password: md5085815e3463853f3a1e9731b61ddb3a7
+      owner: knowledge_management
