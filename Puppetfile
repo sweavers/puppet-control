@@ -4,7 +4,7 @@ forge 'https://forgeapi.puppetlabs.com'
 mod 'ajcrowe/supervisord',             '0.6.1'
 mod 'alphagov/account',                :git => 'https://github.com/alphagov/puppet-account.git',
                                        :ref => '8bc0e9981174fd175d630dd98538334a2814065b'
-mod 'elasticsearch/elasticsearch',     '0.16.0'
+mod 'elasticsearch/elasticsearch',     '0.11.0'
 mod 'lesaux/kibana4',                  '1.0.15'
 mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
@@ -51,7 +51,7 @@ mod 'willdurand/nodejs',               '1.9.5'
 mod 'puppet-rabbit',                   :git => 'https://github.com/LandRegistry-Ops/puppet-rabbit.git',
                                        :ref => '2.0.3'
 mod 'puppet-elastic',                  :git => 'https://github.com/LandRegistry-Ops/puppet-elastic.git',
-                                       :ref => '2.9.1'
+                                       :ref => '2.0.1'
 mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-Ops/puppet-kibana.git',
                                        :ref => '84d1aecbeb01eef6de616f252f372257492a974d'
 mod 'puppet-firewallservice',          :git => 'https://github.com/LandRegistry-Ops/puppet-firewallservice.git',
