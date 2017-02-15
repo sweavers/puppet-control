@@ -58,7 +58,8 @@ class profiles::nagios_client(
     max_check_attempts    => '5',
     check_period          => '24x7',
     notification_interval => '30',
-    notification_period   => '24x7'
+    notification_period   => '24x7',
+    contact_groups        => 'admins'
   }
 
   # Export nagios service configuration
@@ -70,7 +71,8 @@ class profiles::nagios_client(
     use                 => 'generic-service',
     host_name           => $::hostname,
     notification_period => '24x7',
-    service_description => 'Ping'
+    service_description => 'Ping',
+    contact_groups      => 'admins'
   }
 
   @@nagios_service { "check_load_${::hostname}":
@@ -81,7 +83,8 @@ class profiles::nagios_client(
     use                 => 'generic-service',
     host_name           => $::hostname,
     notification_period => '24x7',
-    service_description => 'Current Load'
+    service_description => 'Current Load',
+    contact_groups      => 'admins'
   }
 
   @@nagios_service { "check_current_users_${::hostname}":
@@ -92,7 +95,8 @@ class profiles::nagios_client(
     use                 => 'generic-service',
     host_name           => $::hostname,
     notification_period => '24x7',
-    service_description => 'Current Users'
+    service_description => 'Current Users',
+    contact_groups      => 'admins'
   }
 
   @@nagios_service { "check_root_partition_${::hostname}":
@@ -103,7 +107,8 @@ class profiles::nagios_client(
     use                 => 'generic-service',
     host_name           => $::hostname,
     notification_period => '24x7',
-    service_description => 'Root Partition'
+    service_description => 'Root Partition',
+    contact_groups      => 'admins'
   }
 
   @@nagios_service { "check_ssh_${::hostname}":
@@ -114,7 +119,8 @@ class profiles::nagios_client(
     use                 => 'generic-service',
     host_name           => $::hostname,
     notification_period => '24x7',
-    service_description => 'SSH'
+    service_description => 'SSH',
+    contact_groups      => 'admins'
   }
 
   # Only add swap check if this is not an aws machine
@@ -127,7 +133,8 @@ class profiles::nagios_client(
       use                 => 'generic-service',
       host_name           => $::hostname,
       notification_period => '24x7',
-      service_description => 'Swap Usage'
+      service_description => 'Swap Usage',
+      contact_groups      => 'admins'
     }
   }
 
@@ -139,7 +146,8 @@ class profiles::nagios_client(
     use                 => 'generic-service',
     host_name           => $::hostname,
     notification_period => '24x7',
-    service_description => 'Processes'
+    service_description => 'Processes',
+    contact_groups      => 'admins'
   }
 
   @@nagios_service { "check_mem_${::hostname}":
@@ -150,7 +158,8 @@ class profiles::nagios_client(
     use                 => 'generic-service',
     host_name           => $::hostname,
     notification_period => '24x7',
-    service_description => 'Ram Usage'
+    service_description => 'Ram Usage',
+    contact_groups      => 'admins'
   }
 
   # create additional nagios services from hiera
