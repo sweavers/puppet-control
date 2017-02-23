@@ -38,7 +38,7 @@
 #        use: linux-server
 #        max_check_attempts: 5
 #        check_period: 24x7
-#        notification_interval: 30
+#        notification_interval: 0
 #        notification_period: 24x7
 #
 #    nagios_services:
@@ -50,6 +50,7 @@
 #        use: generic-service
 #        host_name: test_host
 #        notification_period: 24x7
+#        notification_interval: 0
 #        service_description: Ping
 
 class profiles::nagios_server(
@@ -65,6 +66,18 @@ class profiles::nagios_server(
   ){
 
   include nagios
+
+  # Create time period for aws_dev servers to prevent alertiing when servers
+  # with the 'managed' tag are shutdown.
+  nagios_timeperiod { 'dev_aws':
+    ensure    => present,
+    alias     => 'Time during which managed aws_dev servers should be up',
+    monday    => '07:10-19:50',
+    tuesday   => '07:10-19:50',
+    wednesday => '07:10-19:50',
+    thursday  => '07:10-19:50',
+    friday    => '07:10-19:50'
+  }
 
   # Collect nagios resources from puppetdb
   Nagios_host <<||>> {

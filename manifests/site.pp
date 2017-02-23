@@ -7,6 +7,9 @@ notify{"Application Environment: ${::application_environment}": loglevel => debu
 # Include classes specified in Hiera
 hiera_include('classes')
 
+# Include automagical DNS
+include ::profiles::dns
+
 # Create 'lr-admin' group on all hosts
 group { 'lr-admin' :
   ensure => present,
