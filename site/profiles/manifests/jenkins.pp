@@ -199,7 +199,7 @@ class profiles::jenkins (
     ensure_packages(['libcurl-devel', 'patch', 'libxml2-devel',
       'libxslt-devel', 'gcc', 'ruby-devel', 'zlib-devel', 'postgresql-devel',
       'openssl-devel', 'readline-devel', 'libffi-devel', 'gcc-c++',
-      'libjpeg-turbo-devel', 'zlib-devel'])
+      'libjpeg-turbo-devel', 'zlib-devel', 'bzip2-devel'])
 
   }
 
