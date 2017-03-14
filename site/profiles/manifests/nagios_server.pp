@@ -66,6 +66,7 @@ class profiles::nagios_server(
   ){
 
   include nagios
+  include profiles::smtp_relay
 
   # Create time period for aws_dev servers to prevent alertiing when servers
   # with the 'managed' tag are shutdown.
@@ -137,5 +138,20 @@ class profiles::nagios_server(
       notify  => Service['nagios'],
       require => Package['nagios']
     }
+  }
+
+  # Configure nagios not to send ip addresses in email alerts
+  nagios_command { 'notify-host-by-email':
+    command_line => '/usr/bin/printf "%b" "***** Nagios *****\n\nNotification Type: $NOTIFICATIONTYPE$\nHost: $HOSTNAME$\nState: $HOSTSTATE$\nInfo: $HOSTOUTPUT$\n\nDate/Time: $LONGDATETIME$\n" | /usr/bin/mail -s "** $NOTIFICATIONTYPE$ Host Alert: $HOSTNAME$ is $HOSTSTATE$ **" $CONTACTEMAIL$',
+    target       => '/etc/nagios/objects/commands.cfg',
+    notify       => Service['nagios'],
+    require      => Package['nagios']
+  }
+
+  nagios_command { 'notify-service-by-email':
+    command_line => '/usr/bin/printf "%b" "***** Nagios *****\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nState: $SERVICESTATE$\n\nDate/Time: $LONGDATETIME$\n\nAdditional Info:\n\n$SERVICEOUTPUT$\n" | /usr/bin/mail -s "** $NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ **" $CONTACTEMAIL$',
+    target       => '/etc/nagios/objects/commands.cfg',
+    notify       => Service['nagios'],
+    require      => Package['nagios']
   }
 }
