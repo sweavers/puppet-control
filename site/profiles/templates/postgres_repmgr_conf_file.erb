@@ -1,0 +1,31 @@
+<% @nodecount = 1
+scope.function_hiera(['pg_cluster_member_hostnames']).each do |host_name,config|
+  trimmed_host_name = host_name.gsub(/\..*$/, '').downcase
+  if trimmed_host_name == @hostname.downcase
+    @node_number = config['repmgr_node_number']
+  end
+  if config['initial_role'] == 'master' or config['initial_role'] == 'standby'
+    @nodecount += 1
+  end
+end %>
+cluster=<%= @application_environment.gsub(/-/, '_') %>
+node=<%= @node_number %>
+node_name=node<%= @node_number %>
+conninfo='host=<%= @hostname %> user=repmgr dbname=repmgr connect_timeout=2'
+pg_bindir=/usr/pgsql-<%= @version %>/bin
+master_response_timeout=60
+reconnect_attempts=6
+reconnect_interval=10
+failover=automatic
+promote_command='/etc/repmgr/<%= @version %>/auto_failover.sh'
+<% if @shortversion.to_i >= 95 -%>
+follow_command='/usr/pgsql-<%= @version %>/bin/repmgr standby follow -f /etc/repmgr/<%= @version %>/repmgr.conf -W; /usr/pgsql-<%= @version %>/bin/repmgr standby register -F'
+service_start_command='sudo systemctl start postgresql-<%= @version %>'
+service_stop_command='sudo systemctl stop postgresql-<%= @version %>'
+service_restart_command='sudo systemctl restart postgresql-<%= @version %>'
+service_reload_command='sudo systemctl reload postgresql-<%= @version %>'
+<% else -%>
+follow_command='/usr/pgsql-<%= @version %>/bin/repmgr standby follow -f /etc/repmgr/<%= @version %>/repmgr.conf -W'
+<% end -%>
+priority=<%= @nodecount - @node_number %>
+use_replication_slots=1

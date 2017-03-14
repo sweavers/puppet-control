@@ -82,7 +82,7 @@ class profiles::postgresqlha_standby (
     } ->
 
     exec { "get_postgres_${shortversion}" :
-      command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-6-x86_64/pgdg-centos${shortversion}-${version}-1.noarch.rpm -y",
+      command => "yum localinstall http://yum.postgresql.org/${version}/redhat/rhel-6-x86_64/pgdg-centos${shortversion}-${version}-3.noarch.rpm -y",
       user    => 'root',
       before  => Package["postgresql${shortversion}-server"]
     } ->

@@ -1,0 +1,3 @@
+export PATH=$PATH:/usr/pgsql-<%= @version %>/bin/
+
+alias cluster='repmgr -f /etc/repmgr/<%= @version %>/repmgr.conf cluster show'
