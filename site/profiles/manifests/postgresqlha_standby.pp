@@ -202,6 +202,7 @@ class profiles::postgresqlha_standby (
       command => "/usr/pgsql-${version}/bin/repmgr -r -F -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr ${wal_keep_segments} --verbose standby clone ${vip_hostname}",
       user    => 'postgres',
       cwd     => "/etc/repmgr/${version}/",
+      timeout => '0',
       unless  => 'psql -c "select pg_is_in_recovery();" | grep "^ t$"',
     } ->
 
@@ -217,7 +218,7 @@ class profiles::postgresqlha_standby (
     } ->
     # added sleep before next command as on ESX repmanager tries to start before the postgres database is up.
     exec { 'standby_register_repmgrd' :
-      command => "sleep 10 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register --force",
+      command => "sleep 30 ; /usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf standby register --force",
       user    => 'postgres',
       require => File['/var/lib/pgsql/.pgpass'],
       unless  => "/usr/pgsql-${version}/bin/repmgr -f /etc/repmgr/${version}/repmgr.conf cluster show | grep \"standby | host=${::hostname}\"",

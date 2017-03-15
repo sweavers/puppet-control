@@ -342,6 +342,7 @@ class profiles::postgres_ha(
         command => "/usr/pgsql-${version}/bin/repmgr -r -F -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr ${::wal_keep_segments} --verbose standby clone ${vip_hostname}",
         user    => 'postgres',
         cwd     => "/etc/repmgr/${version}/",
+        timeout => '0',
         require => File["/etc/repmgr/${version}/repmgr.conf"]
       } ->
 
