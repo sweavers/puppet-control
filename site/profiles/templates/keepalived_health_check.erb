@@ -1,0 +1,2 @@
+#! /bin/bash
+sudo -u postgres /usr/pgsql-<%= @version %>/bin/repmgr -f /etc/repmgr/<%= @version %>/repmgr.conf cluster show 2> /dev/null | grep 'master.*'`hostname -s`
