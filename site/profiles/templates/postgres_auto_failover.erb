@@ -1,0 +1,2 @@
+/usr/pgsql-<%= @version %>/bin/repmgr -f /etc/repmgr/<%= @version %>/repmgr.conf --verbose standby promote
+rm -f /var/lib/pgsql/<%= @version %>/data/recovery.done
