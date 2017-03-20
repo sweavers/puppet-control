@@ -59,7 +59,7 @@ mod 'puppet-firewallservice',          :git => 'https://github.com/LandRegistry-
 mod 'puppet-nagios',                   :git => 'https://github.com/LandRegistry-Ops/puppet-nagios.git',
                                        :ref => '0.11.0'
 mod 'puppet-nagiosclient',             :git => 'https://github.com/LandRegistry-Ops/puppet-nagiosclient.git',
-                                       :ref => '0.11.0'
+                                       :ref => '0.12.0'
 mod 'landregistry/powerdns',           :git => 'https://github.com/LandRegistry-Ops/puppet-powerdns.git',
                                        :ref => '0.2.0'
 # Dependency modules
