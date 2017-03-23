@@ -20,6 +20,7 @@ class profiles::application (
       check_period          => '24x7',
       contact_groups        => 'admins',
       notification_interval => 0,
+      notifications_enabled => 0,
       notification_period   => '24x7',
       service_description   => "LR service ${name}"
     }
@@ -52,9 +53,10 @@ class profiles::application (
         owner                 => root,
         use                   => 'generic-service',
         host_name             => $::hostname,
-        check_period          => '24x7',
+        check_period          => '24x7'
         contact_groups        => 'admins',
         notification_interval => 0,
+        notifications_enabled => 0,
         notification_period   => '24x7',
         service_description   => "LR tcp ${name}"
       }
