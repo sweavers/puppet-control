@@ -5,7 +5,6 @@ mod 'ajcrowe/supervisord',             '0.6.1'
 mod 'alphagov/account',                :git => 'https://github.com/alphagov/puppet-account.git',
                                        :ref => '8bc0e9981174fd175d630dd98538334a2814065b'
 mod 'elastic/elasticsearch',           '5.1.0'
-mod 'lesaux/kibana4',                  '1.0.15'
 mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
 mod 'jfryman/nginx',                   '0.3.0'
@@ -51,9 +50,9 @@ mod 'willdurand/nodejs',               '1.9.5'
 mod 'puppet-rabbit',                   :git => 'https://github.com/LandRegistry-Ops/puppet-rabbit.git',
                                        :ref => '2.0.3'
 mod 'puppet-elastic',                  :git => 'https://github.com/LandRegistry-Ops/puppet-elastic.git',
-                                       :ref => '2.9.6'
-mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-Ops/puppet-kibana.git',
-                                       :ref => '84d1aecbeb01eef6de616f252f372257492a974d'
+                                       :ref => '3.0.0'
+mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-Ops/elastic-puppet-kibana.git',
+                                       :ref => 'fe1585a017786891e63660236694a36be1e44888'
 mod 'puppet-firewallservice',          :git => 'https://github.com/LandRegistry-Ops/puppet-firewallservice.git',
                                        :ref => '0.1.5'
 mod 'puppet-nagios',                   :git => 'https://github.com/LandRegistry-Ops/puppet-nagios.git',
