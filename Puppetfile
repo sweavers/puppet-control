@@ -48,7 +48,7 @@ mod 'puppet-logconsumer',              :git => 'https://github.com/LandRegistry-
                                        :ref => '2.0.3'
 mod 'willdurand/nodejs',               '1.9.5'
 mod 'puppet-rabbit',                   :git => 'https://github.com/LandRegistry-Ops/puppet-rabbit.git',
-                                       :ref => '2.0.3'
+                                       :ref => '474e8a905c1b66ebbee3468582655d453d5b47a1'
 mod 'puppet-elastic',                  :git => 'https://github.com/LandRegistry-Ops/puppet-elastic.git',
                                        :ref => '3.0.0'
 mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-Ops/elastic-puppet-kibana.git',
