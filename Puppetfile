@@ -43,7 +43,7 @@ mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-
 mod 'puppet-filebeat',                 :git => 'https://github.com/LandRegistry-Ops/puppet-filebeat.git',
                                        :ref => '777803db08a8a581dee95f39f89f9b213be1aba5'
 mod 'puppet-logreceiver',              :git => 'https://github.com/LandRegistry-Ops/puppet-logreceiver.git',
-                                       :ref => 'fb336753b3b47ec6578029b97b7ab74a0dbcfb43'
+                                       :ref => '00625ca169eb97307df3dc2e14d728e8c26d0859'
 mod 'puppet-logconsumer',              :git => 'https://github.com/LandRegistry-Ops/puppet-logconsumer.git',
                                        :ref => '5b8dcf675bb9fa03aa2d071b966c7aeed8ff9e4a'
 mod 'willdurand/nodejs',               '1.9.5'
