@@ -43,14 +43,14 @@ mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-
 mod 'puppet-filebeat',                 :git => 'https://github.com/LandRegistry-Ops/puppet-filebeat.git',
                                        :ref => 'db07e248bf3c06231c673f06eed4aa8950e8ad92'
 mod 'puppet-logreceiver',              :git => 'https://github.com/LandRegistry-Ops/puppet-logreceiver.git',
-                                       :ref => '0037db95c613c2cc3e4ca4968b69e460a4c6b780'
+                                       :ref => '5a4785dec624fd4e437ad0967109bb82641e847a'
 mod 'puppet-logconsumer',              :git => 'https://github.com/LandRegistry-Ops/puppet-logconsumer.git',
-                                       :ref => '2.0.3'
+                                       :ref => '1b78e8be16062bfc2913230aa79d8bdc9a034e09'
 mod 'willdurand/nodejs',               '1.9.5'
 mod 'puppet-rabbit',                   :git => 'https://github.com/LandRegistry-Ops/puppet-rabbit.git',
                                        :ref => '939d4319d394f15fc791fce12d2948eb02563343'
 mod 'puppet-elastic',                  :git => 'https://github.com/LandRegistry-Ops/puppet-elastic.git',
-                                       :ref => '3.0.0'
+                                       :ref => '424f3842f49e64a13c97bbe3e0b1031bfd48f653'
 mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-Ops/elastic-puppet-kibana.git',
                                        :ref => 'fe1585a017786891e63660236694a36be1e44888'
 mod 'puppet-firewallservice',          :git => 'https://github.com/LandRegistry-Ops/puppet-firewallservice.git',
