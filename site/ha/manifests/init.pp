@@ -21,7 +21,7 @@ class ha (
   $interface   = 'eth0',
   $virtual_ip  = undef,
   $sticky      = false,
-  $users       = undef,
+  $auth_users  = undef,
 ) {
 
   include stdlib

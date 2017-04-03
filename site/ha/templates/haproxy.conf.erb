@@ -39,9 +39,9 @@ listen <%= name %> *:<%= config['port'] %>
     # Backend <%= backend %> with native healthcheck
     server <%= backend.split(':')[0] %> <%= backend %> check
 
-    <% if @users -%>
-    acl AuthOkay_Ops http_auth(UsersFor_Ops)
-    http-request auth realm MyAuthRealm if !AuthOkay_Ops
+    <% if config['auth_group'] -%>
+    acl <%= config['auth_group'] %> http_auth(<%= config['auth_group'] %>)
+    http-request auth realm MyAuthRealm if !<%= config['auth_group'] %>
     <% end -%>
 <% end -%>
 <% end -%>
@@ -50,11 +50,13 @@ listen <%= name %> *:<%= config['port'] %>
 <% end -%>
 <% end -%>
 
-<% if @users -%>
-userlist UsersFor_Ops
-  group AdminGroup users <% @users.each do |name,password| -%><%=name%>,<% end -%>
+<% if @auth_users -%>
+<% @auth_users.each do |group,users| -%>
+userlist <%= group %>
+  group AdminGroup users <% users.each do |name,password| -%><%=name%>,<% end -%>
 
-  <% @users.each do |name,password| -%>
+  <% users.each do |name,password| -%>
   user <%=name%> password <%=password%>
   <% end -%>
+<% end -%>
 <% end -%>
