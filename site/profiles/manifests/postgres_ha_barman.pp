@@ -4,7 +4,7 @@
 #
 
 class profiles::postgres_ha_barman(
-  $version      = '9.4',
+  $version      = '9.6',
   $ssh_keys     = hiera_hash('postgresqlha_keys',false)
   ){
 
@@ -129,16 +129,6 @@ class profiles::postgres_ha_barman(
     group   => 'barman',
     mode    => '0700',
   } ->
-
-  # exec { 'initialise_barman' :
-  #   command => 'barman receive-wal --create-slot primary && barman cron && barman switch-xlog && barman cron',
-  #   user    => 'barman',
-  #   require => [
-  #     Package["postgresql${shortversion}"],
-  #     Package['barman']
-  #   ],
-  #   unless  => 'test -s /var/lib/barman/primary/wals/xlog.db',
-  # } ->
 
   cron { 'barman_cron' :
     ensure  => present,

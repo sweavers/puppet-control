@@ -42,7 +42,7 @@
 
 class profiles::postgres_ha(
     $port           = 5432,
-    $version        = '9.4',
+    $version        = '9.6',
     $remote         = true,
     $dbroot         = '/var/lib/pgsql',
     $databases      = hiera_hash('postgres_databases',false),
@@ -160,6 +160,14 @@ class profiles::postgres_ha(
     archive_command          => "\'rsync -aq %p barman@${barman_hostname}:primary/incoming/%f\'",
     archive_mode             => 'on',
     hot_standby              => 'on',
+    log_connections          => 'on',
+    log_destination          => 'csvlog',
+    log_disconnections       => 'on',
+    log_filename             => "\'postgresql-%Y-%m-%d.log\'",
+    log_line_prefix          => "\'< %m >%u -- \'",
+    log_min_messages         => 'info',
+    log_min_error_statement  => 'info',
+    log_statement            => 'all',
     max_replication_slots    => '10',
     max_wal_senders          => '10',
     shared_preload_libraries => 'repmgr_funcs',
