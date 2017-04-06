@@ -18,10 +18,12 @@ class profiles::postgresqlha_standby (
   $shortversion = regsubst($version, '\.', '')
   $custom_hosts = template('profiles/postgres_hostfile_generation.erb')
 
-  if has_key($postgres_conf, 'wal_keep_segments') {
-    $wal_keep_segments = "-w ${postgres_conf[wal_keep_segments]}"
-  } else {
-    $wal_keep_segments = ''
+  if $postgres_conf {
+    if has_key($postgres_conf, 'wal_keep_segments') {
+      $wal_keep_segments = "-w ${postgres_conf[wal_keep_segments]}"
+    } else {
+      $wal_keep_segments = ''
+    }
   }
 
   selinux::module { 'keepalivedlr':
