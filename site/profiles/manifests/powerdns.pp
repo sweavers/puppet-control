@@ -14,6 +14,14 @@ class profiles::powerdns (
 
   include ::stdlib
 
-  ensure_resource('class', 'powerdns::server::authoritive', $config)
+  class { powerdns::server::authoritive :
+    ensure     => present,
+    port       => 53,
+    password   => ${config['password'],
+    api_port   => ${config['api_port'],
+    soa_name   => ${config['soa_name'],
+    soa_mail   => ${config['soa_mail'],
+    postgresql => ${config['postgresql']
+  }
 
 }
