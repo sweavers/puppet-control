@@ -1,0 +1,4 @@
+classes:
+  - 'filebeat'
+
+filebeat::log_receiver: ['192.168.42.71:5044', '192.168.42.72:5044']
