@@ -38,16 +38,10 @@
 class profiles::nagios_client(
 
   $interface       = eth1,
-  $nagios_services = hiera_hash('nagios_services', false)
+  $nagios_services = hiera_hash('nagios_services', false),
+  $time_period     = hiera('nagios_time_period', '24x7')
 
   ){
-
-  # Set notification_period to managed hours if aws_dev machine
-  if ($::hosting_platform == dev_aws) {
-    $time_period = 'dev_aws'
-  } else {
-    $time_period = '24x7'
-  }
 
   # create additional nrpe commands from hiera
   class { 'nagiosclient':
