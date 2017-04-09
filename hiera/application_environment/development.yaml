@@ -1,4 +1,7 @@
 ---
+profiles::postgres_ha::version: '9.6'
+profiles::postgres_ha_barman::version: '9.6'
+profiles::nagios_client::nagios_server: 192.16.42.47
 
 postgresqlha_keys:
   public: |
@@ -34,28 +37,28 @@ postgresqlha_keys:
 
 pg_cluster_member_hostnames:
   puppet puppetmaster puppet-master-91.control.net:
-    ip_address:          192.168.42.9
+    ip_address:          192.168.42.5
     initial_role:        puppetmaster
   vip:
-    ip_address:          192.168.42.10
+    ip_address:          192.168.42.50
     initial_role:        vip
   server1:
-    ip_address:          192.168.42.11
+    ip_address:          192.168.42.51
     initial_role:        master
     keepalived_priority: 100
     repmgr_node_number:  1
   server2:
-    ip_address:          192.168.42.12
+    ip_address:          192.168.42.52
     initial_role:        standby
     keepalived_priority: 99
     repmgr_node_number:  2
   server3:
-    ip_address:          192.168.42.13
+    ip_address:          192.168.42.53
     initial_role:        standby
     keepalived_priority: 98
     repmgr_node_number:  3
   server4:
-    ip_address:          192.168.42.14
+    ip_address:          192.168.42.54
     initial_role:        backup
 
 postgres_databases:
@@ -75,3 +78,6 @@ postgres_users:
 repmgr_password: repmgr
 barman_password: barman
 barman_retention_policy: RECOVERY WINDOW OF 2 WEEKS
+
+postgres_conf:
+  wal_keep_segments: 500

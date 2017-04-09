@@ -7,7 +7,7 @@ repmgr_local_rule:
   address: 127.0.0.1/32
   auth_method: trust<%
 scope.function_hiera(['pg_cluster_member_hostnames']).each do |server,config|
-if config['initial_role'] == 'master' or config['initial_role'] == 'standby'
+if config['initial_role'] == 'master' or config['initial_role'] == 'standby' or config['initial_role'] == 'barman'
   ip_address = config['ip_address'] %>
 repmgr_<%= server %>_rule:
   description: repmgr <%= server %> access
@@ -24,21 +24,11 @@ replication_<%= server %>_rule:
   address: <%= ip_address %>/32
   auth_method: md5<%
 end
-if config['initial_role'] == 'backup'
-  ip_address = config['ip_address']%>
-barman_<%= server %>_rule:
-  description: barman <%= server %> access
-  type: host
-  database: replication
-  user: barman
-  address: <%= ip_address %>/32
-  auth_method: md5
-barman_<%= server %>_rule:
-  description: barman <%= server %> access
-  type: host
-  database: replication
-  user: repmgr
-  address: <%= ip_address %>/32
-  auth_method: md5<%
-end
 end %>
+barman_rule:
+  description: barman access
+  type: local
+  database: all
+  user: barman
+  auth_method: md5
+  order: '001'
