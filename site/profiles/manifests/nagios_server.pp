@@ -69,15 +69,15 @@ class profiles::nagios_server(
   include profiles::smtp_relay
 
   # Create time period for aws_dev servers to prevent alertiing when servers
-  # with the 'managed' tag are shutdown.
+  # with the 'managed' tag are shutdown. Adjusted for BST (Server time is UTC)
   nagios_timeperiod { 'dev_aws':
     ensure    => present,
     alias     => 'Time during which managed aws_dev servers should be up',
-    monday    => '07:10-19:50',
-    tuesday   => '07:10-19:50',
-    wednesday => '07:10-19:50',
-    thursday  => '07:10-19:50',
-    friday    => '07:10-19:50'
+    monday    => '06:10-18:50',
+    tuesday   => '06:10-18:50',
+    wednesday => '06:10-18:50',
+    thursday  => '06:10-18:50',
+    friday    => '06:10-18:50'
   }
 
   # Collect nagios resources from puppetdb
