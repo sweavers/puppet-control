@@ -2,7 +2,8 @@
 class profiles::application (
 
   $applications  = hiera_hash('applications',false),
-  $time_period   = hiera('nagios_time_period', '24x7')
+  $time_period   = hiera('nagios_time_period', '24x7'),
+  $log_fields    = hiera('filebeat_log_fields',[])
 
   ){
 
@@ -72,9 +73,12 @@ class profiles::application (
       mode   => '0755'
     }
 
+    $app_defaults = {
+                    log_fields => $log_fields,
+                    require => File['/var/log/applications/']}
+
     # Create application resources for each application specified for server
-    create_resources('wsgi::application', $applications,
-      {require => File['/var/log/applications/']})
+    create_resources('wsgi::application', $applications, $app_defaults)
 
     # Filter hash to only return 'bind' and 'app_type' keys and values
     $check_hash = hash_filter($applications, ['bind','app_type'])
