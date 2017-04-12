@@ -63,6 +63,8 @@ mod 'puppet-nagiosclient',             :git => 'https://github.com/LandRegistry-
 mod 'landregistry/powerdns',           :git => 'https://github.com/LandRegistry-Ops/puppet-powerdns.git',
                                        :ref => '0.2.0'
 mod 'ghoneycutt/hosts',                '2.5.0'
+mod 'landregistry/opendj',             :git => 'https://github.com/LandRegistry-Ops/puppet-opendj.git',
+                                       :ref => '42a1e7a9d43a34f1d35e58063338811104540be8'
 
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.8'
