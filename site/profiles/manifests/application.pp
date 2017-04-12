@@ -12,10 +12,10 @@ class profiles::application (
   # Define process check for bespoke applications
   define service_check(
 
-    $bind,
+    $bind = undef,
     $app_type = 'wsgi',
-    $notification_period,
-    $check_period,
+    $notification_period = undef,
+    $check_period = undef,
 
     ){
     if ($app_type in [ 'wsgi', 'jar', 'python' ]) {
@@ -39,10 +39,10 @@ class profiles::application (
   # Define tcp_check for bespoke applications
   define tcp_check(
 
-    $bind,
+    $bind = undef,
     $app_type = 'wsgi',
-    $notification_period,
-    $check_period,
+    $notification_period = undef,
+    $check_period = undef,
 
     ){
     if ($app_type in [ 'wsgi', 'jar']) {

@@ -15,9 +15,9 @@ class profiles::rabbitmq_monitoring(
   ){
   # Install rabbit nagios plugins and dependancies
   $nagios_plugins = ['check_rabbitmq_aliveness','check_rabbitmq_cluster',
-                     'check_rabbitmq_queue']
+                    'check_rabbitmq_queue']
   $dependancies = ['perl-Monitoring-Plugin.noarch',
-                   'perl-LWP-UserAgent-Determined.noarch','perl-JSON.noarch']
+                    'perl-LWP-UserAgent-Determined.noarch','perl-JSON.noarch']
   ensure_packages($dependancies)
 
   define nagios_plugins(){
@@ -42,22 +42,22 @@ class profiles::rabbitmq_monitoring(
 
   define nrpe_commands(){
     file_line { $name :
-       path   => '/etc/nagios/nrpe.cfg',
-       line   => $name,
-       after  => '# Additional commands added via puppet',
-       notify => Service['nrpe']
+      path   => '/etc/nagios/nrpe.cfg',
+      line   => $name,
+      after  => '# Additional commands added via puppet',
+      notify => Service['nrpe']
     }
   }
 
   nrpe_commands{$nrpe_commands:}
 
   file {'rabbit fact script':
-    ensure  => 'present',
-    path    => '/etc/puppetlabs/facter/facts.d/rabbit_queue_facts.sh',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    source  => 'puppet:///modules/profiles/rabbit_queue_facts.sh',
+    ensure => 'present',
+    path   => '/etc/puppetlabs/facter/facts.d/rabbit_queue_facts.sh',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+    source => 'puppet:///modules/profiles/rabbit_queue_facts.sh',
   }
 
   # Get rabbit admin creds for checks
@@ -77,10 +77,10 @@ class profiles::rabbitmq_monitoring(
   # Define aliveness check
   define rabbitmq_aliveness(
 
-    $notification_period,
-    $check_period,
-    $user_name,
-    $passwd,
+    $notification_period = undef,
+    $check_period = undef,
+    $user_name = undef,
+    $passwd = undef,
 
     ){
     @@nagios_service { "${::hostname}-rabbitmq_aliveness-${name}" :
@@ -138,7 +138,7 @@ class profiles::rabbitmq_monitoring(
     notification_interval => 0,
     notifications_enabled => 1,
     notification_period   => $notification_period,
-    service_description   => "Rabbitmq cluster status"
+    service_description   => 'Rabbitmq cluster status'
   }
 
   # Define type to create check for individual queues
@@ -181,11 +181,11 @@ class profiles::rabbitmq_monitoring(
   # Define resource to call individual check resource for each queue on a vhost
   define queue_check_for_vhost (
 
-    $notification_period,
-    $check_period,
-    $user_name,
-    $passwd,
-    $queues,
+    $notification_period = undef,
+    $check_period = undef,
+    $user_name = undef,
+    $passwd = undef,
+    $queues = undef,
 
     ) {
 
