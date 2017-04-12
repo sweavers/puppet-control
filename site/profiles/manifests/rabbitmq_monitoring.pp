@@ -85,7 +85,7 @@ class profiles::rabbitmq_monitoring(
     ){
     @@nagios_service { "${::hostname}-rabbitmq_aliveness-${name}" :
       ensure                => present,
-      check_command         => "check_nrpe!check_rabbitmq_aliveness\!'${name}'\!'${user_name}'\!'${passwd}'",
+      check_command         => "check_nrpe!check_rabbitmq_aliveness\\!'${name}'\\!'${user_name}'\\!'${passwd}'",
       mode                  => '0644',
       owner                 => root,
       use                   => 'generic-service',
@@ -128,7 +128,7 @@ class profiles::rabbitmq_monitoring(
   # Export cluster check resource
   @@nagios_service { "${::hostname}-rabbitmq_cluster" :
     ensure                => present,
-    check_command         => "check_nrpe!check_rabbitmq_cluster\!'${cluster_crit}'",
+    check_command         => "check_nrpe!check_rabbitmq_cluster\\!'${cluster_crit}'",
     mode                  => '0644',
     owner                 => root,
     use                   => 'generic-service',
@@ -164,7 +164,7 @@ class profiles::rabbitmq_monitoring(
     # Export individual check resource
     @@nagios_service { "${::hostname}-rabbitmq_queue-${name}" :
       ensure                => present,
-      check_command         => "check_nrpe!check_rabbitmq_individual_queue\!'${vhost}'\!'${user_name}'\!'${passwd}'\!'${name}'\!'${threshold}'",
+      check_command         => "check_nrpe!check_rabbitmq_individual_queue\\!'${vhost}'\\!'${user_name}'\\!'${passwd}'\\!'${name}'\\!'${threshold}'",
       mode                  => '0644',
       owner                 => root,
       use                   => 'generic-service',
