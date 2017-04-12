@@ -13,7 +13,7 @@ class profiles::application (
   define service_check(
 
     $bind,
-    $app_type,
+    $app_type = 'wsgi',
     $notification_period,
     $check_period,
 
@@ -40,7 +40,7 @@ class profiles::application (
   define tcp_check(
 
     $bind,
-    $app_type,
+    $app_type = 'wsgi',
     $notification_period,
     $check_period,
 
