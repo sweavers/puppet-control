@@ -13,16 +13,16 @@ class profiles::application (
   # Define process check for bespoke applications
   define service_check(
 
-    $bind,
+    $bind = undef,
     $app_type = 'wsgi',
-    $notification_period,
-    $check_period,
+    $notification_period = undef,
+    $check_period = undef,
 
     ){
     if ($app_type in [ 'wsgi', 'jar', 'python' ]) {
       @@nagios_service { "${::hostname}-lr-${name}" :
         ensure                => present,
-        check_command         => "check_nrpe!check_service_procs\!2:20\!1:25\!${name}",
+        check_command         => "check_nrpe!check_service_procs\\!2:20\\!1:25\\!${name}",
         mode                  => '0644',
         owner                 => root,
         use                   => 'generic-service',
@@ -40,16 +40,16 @@ class profiles::application (
   # Define tcp_check for bespoke applications
   define tcp_check(
 
-    $bind,
+    $bind = undef,
     $app_type = 'wsgi',
-    $notification_period,
-    $check_period,
+    $notification_period = undef,
+    $check_period = undef,
 
     ){
     if ($app_type in [ 'wsgi', 'jar']) {
       @@nagios_service { "${::hostname}-lr-${name}-tcp_check" :
         ensure                => present,
-        check_command         => "check_nrpe!check_service_tcp\!'127.0.0.1'\!'${bind}'",
+        check_command         => "check_nrpe!check_service_tcp\\!'127.0.0.1'\\!'${bind}'",
         mode                  => '0644',
         owner                 => root,
         use                   => 'generic-service',
