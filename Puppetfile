@@ -66,7 +66,7 @@ mod 'ghoneycutt/hosts',                '2.5.0'
 mod 'landregistry/opendj',             :git => 'https://github.com/LandRegistry-Ops/puppet-opendj.git',
                                        :ref => '12d86f83bf0eacf43cf4b9d03034c5a6422eadc3'
 mod 'landregistry/openresty',          :git => 'https://github.com/LandRegistry-Ops/puppet-openresty.git',
-                                       :ref => '4f4a2bc9b952a8dec5996f7cdfcf2d620faf754e'
+                                       :ref => '33bbba35e75dcdc388ceacbcc49bd57895dde9d1'
 
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.8'
