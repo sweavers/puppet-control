@@ -12,7 +12,7 @@ mod 'jfryman/selinux',                 '0.4.0'
 mod 'puppet-gradle',                   :git => 'https://github.com/LandRegistry-Ops/puppet-gradle.git',
                                        :ref => '8aec2ee291a34e79531a0045a7c0027aaa8138d8'
 mod 'puppet-wsgi',                     :git => 'https://github.com/LandRegistry-Ops/puppet-wsgi.git',
-                                       :ref => '6a439d5e235616bcc678f07060102a335bc91789'
+                                       :ref => '1.3.5'
 mod 'leinaddm/htpasswd',               '0.0.3'
 mod 'maestrodev/wget',                 '1.7.3'
 mod 'openstackci/pip',                 :git => 'https://github.com/openstack-infra/puppet-pip.git',
@@ -61,7 +61,7 @@ mod 'landregistry/powerdns',           :git => 'https://github.com/LandRegistry-
                                        :ref => '0.2.0'
 mod 'ghoneycutt/hosts',                '2.5.0'
 mod 'landregistry/opendj',             :git => 'https://github.com/LandRegistry-Ops/puppet-opendj.git',
-                                       :ref => '0c1cad444ecfe43dd9301f82078523b476aa74db'
+                                       :ref => '807a2bb4082bb020b95824d14a38fab25e96fcbc'
 mod 'landregistry/openresty',          :git => 'https://github.com/LandRegistry-Ops/puppet-openresty.git',
                                        :ref => '7adb11999e400897fb8ef41bf367fe1932deaaaf'
 
