@@ -36,7 +36,7 @@ class profiles::rabbitmq_monitoring(
 
   # Add nrpe commands
   $nrpe_commands = ['command[check_rabbitmq_aliveness]=/usr/lib64/nagios/plugins/check_rabbitmq_aliveness -H localhost --vhost $ARG1$ -u $ARG2$ -p $ARG3$',
-  'command[check_rabbitmq_cluster]=/usr/lib64/nagios/plugins/check_rabbitmq_cluster -H localhost -c $ARG1$',
+  'command[check_rabbitmq_cluster]=/usr/lib64/nagios/plugins/check_rabbitmq_cluster -H localhost -c $ARG1$ -u $ARG2$ -p $ARG3$',
   'command[check_rabbitmq_queue]=/usr/lib64/nagios/plugins/check_rabbitmq_queue -H localhost --vhost $ARG1$ -u $ARG2$ -p $ARG3$',
   'command[check_rabbitmq_individual_queue]=/usr/lib64/nagios/plugins/check_rabbitmq_queue -H localhost --vhost $ARG1$ -u $ARG2$ -p $ARG3$ --queue $ARG4$ -c $ARG5$']
 
@@ -99,7 +99,7 @@ class profiles::rabbitmq_monitoring(
     }
   }
 
-  # Create alivness check for each defined rabbit vhost
+  # Create aliveness check for each defined rabbit vhost
   if $rabbitmq_vhosts {
     $vhost = keys($rabbitmq_vhosts)
     rabbitmq_aliveness{$vhost:
@@ -109,7 +109,7 @@ class profiles::rabbitmq_monitoring(
       passwd              => $admin_pword
     }
   }
-  # Create alivness check for default rabbit vhost
+  # Create aliveness check for default rabbit vhost
   rabbitmq_aliveness{'/':
     notification_period => $time_period,
     check_period        => $time_period,
@@ -117,28 +117,38 @@ class profiles::rabbitmq_monitoring(
     passwd              => $admin_pword
   }
 
-  # Determin how many hosts in the cluster and set crytical level
-  $no_of_nodes = count($cluster_nodes)
-  if $no_of_nodes > 0 {
-    $cluster_crit = ($no_of_nodes - 1)
-  } else {
-    $cluster_crit = 0
-  }
+  define rabbitmq_cluster_check(
 
-  # Export cluster check resource
-  @@nagios_service { "${::hostname}-rabbitmq_cluster" :
-    ensure                => present,
-    check_command         => "check_nrpe!check_rabbitmq_cluster\\!'${cluster_crit}'",
-    mode                  => '0644',
-    owner                 => root,
-    use                   => 'generic-service',
-    host_name             => $::hostname,
-    check_period          => $check_period,
-    contact_groups        => 'admins',
-    notification_interval => 0,
-    notifications_enabled => 1,
-    notification_period   => $notification_period,
-    service_description   => 'Rabbitmq cluster status'
+    $notification_period = $time_period,
+    $check_period = $time_period,
+    $user_name = $admin_uname,
+    $passwd = $admin_pword,
+
+    ) {
+
+    # Determine how many hosts in the cluster and set critical level
+    $no_of_nodes = count($cluster_nodes)
+    if $no_of_nodes > 0 {
+      $cluster_crit = ($no_of_nodes - 1)
+    } else {
+      $cluster_crit = 0
+    }
+
+    # Export cluster check resource
+    @@nagios_service { "${::hostname}-rabbitmq_cluster" :
+      ensure                => present,
+      check_command         => "check_nrpe!check_rabbitmq_cluster\\!'${cluster_crit}'\\!'${user_name}'\\!'${passwd}'",
+      mode                  => '0644',
+      owner                 => root,
+      use                   => 'generic-service',
+      host_name             => $::hostname,
+      check_period          => $check_period,
+      contact_groups        => 'admins',
+      notification_interval => 0,
+      notifications_enabled => 1,
+      notification_period   => $notification_period,
+      service_description   => 'Rabbitmq cluster status'
+    }
   }
 
   # Define type to create check for individual queues
