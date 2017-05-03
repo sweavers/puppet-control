@@ -117,15 +117,6 @@ class profiles::rabbitmq_monitoring(
     passwd              => $admin_pword
   }
 
-  define rabbitmq_cluster_check(
-
-    $notification_period = $time_period,
-    $check_period = $time_period,
-    $user_name = $admin_uname,
-    $passwd = $admin_pword,
-
-    ) {
-
     # Determine how many hosts in the cluster and set critical level
     $no_of_nodes = count($cluster_nodes)
     if $no_of_nodes > 0 {
@@ -137,7 +128,7 @@ class profiles::rabbitmq_monitoring(
     # Export cluster check resource
     @@nagios_service { "${::hostname}-rabbitmq_cluster" :
       ensure                => present,
-      check_command         => "check_nrpe!check_rabbitmq_cluster\\!'${cluster_crit}'\\!'${user_name}'\\!'${passwd}'",
+      check_command         => "check_nrpe!check_rabbitmq_cluster\\!'${cluster_crit}'\\!'${admin_uname}'\\!'${admin_pword}'",
       mode                  => '0644',
       owner                 => root,
       use                   => 'generic-service',
@@ -149,7 +140,6 @@ class profiles::rabbitmq_monitoring(
       notification_period   => $notification_period,
       service_description   => 'Rabbitmq cluster status'
     }
-  }
 
   # Define type to create check for individual queues
   # NB There can be no queues with duplicate names
