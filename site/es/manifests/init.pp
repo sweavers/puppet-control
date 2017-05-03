@@ -33,7 +33,7 @@ class es (
   $data_dir      = "/var/lib/elasticsearch/${cluster_name}/data"
   $log_dir       = "/var/lib/elasticsearch/${cluster_name}/logs"
 
-  class { 'elasticsearch' :
+  class { 'elasticsearch_old' :
     ensure       => present,
     manage_repo  => true,
     package_pin  => true,
@@ -42,11 +42,11 @@ class es (
     version      => $version
   }
 
-  elasticsearch::plugin { 'royrusso/elasticsearch-HQ' :
+  elasticsearch_old::plugin { 'royrusso/elasticsearch-HQ' :
     instances => $cluster_name
   }
 
-  elasticsearch::instance { $cluster_name :
+  elasticsearch_old::instance { $cluster_name :
     datadir       => $data_dir,
     init_defaults => {
       'ES_HEAP_SIZE' => $heap_size
@@ -64,7 +64,7 @@ class es (
         'number_of_shards'   => $shards,
         'number_of_replicas' => $replicas,
       },
-      'gateway'       => {
+      'gateway' s      => {
         'type'                => 'local',
         'recover_after_nodes' => 1,
         'recover_after_time'  => '2m',
