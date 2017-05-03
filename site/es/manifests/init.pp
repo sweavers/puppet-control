@@ -64,7 +64,7 @@ class es (
         'number_of_shards'   => $shards,
         'number_of_replicas' => $replicas,
       },
-      'gateway' s      => {
+      'gateway'       => {
         'type'                => 'local',
         'recover_after_nodes' => 1,
         'recover_after_time'  => '2m',
