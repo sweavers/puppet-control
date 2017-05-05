@@ -19,7 +19,7 @@
 #
 class profiles::jenkins (
 
-  $plugins                 = hiera_hash('jenkins_plugins', false),
+  $plugins                 = undef,
   $jobs                    = undef,
   $deploy_from_jenkins_rsa = undef,
   $version                 = '1.651-1.1',
