@@ -10,7 +10,8 @@ class es (
   $enable_backup = false,
   $backup_dir    = '/backups',
   $backup_hour   = '02',
-  $remote_fs     = false
+  $remote_fs     = false,
+  $cluster_servers = []
 ){
 
   include stdlib
@@ -77,7 +78,8 @@ class es (
       'discovery.zen' => {
         'minimum_master_nodes' => 1,
         'ping'                 => {
-          'multicast.enabled' => true
+          'multicast.enabled' => false,
+          'unicast.hosts'     => $cluster_servers
         }
       }
     }
