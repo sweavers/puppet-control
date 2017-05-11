@@ -5,7 +5,7 @@ mod 'ajcrowe/supervisord',             '0.6.1'
 mod 'alphagov/account',                :git => 'https://github.com/alphagov/puppet-account.git',
                                        :ref => '8bc0e9981174fd175d630dd98538334a2814065b'
 mod 'puppet-elasticsearch_old',        :git => 'https://github.com/LandRegistry-Ops/puppet-elasticsearch_old.git',
-                                       :ref => '0.11.10'
+                                       :ref => '0.11.11'
 mod 'elastic/elasticsearch',           '5.1.0'
 mod 'lesaux/kibana4',                  '1.0.15'
 mod 'evenup/redis',                    '1.3.1'
