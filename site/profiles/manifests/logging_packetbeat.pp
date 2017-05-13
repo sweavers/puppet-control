@@ -15,6 +15,10 @@ class profiles::logging_packetbeat(
   $amqp_logging_ports       = undef,
   $amqp_logging_enabled     = undef,
   $manage_repo              = true,
+  $redis_logging_enabled    = undef,
+  $redis_logging_ports      = undef,
+  $dns_logging_enabled      = undef,
+  $dns_logging_ports        = undef,
 ){
 
   class { 'packetbeat':
@@ -27,6 +31,10 @@ class profiles::logging_packetbeat(
     postgres_logging_enabled => $postgres_logging_enabled,
     amqp_logging_ports       => $amqp_logging_ports,
     amqp_logging_enabled     => $amqp_logging_enabled,
+    redis_logging_enabled    => $redis_logging_enabled,
+    redis_logging_ports      => $redis_logging_ports,
+    dns_logging_enabled      => $dns_logging_enabled,
+    dns_logging_ports        => $dns_logging_ports,
     manage_repo              => $manage_repo,
   }
 
