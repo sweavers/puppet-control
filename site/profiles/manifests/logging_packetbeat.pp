@@ -1,9 +1,7 @@
-# Class profiles::logging
-#
-# This class will manage application server installations
+# Class profiles::logging_packetbeat
 #
 # Requires:
-# - filebeat
+# - packetbeat
 #
 
 class profiles::logging_packetbeat(
