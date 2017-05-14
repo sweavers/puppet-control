@@ -5,7 +5,7 @@
 #
 
 class profiles::logging_packetbeat(
-  $log_receiver             = [],
+  $log_receiver             = hiera('logstash_cluster_hosts',[]),
   $log_fields               = hiera('filebeat_log_fields',[]),
   $version                  = '5.3.1-1',
   $http_logging_ports       = undef,
