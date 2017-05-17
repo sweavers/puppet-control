@@ -69,7 +69,7 @@ mod 'landregistry/opendj',             :git => 'https://github.com/LandRegistry-
                                        :ref => '9256a8e364ce6bc30302d73b011bc2d15c969044'
 mod 'landregistry/openresty',          :git => 'https://github.com/LandRegistry-Ops/puppet-openresty.git',
                                        :ref => 'd2f3211bf7cdcd6c49b66c8e3065bf8373e0b0de'
-mod 'landregistry/puppet-geoserver',   :git => 'https://github.com/LandRegistry-Ops/puppet-geoserver.git'
+mod 'landregistry/puppet-geoserver',   :git => 'https://github.com/LandRegistry-Ops/puppet-geoserver.git',
                                        :ref => '3e5f4e462f4022ffcb3d4e3e18483419741f8224'
 
 # Dependency modules
