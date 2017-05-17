@@ -66,9 +66,9 @@ mod 'landregistry/powerdns',           :git => 'https://github.com/LandRegistry-
                                        :ref => '0.2.1'
 mod 'ghoneycutt/hosts',                '2.5.0'
 mod 'landregistry/opendj',             :git => 'https://github.com/LandRegistry-Ops/puppet-opendj.git',
-                                       :ref => '37908f0c8305cb1d5fb83824207c42aa6374d3e8'
+                                       :ref => '9256a8e364ce6bc30302d73b011bc2d15c969044'
 mod 'landregistry/openresty',          :git => 'https://github.com/LandRegistry-Ops/puppet-openresty.git',
-                                       :ref => '6650589ba035dd06deb06d05cf4d3c6c239e1a4a'
+                                       :ref => 'd2f3211bf7cdcd6c49b66c8e3065bf8373e0b0de'
 
 # Dependency modules
 mod 'ceritsc/yum',                     '0.9.8'
