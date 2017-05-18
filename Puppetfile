@@ -7,7 +7,6 @@ mod 'alphagov/account',                :git => 'https://github.com/alphagov/pupp
 mod 'puppet-elasticsearch_old',        :git => 'https://github.com/LandRegistry-Ops/puppet-elasticsearch_old.git',
                                        :ref => '0.11.11'
 mod 'elastic/elasticsearch',           '5.1.0'
-mod 'lesaux/kibana4',                  '1.0.15'
 mod 'evenup/redis',                    '1.3.1'
 mod 'ispavailability/file_concat',     '0.2.1'
 mod 'jfryman/nginx',                   '0.3.0'
@@ -44,18 +43,18 @@ mod 'puppet-dnsserver',                :git => 'https://github.com/LandRegistry-
 mod 'puppet-files',                    :git => 'https://github.com/LandRegistry-Ops/puppet-files.git',
                                        :ref => '3d3cbee15a91abf160275abe7d2961cf89beba77'
 mod 'puppet-filebeat',                 :git => 'https://github.com/LandRegistry-Ops/puppet-filebeat.git',
-                                       :ref => '1.0.7'
-mod 'puppet-logreceiver',              :git => 'https://github.com/LandRegistry-Ops/puppet-logreceiver.git',
-                                       :ref => '2.0.1'
-mod 'puppet-logconsumer',              :git => 'https://github.com/LandRegistry-Ops/puppet-logconsumer.git',
-                                       :ref => '2.0.3'
+                                       :ref => '1.0.8'
+mod 'puppet-packetbeat',               :git => 'https://github.com/LandRegistry-Ops/puppet-packetbeat.git',
+                                       :ref => '1.0.5'
+mod 'puppet-logstash',                 :git => 'https://github.com/LandRegistry-Ops/puppet-logstash.git',
+                                       :ref => '1.0.9'
 mod 'willdurand/nodejs',               '1.9.5'
 mod 'puppet-rabbit',                   :git => 'https://github.com/LandRegistry-Ops/puppet-rabbit.git',
-                                       :ref => '2.0.3'
+                                       :ref => '3.0.6'
 mod 'puppet-elastic',                  :git => 'https://github.com/LandRegistry-Ops/puppet-elastic.git',
-                                       :ref => '3.0.12'
-mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-Ops/puppet-kibana.git',
-                                       :ref => '84d1aecbeb01eef6de616f252f372257492a974d'
+                                       :ref => '3.0.17'
+mod 'puppet-kibana',                   :git => 'https://github.com/LandRegistry-Ops/elastic-puppet-kibana.git',
+                                       :ref => '3.0.2'
 mod 'puppet-firewallservice',          :git => 'https://github.com/LandRegistry-Ops/puppet-firewallservice.git',
                                        :ref => '0.1.5'
 mod 'puppet-nagios',                   :git => 'https://github.com/LandRegistry-Ops/puppet-nagios.git',
