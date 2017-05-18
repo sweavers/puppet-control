@@ -69,7 +69,7 @@ mod 'puppet-opendj',                   :git => 'https://github.com/LandRegistry-
 mod 'puppet-openresty',                :git => 'https://github.com/LandRegistry-Ops/puppet-openresty.git',
                                        :ref => '3c5b5be3a28351fffffafd590c181ba396de8676'
 mod 'puppet-geoserver',                :git => 'https://github.com/LandRegistry-Ops/puppet-geoserver.git',
-                                       :ref => '3e5f4e462f4022ffcb3d4e3e18483419741f8224'
+                                       :ref => '5364badd3faa9962adab1375b246d962796d6a23'
 # Dependency modules
 mod 'ceritsc/yum',                           '0.9.8'
 mod 'croddy/make',                           '0.0.5'
