@@ -1,5 +1,5 @@
 #
-class tomcat (
+class tomcat_old (
 
   $tomcat_manager_gui_password = hiera('tomcat_manager_gui_password'),
   $tomcatvalve                 = false
