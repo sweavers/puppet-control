@@ -20,7 +20,8 @@ class ha (
   $lb_instances = undef,
   $interface   = 'eth0',
   $virtual_ip  = undef,
-  $sticky      = false
+  $sticky      = false,
+  $auth_users  = undef,
 ) {
 
   include stdlib
