@@ -22,6 +22,14 @@ defaults
 listen <%= name %> *:<%= config['port'] %>
     balance roundrobin
 
+<% if config['mode'] == 'tcp' -%>
+  mode tcp
+  #option tcp-check
+  <% config['backends'].each do |backend| -%>
+  # Backend <%= backend %>
+  server <%= backend.split(':')[0] %> <%= backend %> check inter 5s rise 2 fall 3
+<% end -%>
+<% else -%>
 <% if @sticky == true -%>
     cookie JSESSIONID prefix
     option httpchk GET  <%= config['healthcheck'] %>
@@ -47,6 +55,7 @@ listen <%= name %> *:<%= config['port'] %>
 <% end -%>
 <% end -%>
 
+<% end -%>
 <% end -%>
 <% end -%>
 
