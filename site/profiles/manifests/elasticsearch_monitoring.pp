@@ -48,7 +48,7 @@ class profiles::elasticsearch_monitoring(
   # Elasticsearch process check
   @@nagios_service { "${::hostname}-elasticsearch" :
     ensure                => present,
-    check_command         => "check_nrpe!check_service_procs\\!1:2\\!1:1\\!elasticsearch",
+    check_command         => 'check_nrpe!check_service_procs\\!1:2\\!1:1\\!elasticsearch',
     mode                  => '0644',
     owner                 => root,
     use                   => 'generic-service',
@@ -58,13 +58,13 @@ class profiles::elasticsearch_monitoring(
     notification_interval => 0,
     notifications_enabled => 1,
     notification_period   => $time_period,
-    service_description   => "Elasticsearch"
+    service_description   => 'Elasticsearch'
   }
 
   # Elasticsearch cluster status check
   @@nagios_service { "${::hostname}-elasticserch_cluster_status" :
     ensure                => present,
-    check_command         => "check_nrpe!check_elasticsearch_cluster",
+    check_command         => 'check_nrpe!check_elasticsearch_cluster',
     mode                  => '0644',
     owner                 => root,
     use                   => 'generic-service',
@@ -74,14 +74,14 @@ class profiles::elasticsearch_monitoring(
     notification_interval => 0,
     notifications_enabled => 1,
     notification_period   => $time_period,
-    service_description   => "Elasticsearch cluster status"
+    service_description   => 'Elasticsearch cluster status'
   }
 
   # Elasticsearch backup status check
   if $backups_enabled {
     @@nagios_service { "${::hostname}-elasticserch_backup_status" :
       ensure                => present,
-      check_command         => "check_nrpe!check_elasticsearch_backups",
+      check_command         => 'check_nrpe!check_elasticsearch_backups',
       mode                  => '0644',
       owner                 => root,
       use                   => 'generic-service',
@@ -91,7 +91,7 @@ class profiles::elasticsearch_monitoring(
       notification_interval => 0,
       notifications_enabled => 1,
       notification_period   => $time_period,
-      service_description   => "Elasticsearch backup status"
+      service_description   => 'Elasticsearch backup status'
     }
   }
 }
