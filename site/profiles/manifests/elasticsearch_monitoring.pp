@@ -48,7 +48,7 @@ class profiles::elasticsearch_monitoring(
   # Elasticsearch process check
   @@nagios_service { "${::hostname}-elasticsearch" :
     ensure                => present,
-    check_command         => 'check_nrpe!check_service_procs\\!1:2\\!1:1\\!elasticsearch',
+    check_command         => 'check_nrpe!check_service_procs\\!1:2\\!1:1\\!org.elasticsearch.bootstrap.Elasticsearch',
     mode                  => '0644',
     owner                 => root,
     use                   => 'generic-service',
