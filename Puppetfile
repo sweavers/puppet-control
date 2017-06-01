@@ -63,6 +63,8 @@ mod 'puppet-nagiosclient',             :git => 'https://github.com/LandRegistry-
                                        :ref => '0.13.0'
 mod 'landregistry/powerdns',           :git => 'https://github.com/LandRegistry-Ops/puppet-powerdns.git',
                                        :ref => '0.2.1'
+mod 'landregistry/security',           :git => 'https://github.com/LandRegistry-Ops/puppet-security.git',
+                                       :ref => '0.3.2'
 mod 'ghoneycutt/hosts',                '2.5.0'
 mod 'puppet-opendj',                   :git => 'https://github.com/LandRegistry-Ops/puppet-opendj.git',
                                        :ref => '9292bef79f3cec83d88080268a687cace382a08d'
