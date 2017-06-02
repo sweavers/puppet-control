@@ -200,12 +200,22 @@ class profiles::postgresqlha_standby (
       mode    => '0600',
     } ->
 
+    exec { 'set_system_keepalive' :
+      command => "sysctl -w net.ipv4.tcp_keepalive_time=60",
+      user    => 'root',
+    } ->
+
     exec { 'clone_database_master' :
-      command => "/usr/pgsql-${version}/bin/repmgr -r -F -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr ${wal_keep_segments} --verbose standby clone ${vip_hostname}",
+      command => "/usr/pgsql-${version}/bin/repmgr -c -F -f /etc/repmgr/${version}/repmgr.conf ${::wal_keep_segments} -D /var/lib/pgsql/${version}/data/ -d repmgr -U repmgr --verbose standby clone ${vip_hostname}",
       user    => 'postgres',
       cwd     => "/etc/repmgr/${version}/",
       timeout => '0',
       unless  => 'psql -c "select pg_is_in_recovery();" | grep "^ t$"',
+    } ->
+
+    exec { 'reset_system_keepalive' :
+      command => "sysctl -w net.ipv4.tcp_keepalive_time=7200",
+      user    => 'root',
     } ->
 
     service { "postgresql-${version}" :
