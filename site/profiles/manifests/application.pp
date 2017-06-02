@@ -2,7 +2,8 @@
 class profiles::application (
 
   $applications  = hiera_hash('applications',false),
-  $time_period   = hiera('nagios_time_period', '24x7')
+  $time_period   = hiera('nagios_time_period', '24x7'),
+  $log_fields    = hiera('filebeat_log_fields',[])
 
   ){
 
@@ -12,16 +13,16 @@ class profiles::application (
   # Define process check for bespoke applications
   define service_check(
 
-    $bind,
-    $app_type,
-    $notification_period,
-    $check_period,
+    $bind = undef,
+    $app_type = 'wsgi',
+    $notification_period = undef,
+    $check_period = undef,
 
     ){
     if ($app_type in [ 'wsgi', 'jar', 'python' ]) {
       @@nagios_service { "${::hostname}-lr-${name}" :
         ensure                => present,
-        check_command         => "check_nrpe!check_service_procs\!2:20\!1:25\!${name}",
+        check_command         => "check_nrpe!check_service_procs\\!2:20\\!1:25\\!${name}",
         mode                  => '0644',
         owner                 => root,
         use                   => 'generic-service',
@@ -39,16 +40,16 @@ class profiles::application (
   # Define tcp_check for bespoke applications
   define tcp_check(
 
-    $bind,
-    $app_type,
-    $notification_period,
-    $check_period,
+    $bind = undef,
+    $app_type = 'wsgi',
+    $notification_period = undef,
+    $check_period = undef,
 
     ){
     if ($app_type in [ 'wsgi', 'jar']) {
       @@nagios_service { "${::hostname}-lr-${name}-tcp_check" :
         ensure                => present,
-        check_command         => "check_nrpe!check_service_tcp\!'127.0.0.1'\!'${bind}'",
+        check_command         => "check_nrpe!check_service_tcp\\!'127.0.0.1'\\!'${bind}'",
         mode                  => '0644',
         owner                 => root,
         use                   => 'generic-service',
@@ -72,9 +73,12 @@ class profiles::application (
       mode   => '0755'
     }
 
+    $app_defaults = {
+                    log_fields => $log_fields,
+                    require => File['/var/log/applications/']}
+
     # Create application resources for each application specified for server
-    create_resources('wsgi::application', $applications,
-      {require => File['/var/log/applications/']})
+    create_resources('wsgi::application', $applications, $app_defaults)
 
     # Filter hash to only return 'bind' and 'app_type' keys and values
     $check_hash = hash_filter($applications, ['bind','app_type'])

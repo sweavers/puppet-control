@@ -29,9 +29,12 @@ class profiles::rabbitmq(
   $rabbitmq_users            = hiera_hash('rabbitmq_users', false),
   $rabbitmq_user_permissions = hiera_hash('rabbitmq_user_permissions', false),
   $rabbitmq_vhosts           = hiera_hash('rabbitmq_vhosts', false),
-  $rabbitmq_policy           = hiera_hash('rabbitmq_policy', false)
+  $rabbitmq_policy           = hiera_hash('rabbitmq_policy', false),
+  $time_period               = hiera('nagios_time_period', '24x7')
 
 ){
+
+  include profiles::rabbitmq_monitoring
 
   # Load SELinuux policy for RabbitMQ
   selinux::module { 'rabbit':
