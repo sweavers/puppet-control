@@ -201,7 +201,7 @@ class profiles::postgresqlha_standby (
     } ->
 
     exec { 'set_system_keepalive' :
-      command => "sysctl -w net.ipv4.tcp_keepalive_time=60",
+      command => 'sysctl -w net.ipv4.tcp_keepalive_time=60',
       user    => 'root',
     } ->
 
@@ -214,7 +214,7 @@ class profiles::postgresqlha_standby (
     } ->
 
     exec { 'reset_system_keepalive' :
-      command => "sysctl -w net.ipv4.tcp_keepalive_time=7200",
+      command => 'sysctl -w net.ipv4.tcp_keepalive_time=7200',
       user    => 'root',
     } ->
 
