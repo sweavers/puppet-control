@@ -34,6 +34,8 @@ class profiles::rabbitmq(
 
 ){
 
+  include profiles::rabbitmq_monitoring
+
   # Load SELinuux policy for RabbitMQ
   selinux::module { 'rabbit':
     ensure => 'present',
